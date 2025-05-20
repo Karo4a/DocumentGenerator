@@ -26,9 +26,9 @@ erDiagram
   name: "Товар 1",
   description: "Описание"
 }
-// productRequestApiModel
 ```
 ```javascript
+// productRequestApiModel
 {
   name: "Товар 1",
   description: "Описание"
