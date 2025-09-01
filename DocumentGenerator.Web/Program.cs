@@ -1,18 +1,79 @@
+﻿using AutoMapper;
+using DocumentGenerator.Common;
+using DocumentGenerator.Context;
+using DocumentGenerator.Context.Contracts;
+using DocumentGenerator.ProductRepository;
+using DocumentGenerator.ProductRepository.Contracts;
+using DocumentGenerator.Services;
+using DocumentGenerator.Services.Contracts;
+using DocumentGenerator.Services.Infrastructure;
+using DocumentGenerator.Web.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 
 namespace DocumentGenerator.Web
 {
+    /// <summary>
+    /// Класс программы
+    /// </summary>
     public class Program
     {
+        /// <summary>
+        /// Точка входа программы
+        /// </summary>
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
 
-            builder.Services.AddControllers();
+            var controllers = builder.Services.AddControllers(opt =>
+            {
+                opt.Filters.Add<ProductExceptionFilter>();
+            });
+
+            if (builder.Environment.EnvironmentName == "integration")
+            {
+                controllers.AddControllersAsServices();
+            }
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(c =>
+            {
+                var baseDirectory = AppContext.BaseDirectory;
+                c.IncludeXmlComments(Path.Combine(baseDirectory, "DocumentGenerator.Web.xml"));
+                c.IncludeXmlComments(Path.Combine(baseDirectory, "DocumentGenerator.Entities.xml"));
+            });
+
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+            builder.Services.AddDbContext<ProductsContext>(options =>
+                options.UseNpgsql(connectionString)
+                    .LogTo(Console.WriteLine)
+            );
+            builder.Services.AddScoped<IReader>(x => x.GetRequiredService<ProductsContext>());
+            builder.Services.AddScoped<IWriter>(x => x.GetRequiredService<ProductsContext>());
+            builder.Services.AddScoped<IUnitOfWork>(x => x.GetRequiredService<ProductsContext>());
+            builder.Services.AddScoped<IProductServices, ProductServices>();
+
+            builder.Services.AddSingleton<IValidateService, ValidateService>();
+            builder.Services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
+
+            //builder.Services.AddAutoMapper(typeof(ApiMapper), typeof(ServiceProfile));
+            builder.Services.AddSingleton(_ =>
+            {
+                var mapConfig = new MapperConfiguration(cfg =>
+                {
+                    cfg.AddProfile<ServiceProfile>();
+                    cfg.AddProfile<ApiMapper>();
+                });
+
+                var mapper = mapConfig.CreateMapper();
+                return mapper;
+            });
+            builder.Services.AddScoped<IProductReadRepository, ProductReadRepository>();
+            builder.Services.AddScoped<IProductWriteRepository, ProductWriteRepository>();
+
 
             var app = builder.Build();
 
