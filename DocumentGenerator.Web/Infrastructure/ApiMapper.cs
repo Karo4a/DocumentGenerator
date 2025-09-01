@@ -1,0 +1,23 @@
+﻿using AutoMapper;
+using DocumentGenerator.Services.Contracts.Models;
+using DocumentGenerator.Web.Models;
+
+namespace DocumentGenerator.Web.Infrastructure
+{
+    /// <summary>
+    /// Профиль автомаппинга API
+    /// </summary>
+    public class ApiMapper : Profile
+    {
+        /// <summary>
+        /// Констуктор
+        /// </summary>
+        public ApiMapper()
+        {
+            CreateMap<ProductModel, ProductApiModel>(MemberList.Destination).ReverseMap();
+            CreateMap<ProductRequestApiModel, ProductCreateModel>(MemberList.Destination);
+            CreateMap<ProductRequestApiModel, ProductModel>(MemberList.Destination)
+                .ForMember(x => x.Id, opt => opt.Ignore());
+        }
+    }
+}
