@@ -5,14 +5,14 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 namespace DocumentGenerator.Context.Tests
 {
     /// <summary>
-    /// 
+    /// Абстрактный класс для тестов с базой в памяти
     /// </summary>
-    public abstract class ProductsContextInMemory : IAsyncDisposable
+    public abstract class DocumentGeneratorContextInMemory : IAsyncDisposable
     {
         /// <summary>
-        /// Контекст <see cref="ProductsContext"/>
+        /// Контекст <see cref="DocumentGeneratorContext"/>
         /// </summary>
-        protected ProductsContext Context { get; }
+        protected DocumentGeneratorContext Context { get; }
 
         /// <inheritdoc cref="IUnitOfWork" />
         protected IUnitOfWork UnitOfWork => Context;
@@ -20,12 +20,12 @@ namespace DocumentGenerator.Context.Tests
         /// <summary>
         /// Конструктор
         /// </summary>
-        protected ProductsContextInMemory()
+        protected DocumentGeneratorContextInMemory()
         {
-            var optionsBuilder = new DbContextOptionsBuilder<ProductsContext>()
-                .UseInMemoryDatabase($"ProductContext{Guid.NewGuid()}")
+            var optionsBuilder = new DbContextOptionsBuilder<DocumentGeneratorContext>()
+                .UseInMemoryDatabase($"DocumentGeneratorContext{Guid.NewGuid()}")
                 .ConfigureWarnings(x => x.Ignore(InMemoryEventId.TransactionIgnoredWarning));
-            Context = new ProductsContext(optionsBuilder.Options);
+            Context = new DocumentGeneratorContext(optionsBuilder.Options);
         }
 
         /// <inheritdoc cref="IAsyncDisposable" />

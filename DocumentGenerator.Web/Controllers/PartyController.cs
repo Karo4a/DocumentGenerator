@@ -1,28 +1,28 @@
 ﻿using AutoMapper;
 using DocumentGenerator.Services;
 using DocumentGenerator.Services.Contracts;
-using DocumentGenerator.Services.Contracts.Models;
-using DocumentGenerator.Web.Models;
+using DocumentGenerator.Services.Contracts.Models.Party;
 using DocumentGenerator.Web.Models.Exceptions;
+using DocumentGenerator.Web.Models.Party;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DocumentGenerator.Web.Controllers
 {
     /// <summary>
-    /// CRUD контроллер по работе с товарами
+    /// CRUD контроллер по работе со сторонами актов
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
-    public class ProductsController : ControllerBase
+    public class PartyController : ControllerBase
     {
-        private readonly IProductServices service;
+        private readonly IPartyServices service;
         private readonly IMapper mapper;
         private readonly IValidateService validateService;
 
         /// <summary>
         /// Конструктор
         /// </summary>
-        public ProductsController(IProductServices service,
+        public PartyController(IPartyServices service,
             IMapper mapper,
             IValidateService validateService)
         {
@@ -32,49 +32,49 @@ namespace DocumentGenerator.Web.Controllers
         }
 
         /// <summary>
-        /// Получает список всех товаров
+        /// Получает список всех сторон актов
         /// </summary>
-        /// GET: /api/products/
+        /// GET: /api/party/
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<ProductApiModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<PartyApiModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetAll(CancellationToken cancellationToken)
         {
             var items = await service.GetAll(cancellationToken);
-            return Ok(mapper.Map<IReadOnlyCollection<ProductApiModel>>(items));
+            return Ok(mapper.Map<IReadOnlyCollection<PartyApiModel>>(items));
         }
 
         /// <summary>
-        /// Добавляет новый товар
+        /// Добавляет новую сторону акта
         /// </summary>
-        /// POST: /api/products/
+        /// POST: /api/party/
         [HttpPost]
-        [ProducesResponseType(typeof(ProductApiModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(PartyApiModel), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status422UnprocessableEntity)]
-        public async Task<ActionResult> Create(ProductRequestApiModel request, CancellationToken cancellationToken)
+        public async Task<ActionResult> Create(PartyRequestApiModel request, CancellationToken cancellationToken)
         {
-            var requestModel = mapper.Map<ProductCreateModel>(request);
+            var requestModel = mapper.Map<PartyCreateModel>(request);
             await validateService.Validate(requestModel, cancellationToken);
             var result = await service.Create(requestModel, cancellationToken);
 
-            return Ok(mapper.Map<ProductApiModel>(result));
+            return Ok(mapper.Map<PartyApiModel>(result));
         }
 
         /// <summary>
-        /// Редактирует товар
+        /// Редактирует сторону акта
         /// </summary>
-        /// PUT: /api/products/c2331ea8-a98d-4c3e-baea-d88f5665947
+        /// PUT: /api/party/c2331ea8-a98d-4c3e-baea-d88f5665947
         [HttpPut("{id:guid}")]
-        [ProducesResponseType(typeof(IEnumerable<ProductApiModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<PartyApiModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Edit([FromRoute] Guid id, [FromBody] ProductRequestApiModel  request, CancellationToken cancellationToken)
+        public async Task<IActionResult> Edit([FromRoute] Guid id, [FromBody] PartyRequestApiModel  request, CancellationToken cancellationToken)
         {
-            var requestModel = mapper.Map<ProductModel>(request);
+            var requestModel = mapper.Map<PartyModel>(request);
             requestModel.Id = id;
 
             var result = await service.Edit(requestModel, cancellationToken);
 
-            return Ok(mapper.Map<ProductModel>(result));
+            return Ok(mapper.Map<PartyModel>(result));
         }
     }
 }

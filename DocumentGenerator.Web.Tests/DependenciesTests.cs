@@ -48,7 +48,7 @@ namespace DocumentGenerator.Web.Tests
         /// <summary>
         /// Контроллер товаров
         /// </summary>
-        public static TheoryData<Type> WebControllerCore => GetControllers<ProductsController>();
+        public static TheoryData<Type> WebControllerCore => GetControllers<ProductController>();
 
         private static TheoryData<Type> GetControllers<TControllers>() =>
             new(Assembly.GetAssembly(typeof(TControllers))?

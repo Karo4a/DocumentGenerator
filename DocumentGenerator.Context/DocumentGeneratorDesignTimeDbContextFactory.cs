@@ -6,7 +6,7 @@ namespace DocumentGenerator.Context
     /// <summary>
     /// Фабрика для создания контекста в DesignTime
     /// </summary>
-    public class ProductsDesignTimeDbContextFactory : IDesignTimeDbContextFactory<ProductsContext>
+    public class DocumentGeneratorDesignTimeDbContextFactory : IDesignTimeDbContextFactory<DocumentGeneratorContext>
     {
         /// <summary>
         /// Creates a new instance of a derived context
@@ -18,15 +18,15 @@ namespace DocumentGenerator.Context
         /// 4) dotnet ef database update --project DocumentGenerator.Context\DocumentGenerator.Context.csproj
         /// 5) dotnet ef database update [targetMigrationName] --project DocumentGenerator.Context\DocumentGenerator.Context.csproj
         /// </remarks>
-        public ProductsContext CreateDbContext(string[] args)
+        public DocumentGeneratorContext CreateDbContext(string[] args)
         {
             var connectionString = "Host=localhost;Port=5432;Database=documentGenerator;Username=postgres;Password=asdasddd";
-            var options = new DbContextOptionsBuilder<ProductsContext>()
+            var options = new DbContextOptionsBuilder<DocumentGeneratorContext>()
                 .UseNpgsql(connectionString)
                 .LogTo(Console.WriteLine)
                 .Options;
 
-            return new ProductsContext(options);
+            return new DocumentGeneratorContext(options);
         }
     }
 }

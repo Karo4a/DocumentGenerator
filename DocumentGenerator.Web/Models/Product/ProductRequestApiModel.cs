@@ -1,4 +1,4 @@
-﻿namespace DocumentGenerator.Web.Models
+﻿namespace DocumentGenerator.Web.Models.Product
 {
     /// <summary>
     /// Модель редактирования товара

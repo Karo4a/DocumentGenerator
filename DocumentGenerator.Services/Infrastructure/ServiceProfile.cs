@@ -1,7 +1,7 @@
-﻿
-using AutoMapper;
+﻿using AutoMapper;
 using DocumentGenerator.Entities;
 using DocumentGenerator.Services.Contracts.Models;
+using DocumentGenerator.Services.Contracts.Models.Party;
 
 namespace DocumentGenerator.Services.Infrastructure
 {
@@ -11,11 +11,12 @@ namespace DocumentGenerator.Services.Infrastructure
     public class ServiceProfile : Profile
     {
         /// <summary>
-        /// Констуктор
+        /// Конструктор
         /// </summary>
         public ServiceProfile()
         {
             CreateMap<Product, ProductModel>(MemberList.Destination);
+            CreateMap<Party, PartyModel>(MemberList.Destination);
         }
     }
 }

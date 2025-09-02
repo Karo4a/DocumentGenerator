@@ -8,7 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DocumentGenerator.Context.Tests\DocumentGenerator.Context.Tests.csproj" />
-    <ProjectReference Include="..\DocumentGenerator.ProductRepository\DocumentGenerator.ProductRepository.csproj" />
+    <ProjectReference Include="..\DocumentGenerator.Repositories\DocumentGenerator.Repositories.csproj" />
   </ItemGroup>
 
 </Project>

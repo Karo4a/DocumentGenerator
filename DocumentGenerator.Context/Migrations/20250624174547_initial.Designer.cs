@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace DocumentGenerator.Context.Migrations
 {
-    [DbContext(typeof(ProductsContext))]
+    [DbContext(typeof(DocumentGeneratorContext))]
     [Migration("20250624174547_initial")]
     partial class initial
     {

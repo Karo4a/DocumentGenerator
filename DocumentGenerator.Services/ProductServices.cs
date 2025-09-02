@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using DocumentGenerator.Context.Contracts;
 using DocumentGenerator.Entities;
-using DocumentGenerator.ProductRepository.Contracts;
+using DocumentGenerator.Repositories.Contracts.ReadRepositories;
+using DocumentGenerator.Repositories.Contracts.WriteRepositories;
 using DocumentGenerator.Services.Contracts.Exceptions;
 using DocumentGenerator.Services.Contracts.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace DocumentGenerator.Services
 {
@@ -58,7 +58,7 @@ namespace DocumentGenerator.Services
             var entity = await productReadRepository.GetById(model.Id, cancellationToken);
             if (entity == null)
             {
-                throw new ProductNotFoundException($"Не удалось найти товар с иденитификатором {model.Id}");
+                throw new DocumentGeneratorNotFoundException($"Не удалось найти товар с иденитификатором {model.Id}");
             }
 
             entity.Name = model.Name;

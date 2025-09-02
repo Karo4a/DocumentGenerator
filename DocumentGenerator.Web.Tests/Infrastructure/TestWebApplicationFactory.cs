@@ -27,18 +27,18 @@ namespace DocumentGenerator.Web.Tests.Infrastructure
             builder.ConfigureTestAppConfiguration();
             builder.ConfigureServices(services =>
             {
-                var descriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<ProductsContext>));
+                var descriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<DocumentGeneratorContext>));
                 if (descriptor != null)
                 {
                     services.Remove(descriptor);
                 }
 
-                services.AddSingleton<DbContextOptions<ProductsContext>>(provider =>
+                services.AddSingleton<DbContextOptions<DocumentGeneratorContext>>(provider =>
                 {
                     var configuration = provider.GetRequiredService<IConfiguration>();
                     var connectionString = configuration.GetConnectionString("IntegrationConnection");
-                    var dbContextOptions = new DbContextOptions<ProductsContext>(new Dictionary<Type, IDbContextOptionsExtension>());
-                    var optionsBuilder = new DbContextOptionsBuilder<ProductsContext>(dbContextOptions)
+                    var dbContextOptions = new DbContextOptions<DocumentGeneratorContext>(new Dictionary<Type, IDbContextOptionsExtension>());
+                    var optionsBuilder = new DbContextOptionsBuilder<DocumentGeneratorContext>(dbContextOptions)
                         .UseApplicationServiceProvider(provider)
                         .UseNpgsql(connectionString: string.Format(connectionString!, Guid.NewGuid().ToString("N")));
                     return optionsBuilder.Options;

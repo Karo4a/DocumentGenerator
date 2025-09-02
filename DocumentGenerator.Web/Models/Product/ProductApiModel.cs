@@ -1,10 +1,15 @@
-﻿namespace DocumentGenerator.Services.Contracts.Models
+﻿namespace DocumentGenerator.Web.Models.Product
 {
     /// <summary>
-    /// Модель создания товара
+    /// Модель товара
     /// </summary>
-    public class ProductCreateModel
+    public class ProductApiModel
     {
+        /// <summary>
+        /// Идентификатор
+        /// </summary>
+        public Guid Id { get; set; }
+
         /// <summary>
         /// Название
         /// </summary>
@@ -14,5 +19,5 @@
         /// Описание
         /// </summary>
         public string Description { get; set; } = string.Empty;
-    };
+    }
 }

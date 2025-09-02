@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DocumentGenerator.ProductRepository.Contracts\DocumentGenerator.ProductRepository.Contracts.csproj" />
+    <ProjectReference Include="..\DocumentGenerator.Repositories.Contracts\DocumentGenerator.Repositories.Contracts.csproj" />
   </ItemGroup>
 
 </Project>

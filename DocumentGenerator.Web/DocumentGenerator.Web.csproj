@@ -14,7 +14,7 @@
   <ItemGroup>
     <ProjectReference Include="..\DocumentGenerator.Common\DocumentGenerator.Common.csproj" />
     <ProjectReference Include="..\DocumentGenerator.Context\DocumentGenerator.Context.csproj" />
-    <ProjectReference Include="..\DocumentGenerator.ProductRepository\DocumentGenerator.ProductRepository.csproj" />
+    <ProjectReference Include="..\DocumentGenerator.Repositories\DocumentGenerator.Repositories.csproj" />
     <ProjectReference Include="..\DocumentGenerator.Services\DocumentGenerator.Services.csproj" />
   </ItemGroup>
 

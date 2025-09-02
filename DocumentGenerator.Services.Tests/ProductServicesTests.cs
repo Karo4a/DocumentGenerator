@@ -3,11 +3,11 @@ using AutoMapper;
 using DocumentGenerator.Common;
 using DocumentGenerator.Context.Tests;
 using DocumentGenerator.Entities;
-using DocumentGenerator.ProductRepository;
+using DocumentGenerator.Repositories.ReadRepositories;
+using DocumentGenerator.Repositories.WriteRepositories;
 using DocumentGenerator.Services.Contracts.Models;
 using DocumentGenerator.Services.Infrastructure;
 using FluentAssertions;
-using Microsoft.EntityFrameworkCore;
 using Moq;
 using Xunit;
 

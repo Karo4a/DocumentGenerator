@@ -29,13 +29,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DocumentGenerator.Context.Contracts", "DocumentGenerator.Context.Contracts\DocumentGenerator.Context.Contracts.csproj", "{AA2BA5F1-430F-4FC4-8E72-ADA5F8F97241}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DocumentGenerator.ProductRepository", "DocumentGenerator.ProductRepository\DocumentGenerator.ProductRepository.csproj", "{7CE4E473-A50A-4169-AB27-7F253EDA161B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DocumentGenerator.Repositories", "DocumentGenerator.Repositories\DocumentGenerator.Repositories.csproj", "{7CE4E473-A50A-4169-AB27-7F253EDA161B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DocumentGenerator.ProductRepository.Contracts", "DocumentGenerator.ProductRepository.Contracts\DocumentGenerator.ProductRepository.Contracts.csproj", "{0EFB646C-4E98-4C09-B639-9C2650C26877}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DocumentGenerator.Repositories.Contracts", "DocumentGenerator.Repositories.Contracts\DocumentGenerator.Repositories.Contracts.csproj", "{0EFB646C-4E98-4C09-B639-9C2650C26877}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DocumentGenerator.Common", "DocumentGenerator.Common\DocumentGenerator.Common.csproj", "{A173809D-3823-4F4D-8D15-9D670F6F181C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DocumentGenerator.ProductRepository.Tests", "DocumentGenerator.ProductRepository.Tests\DocumentGenerator.ProductRepository.Tests.csproj", "{93B5E48F-6B40-4FF9-8CB4-18664F390259}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DocumentGenerator.Repositories.Tests", "DocumentGenerator.Repositories.Tests\DocumentGenerator.Repositories.Tests.csproj", "{93B5E48F-6B40-4FF9-8CB4-18664F390259}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DocumentGenerator.Context.Tests", "DocumentGenerator.Context.Tests\DocumentGenerator.Context.Tests.csproj", "{DFB11D27-4434-4270-9335-3D88D12ABB14}"
 EndProject

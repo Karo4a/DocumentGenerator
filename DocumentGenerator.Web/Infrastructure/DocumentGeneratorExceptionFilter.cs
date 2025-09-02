@@ -8,27 +8,27 @@ namespace DocumentGenerator.Web.Infrastructure
     /// <summary>
     /// Фильтр обработки ошибок
     /// </summary>
-    public class ProductExceptionFilter : IExceptionFilter
+    public class DocumentGeneratorExceptionFilter : IExceptionFilter
     {
         void IExceptionFilter.OnException(ExceptionContext context)
         {
-            if (context.Exception is not ProductException exception)
+            if (context.Exception is not DocumentGeneratorException exception)
             {
                 return;
             }
 
             switch (exception)
             {
-                case ProductNotFoundException ex:
+                case DocumentGeneratorNotFoundException ex:
                     SetDataToContext(new NotFoundObjectResult(new ApiExceptionDetail(ex.Message)), context);
                     break;
-                case ProductInvalidOperationException ex:
+                case DocumentGeneratorInvalidOperationException ex:
                     SetDataToContext(new BadRequestObjectResult(new ApiExceptionDetail(ex.Message))
                     {
                         StatusCode = StatusCodes.Status406NotAcceptable,
                     }, context);
                     break;
-                case ProductValidationException ex:
+                case DocumentGeneratorValidationException ex:
                     SetDataToContext(new BadRequestObjectResult(new ApiValidationExceptionDetail()
                     {
                         Errors = ex.Errors,

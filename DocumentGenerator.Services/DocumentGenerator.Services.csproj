@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DocumentGenerator.ProductRepository.Contracts\DocumentGenerator.ProductRepository.Contracts.csproj" />
+    <ProjectReference Include="..\DocumentGenerator.Repositories.Contracts\DocumentGenerator.Repositories.Contracts.csproj" />
     <ProjectReference Include="..\DocumentGenerator.Services.Contracts\DocumentGenerator.Services.Contracts.csproj" />
   </ItemGroup>
 

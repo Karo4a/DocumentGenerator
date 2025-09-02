@@ -9,7 +9,7 @@ namespace DocumentGenerator.Web.Tests.Infrastructure
     public class ProductsApiFixture : IAsyncLifetime
     {
         private readonly TestWebApplicationFactory factory;
-        private ProductsContext? context;
+        private DocumentGeneratorContext? context;
 
         /// <summary>
         /// Конструтор
@@ -19,7 +19,7 @@ namespace DocumentGenerator.Web.Tests.Infrastructure
             factory = new TestWebApplicationFactory();
         }
 
-        internal ProductsContext Context
+        internal DocumentGeneratorContext Context
         {
             get
             {
@@ -29,7 +29,7 @@ namespace DocumentGenerator.Web.Tests.Infrastructure
                 }
 
                 var scope = factory.Services.GetRequiredService<IServiceScopeFactory>().CreateScope();
-                context = scope.ServiceProvider.GetRequiredService<ProductsContext>();
+                context = scope.ServiceProvider.GetRequiredService<DocumentGeneratorContext>();
                 return context;
             }
         }

@@ -1,19 +1,19 @@
 ﻿namespace DocumentGenerator.Services.Contracts.Exceptions
 {
     /// <summary>
-    /// Базовый класс исключений товаров
+    /// Базовый класс исключений
     /// </summary>
-    public abstract class ProductException : Exception
+    public abstract class DocumentGeneratorException : Exception
     {
         /// <summary>
         /// Конструктор без параметров
         /// </summary>
-        protected ProductException() { }
+        protected DocumentGeneratorException() { }
 
         /// <summary>
         /// Конструктор c указанием сообщения об ошибке
         /// </summary>
-        protected ProductException(string message)
+        protected DocumentGeneratorException(string message)
             : base(message) { }
     }
 }

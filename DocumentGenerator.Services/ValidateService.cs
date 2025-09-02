@@ -3,6 +3,7 @@ using DocumentGenerator.Services.Validators;
 using DocumentGenerator.Services.Contracts.Exceptions;
 using FluentValidation;
 using DocumentGenerator.Services.Contracts.Models;
+using DocumentGenerator.Services.Contracts.Models.Party;
 
 namespace DocumentGenerator.Services
 {
@@ -18,6 +19,7 @@ namespace DocumentGenerator.Services
         {
             validators = new Dictionary<Type, IValidator>();
             validators.TryAdd(typeof(ProductCreateModel), new ProductCreateModelValidator());
+            validators.TryAdd(typeof(PartyCreateModel), new PartyCreateModelValidator());
         }
 
         async Task IValidateService.Validate<TModel>(TModel model, CancellationToken cancellationToken)
@@ -25,14 +27,15 @@ namespace DocumentGenerator.Services
         {
             if (!validators.TryGetValue(model.GetType(), out var validator))
             {
-                throw new ProductInvalidOperationException($"Не найден запрашиваемый валидатор {model.GetType()}");
+                throw new DocumentGeneratorInvalidOperationException($"Не найден запрашиваемый валидатор {model.GetType()}");
             }
 
             var context = new ValidationContext<TModel>(model);
             var validationResult = await validator.ValidateAsync(context, cancellationToken);
             if (!validationResult.IsValid)
             {
-                throw new ProductValidationException(validationResult.Errors.Select(x => InvalidateItemModel.New(x.PropertyName, x.ErrorMessage)));
+                throw new DocumentGeneratorValidationException(validationResult.Errors.Select(x => 
+                    InvalidateItemModel.New(x.PropertyName, x.ErrorMessage)));
             }
         }
     }

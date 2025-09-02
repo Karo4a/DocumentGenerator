@@ -27,7 +27,7 @@ namespace DocumentGenerator.Services.Tests.Validators
         public async Task ShouldHaveEmptyNameErrorMessage()
         {
             // Arrange
-            var model = new ProductCreateModel(string.Empty, string.Empty);
+            var model = new ProductCreateModel();
 
             // Act
             var result = await validator.TestValidateAsync(model);
@@ -43,7 +43,11 @@ namespace DocumentGenerator.Services.Tests.Validators
         public async Task ShouldHaveShortNameErrorMessage()
         {
             // Arrange
-            var model = new ProductCreateModel("12", string.Empty);
+            var model = new ProductCreateModel
+            { 
+                Name = "12",
+                Description = string.Empty,
+            };
 
             // Act
             var result = await validator.TestValidateAsync(model);
@@ -59,7 +63,11 @@ namespace DocumentGenerator.Services.Tests.Validators
         public async Task ShouldHaveLongNameErrorMessage()
         {
             // Arrange
-            var model = new ProductCreateModel(new string('1', 300), string.Empty);
+            var model = new ProductCreateModel
+            {
+                Name = new string('1', 300),
+                Description = string.Empty,
+            };
 
             // Act
             var result = await validator.TestValidateAsync(model);
@@ -75,7 +83,11 @@ namespace DocumentGenerator.Services.Tests.Validators
         public async Task ShouldNotHaveErrorMessage()
         {
             // Arrange
-            var model = new ProductCreateModel("1234", string.Empty);
+            var model = new ProductCreateModel
+            {
+                Name = "1234",
+                Description = string.Empty,
+            };
 
             // Act
             var result = await validator.TestValidateAsync(model);

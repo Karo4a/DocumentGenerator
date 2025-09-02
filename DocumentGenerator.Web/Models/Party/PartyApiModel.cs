@@ -1,9 +1,9 @@
-﻿namespace DocumentGenerator.Web.Models
+﻿namespace DocumentGenerator.Web.Models.Party
 {
     /// <summary>
-    /// Модель товара
+    /// Модель стороны акта
     /// </summary>
-    public class ProductApiModel
+    public class PartyApiModel
     {
         /// <summary>
         /// Идентификатор
@@ -16,8 +16,13 @@
         public string Name { get; set; } = string.Empty;
 
         /// <summary>
-        /// Описание
+        /// Должность
         /// </summary>
-        public string Description { get; set; } = string.Empty;
+        public string Job { get; set; } = string.Empty;
+
+        /// <summary>
+        /// ИНН
+        /// </summary>
+        public string TaxId { get; set; } = string.Empty;
     }
 }

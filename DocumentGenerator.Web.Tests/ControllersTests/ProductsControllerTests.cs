@@ -1,6 +1,6 @@
 ﻿using Ahatornn.TestGenerator;
 using DocumentGenerator.Context;
-using DocumentGenerator.Web.Models;
+using DocumentGenerator.Web.Models.Product;
 using DocumentGenerator.Web.Tests.Infrastructure;
 using FluentAssertions;
 using Newtonsoft.Json;
@@ -10,13 +10,13 @@ using Xunit;
 namespace DocumentGenerator.Web.Tests.ControllersTests
 {
     /// <summary>
-    /// Тесты контроллера товаров
+    /// Интеграционные тесты контроллера товаров
     /// </summary>
     [Collection(nameof(ProductsCollection))]
     public class ProductsControllerTests
     {
         private readonly HttpClient webClient;
-        private readonly ProductsContext context;
+        private readonly DocumentGeneratorContext context;
 
         /// <summary>
         /// Конструктор

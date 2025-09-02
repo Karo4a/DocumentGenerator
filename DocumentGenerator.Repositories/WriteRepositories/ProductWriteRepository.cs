@@ -1,9 +1,9 @@
 ﻿using DocumentGenerator.Common;
 using DocumentGenerator.Context.Contracts;
 using DocumentGenerator.Entities;
-using DocumentGenerator.ProductRepository.Contracts;
+using DocumentGenerator.Repositories.Contracts.WriteRepositories;
 
-namespace DocumentGenerator.ProductRepository
+namespace DocumentGenerator.Repositories.WriteRepositories
 {
     /// <inheritdoc cref="IProductWriteRepository" />
     public class ProductWriteRepository : BaseWriteRepository<Product>, IProductWriteRepository

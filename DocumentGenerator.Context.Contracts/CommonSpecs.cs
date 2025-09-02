@@ -23,7 +23,7 @@ namespace DocumentGenerator.Context.Contracts
             => query.Where(x => x.Id == id);
 
         /// <summary>
-        /// По идентификатором
+        /// По идентификаторам
         /// </summary>
         public static IQueryable<TEntity> ByIds<TEntity>(this IQueryable<TEntity> query, IReadOnlyCollection<Guid> ids)
             where TEntity : class, IEntityWithId

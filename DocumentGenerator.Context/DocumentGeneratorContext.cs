@@ -6,14 +6,14 @@ using System.Diagnostics.CodeAnalysis;
 namespace DocumentGenerator.Context
 {
     /// <summary>
-    /// Контекст базы данных работы с товарами
+    /// Контекст базы данных
     /// </summary>
-    public class ProductsContext : DbContext, IReader, IWriter, IUnitOfWork
+    public class DocumentGeneratorContext : DbContext, IReader, IWriter, IUnitOfWork
     {
         /// <summary>
         /// Конструктор
         /// </summary>
-        public ProductsContext(DbContextOptions<ProductsContext> options)
+        public DocumentGeneratorContext(DbContextOptions<DocumentGeneratorContext> options)
             : base(options)
         {
             // https://support.aspnetzero.com/QA/Questions/11011/Cannot-write-DateTime-with-KindLocal-to-PostgreSQL-type-%27timestamp-with-time-zone%27-only-UTC-is-supported

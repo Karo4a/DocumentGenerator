@@ -3,7 +3,7 @@
     /// <summary>
     /// Ошибки валидации
     /// </summary>
-    public class ProductValidationException : ProductException
+    public class DocumentGeneratorValidationException : DocumentGeneratorException
     {
         /// <summary>
         /// Список ошибок
@@ -13,7 +13,7 @@
         /// <summary>
         /// Конструктор
         /// </summary>
-        public ProductValidationException(IEnumerable<InvalidateItemModel> errors)
+        public DocumentGeneratorValidationException(IEnumerable<InvalidateItemModel> errors)
         {
             Errors = errors;
         }

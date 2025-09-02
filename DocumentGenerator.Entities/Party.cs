@@ -1,24 +1,30 @@
-﻿using DocumentGenerator.Context.Contracts;
+﻿
+using DocumentGenerator.Context.Contracts;
 
 namespace DocumentGenerator.Entities
 {
     /// <summary>
-    /// Сущность товара
+    /// Сущность стороны акта
     /// </summary>
-    public class Product : IEntityWithId, IEntityWithAudit, IEntityWithSoftDeleted
+    public class Party : IEntityWithId, IEntityWithAudit, IEntityWithSoftDeleted
     {
         /// <inheritdoc cref="IEntityWithId.Id"/>
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Название
+        /// Полное имя
         /// </summary>
         public string Name { get; set; } = string.Empty;
 
         /// <summary>
-        /// Описание
+        /// Должность
         /// </summary>
-        public string Description { get; set; } = string.Empty;
+        public string Job { get; set; } = string.Empty;
+
+        /// <summary>
+        /// ИНН
+        /// </summary>
+        public string TaxId { get; set; } = string.Empty;
 
         /// <inheritdoc cref="IEntityWithAudit.CreatedAt"/>
         public DateTimeOffset CreatedAt { get; set; }
@@ -28,6 +34,6 @@ namespace DocumentGenerator.Entities
 
         /// <inheritdoc cref="IEntityWithSoftDeleted.DeletedAt"/>
         public DateTimeOffset? DeletedAt { get; set; }
-       
+
     }
 }

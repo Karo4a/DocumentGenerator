@@ -1,6 +1,6 @@
 ﻿using DocumentGenerator.Entities;
 
-namespace DocumentGenerator.ProductRepository.Contracts
+namespace DocumentGenerator.Repositories.Contracts.ReadRepositories
 {
     /// <summary>
     /// Интерфейс чтения сущности <see cref="Product"/>

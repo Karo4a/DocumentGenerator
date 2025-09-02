@@ -2,8 +2,10 @@
 using DocumentGenerator.Common;
 using DocumentGenerator.Context;
 using DocumentGenerator.Context.Contracts;
-using DocumentGenerator.ProductRepository;
-using DocumentGenerator.ProductRepository.Contracts;
+using DocumentGenerator.Repositories.Contracts.ReadRepositories;
+using DocumentGenerator.Repositories.Contracts.WriteRepositories;
+using DocumentGenerator.Repositories.ReadRepositories;
+using DocumentGenerator.Repositories.WriteRepositories;
 using DocumentGenerator.Services;
 using DocumentGenerator.Services.Contracts;
 using DocumentGenerator.Services.Infrastructure;
@@ -28,7 +30,7 @@ namespace DocumentGenerator.Web
 
             var controllers = builder.Services.AddControllers(opt =>
             {
-                opt.Filters.Add<ProductExceptionFilter>();
+                opt.Filters.Add<DocumentGeneratorExceptionFilter>();
             });
 
             if (builder.Environment.EnvironmentName == "integration")
@@ -47,19 +49,18 @@ namespace DocumentGenerator.Web
 
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-            builder.Services.AddDbContext<ProductsContext>(options =>
+            builder.Services.AddDbContext<DocumentGeneratorContext>(options =>
                 options.UseNpgsql(connectionString)
                     .LogTo(Console.WriteLine)
             );
-            builder.Services.AddScoped<IReader>(x => x.GetRequiredService<ProductsContext>());
-            builder.Services.AddScoped<IWriter>(x => x.GetRequiredService<ProductsContext>());
-            builder.Services.AddScoped<IUnitOfWork>(x => x.GetRequiredService<ProductsContext>());
+            builder.Services.AddScoped<IReader>(x => x.GetRequiredService<DocumentGeneratorContext>());
+            builder.Services.AddScoped<IWriter>(x => x.GetRequiredService<DocumentGeneratorContext>());
+            builder.Services.AddScoped<IUnitOfWork>(x => x.GetRequiredService<DocumentGeneratorContext>());
             builder.Services.AddScoped<IProductServices, ProductServices>();
 
             builder.Services.AddSingleton<IValidateService, ValidateService>();
             builder.Services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 
-            //builder.Services.AddAutoMapper(typeof(ApiMapper), typeof(ServiceProfile));
             builder.Services.AddSingleton(_ =>
             {
                 var mapConfig = new MapperConfiguration(cfg =>
@@ -87,7 +88,6 @@ namespace DocumentGenerator.Web
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
 
             app.MapControllers();
 

@@ -1,7 +1,8 @@
 ﻿using Ahatornn.TestGenerator;
 using DocumentGenerator.Context.Tests;
 using DocumentGenerator.Entities;
-using DocumentGenerator.ProductRepository.Contracts;
+using DocumentGenerator.Repositories.Contracts.ReadRepositories;
+using DocumentGenerator.Repositories.ReadRepositories;
 using FluentAssertions;
 using Xunit;
 
@@ -10,7 +11,7 @@ namespace DocumentGenerator.ProductRepository.Tests
     /// <summary>
     /// Тесты на <see cref="ProductReadRepository"/>
     /// </summary>
-    public class ProductReadRepositoryTests : ProductsContextInMemory
+    public class ProductReadRepositoryTests : DocumentGeneratorContextInMemory
     {
         private readonly IProductReadRepository productReadRepository;
 
