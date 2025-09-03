@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using DocumentGenerator.Services;
 using DocumentGenerator.Services.Contracts;
 using DocumentGenerator.Services.Contracts.Models.Party;
 using DocumentGenerator.Web.Models.Exceptions;
@@ -34,7 +33,6 @@ namespace DocumentGenerator.Web.Controllers
         /// <summary>
         /// Получает список всех сторон актов
         /// </summary>
-        /// GET: /api/party/
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<PartyApiModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetAll(CancellationToken cancellationToken)
@@ -46,7 +44,6 @@ namespace DocumentGenerator.Web.Controllers
         /// <summary>
         /// Добавляет новую сторону акта
         /// </summary>
-        /// POST: /api/party/
         [HttpPost]
         [ProducesResponseType(typeof(PartyApiModel), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status422UnprocessableEntity)]
@@ -62,12 +59,11 @@ namespace DocumentGenerator.Web.Controllers
         /// <summary>
         /// Редактирует сторону акта
         /// </summary>
-        /// PUT: /api/party/c2331ea8-a98d-4c3e-baea-d88f5665947
         [HttpPut("{id:guid}")]
         [ProducesResponseType(typeof(IEnumerable<PartyApiModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Edit([FromRoute] Guid id, [FromBody] PartyRequestApiModel  request, CancellationToken cancellationToken)
+        public async Task<IActionResult> Edit([FromRoute] Guid id, [FromBody] PartyRequestApiModel request, CancellationToken cancellationToken)
         {
             var requestModel = mapper.Map<PartyModel>(request);
             requestModel.Id = id;
@@ -75,6 +71,18 @@ namespace DocumentGenerator.Web.Controllers
             var result = await service.Edit(requestModel, cancellationToken);
 
             return Ok(mapper.Map<PartyModel>(result));
+        }
+
+        /// <summary>
+        /// Удаляет сторону акта
+        /// </summary>
+        [HttpDelete("{id:guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Delete([FromRoute] Guid id, CancellationToken cancellationToken)
+        {
+            await service.Delete(id, cancellationToken);
+            return Ok();
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace DocumentGenerator.Common
+﻿using DocumentGenerator.Common.Contracts;
+
+namespace DocumentGenerator.Common
 {
     /// <inheritdoc cref="IDateTimeProvider"/>
     public class DateTimeProvider : IDateTimeProvider

@@ -5,6 +5,7 @@ using DocumentGenerator.Repositories.Contracts.ReadRepositories;
 using DocumentGenerator.Repositories.Contracts.WriteRepositories;
 using DocumentGenerator.Services.Contracts.Exceptions;
 using DocumentGenerator.Services.Contracts.Models.Party;
+using DocumentGenerator.Services.Contracts;
 
 namespace DocumentGenerator.Services
 {
@@ -56,11 +57,8 @@ namespace DocumentGenerator.Services
 
         async Task<PartyModel> IPartyServices.Edit(PartyModel model, CancellationToken cancellationToken)
         {
-            var entity = await partyReadRepository.GetById(model.Id, cancellationToken);
-            if (entity == null)
-            {
-                throw new DocumentGeneratorNotFoundException($"Не удалось найти товар с иденитификатором {model.Id}");
-            }
+            var entity = await partyReadRepository.GetById(model.Id, cancellationToken)
+                ?? throw new DocumentGeneratorNotFoundException($"Не удалось найти товар с идентификатором {model.Id}");
 
             entity.Name = model.Name;
             entity.Job = model.Job;
@@ -71,6 +69,14 @@ namespace DocumentGenerator.Services
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
             return mapper.Map<PartyModel>(entity);
+        }
+
+        async Task IPartyServices.Delete(Guid id, CancellationToken cancellationToken)
+        {
+            var entity = await partyReadRepository.GetById(id, cancellationToken)
+                ?? throw new DocumentGeneratorNotFoundException($"Не удалось найти товар с идентификатором {id}");
+            partyWriteRepository.Delete(entity);
+            await unitOfWork.SaveChangesAsync(cancellationToken);
         }
     }
 }

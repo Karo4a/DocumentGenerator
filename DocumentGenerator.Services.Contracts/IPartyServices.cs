@@ -1,6 +1,6 @@
 ﻿using DocumentGenerator.Services.Contracts.Models.Party;
 
-namespace DocumentGenerator.Services
+namespace DocumentGenerator.Services.Contracts
 {
     /// <summary>
     /// Сервис по работе с товарами
@@ -21,5 +21,10 @@ namespace DocumentGenerator.Services
         /// Редактирует существующий <see cref="PartyModel"/>
         /// </summary>
         Task<PartyModel> Edit(PartyModel model, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Удаляет существующий <see cref="PartyModel"/> из базы данных
+        /// </summary>
+        Task Delete(Guid id, CancellationToken cancellationToken);
     }
 }

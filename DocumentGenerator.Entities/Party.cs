@@ -1,5 +1,4 @@
-﻿
-using DocumentGenerator.Context.Contracts;
+﻿using DocumentGenerator.Entities.Contracts;
 
 namespace DocumentGenerator.Entities
 {

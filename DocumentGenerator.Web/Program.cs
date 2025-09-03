@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DocumentGenerator.Common;
+using DocumentGenerator.Common.Contracts;
 using DocumentGenerator.Context;
 using DocumentGenerator.Context.Contracts;
 using DocumentGenerator.Repositories.Contracts.ReadRepositories;
@@ -57,6 +58,7 @@ namespace DocumentGenerator.Web
             builder.Services.AddScoped<IWriter>(x => x.GetRequiredService<DocumentGeneratorContext>());
             builder.Services.AddScoped<IUnitOfWork>(x => x.GetRequiredService<DocumentGeneratorContext>());
             builder.Services.AddScoped<IProductServices, ProductServices>();
+            builder.Services.AddScoped<IPartyServices, PartyServices>();
 
             builder.Services.AddSingleton<IValidateService, ValidateService>();
             builder.Services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
@@ -74,6 +76,9 @@ namespace DocumentGenerator.Web
             });
             builder.Services.AddScoped<IProductReadRepository, ProductReadRepository>();
             builder.Services.AddScoped<IProductWriteRepository, ProductWriteRepository>();
+
+            builder.Services.AddScoped<IPartyReadRepository, PartyReadRepository>();
+            builder.Services.AddScoped<IPartyWriteRepository, PartyWriteRepository>();
 
 
             var app = builder.Build();

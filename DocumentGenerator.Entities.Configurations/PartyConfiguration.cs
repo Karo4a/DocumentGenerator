@@ -26,7 +26,7 @@ namespace DocumentGenerator.Entities.Configurations
 
             builder.Property(x => x.TaxId)
                 .IsRequired()
-                .HasMaxLength(255);
+                .HasMaxLength(12);
 
             builder.HasIndex(x => x.Name, $"IX_{nameof(Party)}_{nameof(Party.DeletedAt)}")
                 .IsUnique()

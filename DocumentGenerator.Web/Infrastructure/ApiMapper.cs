@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using DocumentGenerator.Services.Contracts.Models;
 using DocumentGenerator.Services.Contracts.Models.Party;
+using DocumentGenerator.Services.Contracts.Models.Product;
 using DocumentGenerator.Web.Models.Party;
 using DocumentGenerator.Web.Models.Product;
 

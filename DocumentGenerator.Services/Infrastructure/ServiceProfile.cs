@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using DocumentGenerator.Entities;
-using DocumentGenerator.Services.Contracts.Models;
 using DocumentGenerator.Services.Contracts.Models.Party;
+using DocumentGenerator.Services.Contracts.Models.Product;
 
 namespace DocumentGenerator.Services.Infrastructure
 {

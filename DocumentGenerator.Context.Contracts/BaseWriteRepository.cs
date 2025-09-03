@@ -1,4 +1,5 @@
-﻿using DocumentGenerator.Common;
+﻿using DocumentGenerator.Common.Contracts;
+using DocumentGenerator.Entities.Contracts;
 using System.Diagnostics.CodeAnalysis;
 
 namespace DocumentGenerator.Context.Contracts

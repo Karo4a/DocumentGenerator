@@ -10,8 +10,8 @@ namespace DocumentGenerator.Services.Validators
     {
         private const int MinLength = 3;
         private const int MaxLength = 255;
-        private const int MinTaxIdLength = 10;
-        private const int MaxTaxIdLength = 12;
+        private const int IndividualTaxIdLength = 10;
+        private const int LegalEntityTaxIdLength = 12;
 
         /// <summary>
         /// Конструктор
@@ -28,8 +28,8 @@ namespace DocumentGenerator.Services.Validators
 
             RuleFor(x => x.TaxId)
                 .NotEmpty().WithMessage("ИНН стороны акта не может быть пустым.")
-                .Length(MinLength, MaxLength)
-                .WithMessage($"Длина ИНН стороны акта должна быть от {MinTaxIdLength} до {MaxTaxIdLength}");
+                .Must(x => x.Length == IndividualTaxIdLength || x.Length == LegalEntityTaxIdLength)
+                .WithMessage($"Длина ИНН стороны акта должна быть либо {IndividualTaxIdLength} для физических лиц, либо {LegalEntityTaxIdLength} для юридических лиц");
         }
     }
 }

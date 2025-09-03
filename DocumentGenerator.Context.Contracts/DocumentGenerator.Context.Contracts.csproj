@@ -11,6 +11,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\DocumentGenerator.Common\DocumentGenerator.Common.csproj" />
+	  <ProjectReference Include="..\DocumentGenerator.Common.Contracts\DocumentGenerator.Common.Contracts.csproj" />
+	  <ProjectReference Include="..\DocumentGenerator.Entities.Contracts\DocumentGenerator.Entities.Contracts.csproj" />
 	</ItemGroup>
 </Project>

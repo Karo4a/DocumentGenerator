@@ -3,8 +3,9 @@ using DocumentGenerator.Context.Contracts;
 using DocumentGenerator.Entities;
 using DocumentGenerator.Repositories.Contracts.ReadRepositories;
 using DocumentGenerator.Repositories.Contracts.WriteRepositories;
+using DocumentGenerator.Services.Contracts;
 using DocumentGenerator.Services.Contracts.Exceptions;
-using DocumentGenerator.Services.Contracts.Models;
+using DocumentGenerator.Services.Contracts.Models.Product;
 
 namespace DocumentGenerator.Services
 {
@@ -58,7 +59,7 @@ namespace DocumentGenerator.Services
             var entity = await productReadRepository.GetById(model.Id, cancellationToken);
             if (entity == null)
             {
-                throw new DocumentGeneratorNotFoundException($"Не удалось найти товар с иденитификатором {model.Id}");
+                throw new DocumentGeneratorNotFoundException($"Не удалось найти товар с идентификатором {model.Id}");
             }
 
             entity.Name = model.Name;
@@ -69,6 +70,14 @@ namespace DocumentGenerator.Services
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
             return mapper.Map<ProductModel>(entity);
+        }
+
+        async Task IProductServices.Delete(Guid id, CancellationToken cancellationToken)
+        {
+            var entity = await productReadRepository.GetById(id, cancellationToken)
+                ?? throw new DocumentGeneratorNotFoundException($"Не удалось найти товар с идентификатором {id}");
+            productWriteRepository.Delete(entity);
+            await unitOfWork.SaveChangesAsync(cancellationToken);
         }
     }
 }

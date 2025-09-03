@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
+using DocumentGenerator.Entities.Contracts;
 
 namespace DocumentGenerator.Context.Contracts
 {

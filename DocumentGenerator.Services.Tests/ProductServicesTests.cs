@@ -5,7 +5,7 @@ using DocumentGenerator.Context.Tests;
 using DocumentGenerator.Entities;
 using DocumentGenerator.Repositories.ReadRepositories;
 using DocumentGenerator.Repositories.WriteRepositories;
-using DocumentGenerator.Services.Contracts.Models;
+using DocumentGenerator.Services.Contracts.Models.Product;
 using DocumentGenerator.Services.Infrastructure;
 using FluentAssertions;
 using Moq;

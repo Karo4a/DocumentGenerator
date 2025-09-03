@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using DocumentGenerator.Services.Contracts.Models;
+using DocumentGenerator.Services.Contracts.Models.Product;
 
 namespace DocumentGenerator.Services.Validators
 {

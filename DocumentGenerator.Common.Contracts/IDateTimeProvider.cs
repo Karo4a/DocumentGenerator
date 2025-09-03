@@ -1,4 +1,4 @@
-﻿namespace DocumentGenerator.Common
+﻿namespace DocumentGenerator.Common.Contracts
 {
     /// <summary>
     /// Интерфейс поставщика времени

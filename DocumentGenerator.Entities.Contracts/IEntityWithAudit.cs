@@ -1,4 +1,4 @@
-﻿namespace DocumentGenerator.Context.Contracts
+﻿namespace DocumentGenerator.Entities.Contracts
 {
     /// <summary>
     /// Интерфейс сущности с аудитом

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
-using DocumentGenerator.Services;
 using DocumentGenerator.Services.Contracts;
-using DocumentGenerator.Services.Contracts.Models;
+using DocumentGenerator.Services.Contracts.Models.Product;
 using DocumentGenerator.Web.Models.Exceptions;
 using DocumentGenerator.Web.Models.Product;
 using Microsoft.AspNetCore.Mvc;
@@ -34,7 +33,6 @@ namespace DocumentGenerator.Web.Controllers
         /// <summary>
         /// Получает список всех товаров
         /// </summary>
-        /// GET: /api/products/
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<ProductApiModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetAll(CancellationToken cancellationToken)
@@ -46,7 +44,6 @@ namespace DocumentGenerator.Web.Controllers
         /// <summary>
         /// Добавляет новый товар
         /// </summary>
-        /// POST: /api/products/
         [HttpPost]
         [ProducesResponseType(typeof(ProductApiModel), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status422UnprocessableEntity)]
@@ -62,7 +59,6 @@ namespace DocumentGenerator.Web.Controllers
         /// <summary>
         /// Редактирует товар
         /// </summary>
-        /// PUT: /api/products/c2331ea8-a98d-4c3e-baea-d88f5665947
         [HttpPut("{id:guid}")]
         [ProducesResponseType(typeof(IEnumerable<ProductApiModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status422UnprocessableEntity)]
@@ -75,6 +71,18 @@ namespace DocumentGenerator.Web.Controllers
             var result = await service.Edit(requestModel, cancellationToken);
 
             return Ok(mapper.Map<ProductModel>(result));
+        }
+
+        /// <summary>
+        /// Удаляет товар
+        /// </summary>
+        [HttpDelete("{id:guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Delete([FromRoute] Guid id, CancellationToken cancellationToken)
+        {
+            await service.Delete(id, cancellationToken);
+            return Ok();
         }
     }
 }

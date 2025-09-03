@@ -2,8 +2,8 @@
 using DocumentGenerator.Services.Validators;
 using DocumentGenerator.Services.Contracts.Exceptions;
 using FluentValidation;
-using DocumentGenerator.Services.Contracts.Models;
 using DocumentGenerator.Services.Contracts.Models.Party;
+using DocumentGenerator.Services.Contracts.Models.Product;
 
 namespace DocumentGenerator.Services
 {
