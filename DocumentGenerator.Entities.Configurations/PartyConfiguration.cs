@@ -14,8 +14,8 @@ namespace DocumentGenerator.Entities.Configurations
         public void Configure(EntityTypeBuilder<Party> builder)
         {
             builder.ToTable("Parties");
-
             builder.HasKey(x => x.Id);
+
             builder.Property(x => x.Name)
                 .IsRequired()
                 .HasMaxLength(255);
@@ -28,7 +28,7 @@ namespace DocumentGenerator.Entities.Configurations
                 .IsRequired()
                 .HasMaxLength(12);
 
-            builder.HasIndex(x => x.Name, $"IX_{nameof(Party)}_{nameof(Party.DeletedAt)}")
+            builder.HasIndex(x => x.TaxId, $"IX_{nameof(Party)}_{nameof(Party.DeletedAt)}")
                 .IsUnique()
                 .HasFilter($"\"{nameof(Party.DeletedAt)}\" IS NULL");
         }

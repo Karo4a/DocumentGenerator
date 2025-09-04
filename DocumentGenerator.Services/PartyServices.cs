@@ -58,7 +58,7 @@ namespace DocumentGenerator.Services
         async Task<PartyModel> IPartyServices.Edit(PartyModel model, CancellationToken cancellationToken)
         {
             var entity = await partyReadRepository.GetById(model.Id, cancellationToken)
-                ?? throw new DocumentGeneratorNotFoundException($"Не удалось найти товар с идентификатором {model.Id}");
+                ?? throw new DocumentGeneratorNotFoundException($"Не удалось найти сторону акта с идентификатором {model.Id}");
 
             entity.Name = model.Name;
             entity.Job = model.Job;
@@ -74,7 +74,7 @@ namespace DocumentGenerator.Services
         async Task IPartyServices.Delete(Guid id, CancellationToken cancellationToken)
         {
             var entity = await partyReadRepository.GetById(id, cancellationToken)
-                ?? throw new DocumentGeneratorNotFoundException($"Не удалось найти товар с идентификатором {id}");
+                ?? throw new DocumentGeneratorNotFoundException($"Не удалось найти сторону акта с идентификатором {id}");
             partyWriteRepository.Delete(entity);
             await unitOfWork.SaveChangesAsync(cancellationToken);
         }

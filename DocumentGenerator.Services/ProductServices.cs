@@ -44,7 +44,7 @@ namespace DocumentGenerator.Services
             {
                 Id = Guid.NewGuid(),
                 Name = model.Name,
-                Description = model.Description,
+                Cost = model.Cost,
                 CreatedAt = DateTimeOffset.UtcNow,
                 UpdatedAt = DateTimeOffset.UtcNow,
                 DeletedAt = null,
@@ -63,7 +63,7 @@ namespace DocumentGenerator.Services
             }
 
             entity.Name = model.Name;
-            entity.Description = model.Description;
+            entity.Cost = model.Cost;
             entity.UpdatedAt = DateTimeOffset.UtcNow;
 
             productWriteRepository.Edit(entity);

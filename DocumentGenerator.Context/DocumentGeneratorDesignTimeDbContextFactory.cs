@@ -20,7 +20,7 @@ namespace DocumentGenerator.Context
         /// </remarks>
         public DocumentGeneratorContext CreateDbContext(string[] args)
         {
-            var connectionString = "Host=localhost;Port=5432;Database=documentGenerator;Username=postgres;Password=asdasddd";
+            var connectionString = "Host=localhost;Port=5432;Database=documentGenerator;Username=postgres;Password=123";
             var options = new DbContextOptionsBuilder<DocumentGeneratorContext>()
                 .UseNpgsql(connectionString)
                 .LogTo(Console.WriteLine)
