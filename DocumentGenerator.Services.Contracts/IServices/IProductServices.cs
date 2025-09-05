@@ -1,6 +1,6 @@
 ﻿using DocumentGenerator.Services.Contracts.Models.Product;
 
-namespace DocumentGenerator.Services.Contracts
+namespace DocumentGenerator.Services.Contracts.IServices
 {
     /// <summary>
     /// Сервис по работе с товарами
@@ -20,7 +20,7 @@ namespace DocumentGenerator.Services.Contracts
         /// <summary>
         /// Редактирует существующий <see cref="ProductModel"/>
         /// </summary>
-        Task<ProductModel> Edit(ProductModel model, CancellationToken cancellationToken);
+        Task<ProductModel> Edit(Guid id, ProductCreateModel model, CancellationToken cancellationToken);
 
         /// <summary>
         /// Удаляет существующий <see cref="ProductModel"/> из базы данных

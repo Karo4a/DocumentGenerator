@@ -5,9 +5,9 @@ using DocumentGenerator.Repositories.Contracts.ReadRepositories;
 using DocumentGenerator.Repositories.Contracts.WriteRepositories;
 using DocumentGenerator.Services.Contracts.Exceptions;
 using DocumentGenerator.Services.Contracts.Models.Party;
-using DocumentGenerator.Services.Contracts;
+using DocumentGenerator.Services.Contracts.IServices;
 
-namespace DocumentGenerator.Services
+namespace DocumentGenerator.Services.Services
 {
 
     /// <inheritdoc cref="IPartyServices"/>
@@ -55,10 +55,10 @@ namespace DocumentGenerator.Services
             return mapper.Map<PartyModel>(result);
         }
 
-        async Task<PartyModel> IPartyServices.Edit(PartyModel model, CancellationToken cancellationToken)
+        async Task<PartyModel> IPartyServices.Edit(Guid id, PartyCreateModel model, CancellationToken cancellationToken)
         {
-            var entity = await partyReadRepository.GetById(model.Id, cancellationToken)
-                ?? throw new DocumentGeneratorNotFoundException($"Не удалось найти сторону акта с идентификатором {model.Id}");
+            var entity = await partyReadRepository.GetById(id, cancellationToken)
+                ?? throw new DocumentGeneratorNotFoundException($"Не удалось найти сторону акта с идентификатором {id}");
 
             entity.Name = model.Name;
             entity.Job = model.Job;

@@ -1,9 +1,9 @@
 ﻿using DocumentGenerator.Services.Contracts.Models.Party;
 
-namespace DocumentGenerator.Services.Contracts
+namespace DocumentGenerator.Services.Contracts.IServices
 {
     /// <summary>
-    /// Сервис по работе с товарами
+    /// Сервис по работе со сторонами актов
     /// </summary>
     public interface IPartyServices
     {
@@ -20,7 +20,7 @@ namespace DocumentGenerator.Services.Contracts
         /// <summary>
         /// Редактирует существующий <see cref="PartyModel"/>
         /// </summary>
-        Task<PartyModel> Edit(PartyModel model, CancellationToken cancellationToken);
+        Task<PartyModel> Edit(Guid id, PartyCreateModel model, CancellationToken cancellationToken);
 
         /// <summary>
         /// Удаляет существующий <see cref="PartyModel"/> из базы данных

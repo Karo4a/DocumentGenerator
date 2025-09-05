@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DocumentGenerator.Services.Contracts;
+using DocumentGenerator.Services.Contracts.IServices;
 using DocumentGenerator.Services.Contracts.Models.Product;
 using DocumentGenerator.Web.Models.Exceptions;
 using DocumentGenerator.Web.Models.Product;
@@ -65,10 +66,9 @@ namespace DocumentGenerator.Web.Controllers
         [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Edit([FromRoute] Guid id, [FromBody] ProductRequestApiModel  request, CancellationToken cancellationToken)
         {
-            var requestModel = mapper.Map<ProductModel>(request);
-            requestModel.Id = id;
-
-            var result = await service.Edit(requestModel, cancellationToken);
+            var requestModel = mapper.Map<ProductCreateModel>(request);
+            await validateService.Validate(requestModel, cancellationToken);
+            var result = await service.Edit(id, requestModel, cancellationToken);
 
             return Ok(mapper.Map<ProductModel>(result));
         }

@@ -9,7 +9,9 @@ using DocumentGenerator.Repositories.ReadRepositories;
 using DocumentGenerator.Repositories.WriteRepositories;
 using DocumentGenerator.Services;
 using DocumentGenerator.Services.Contracts;
+using DocumentGenerator.Services.Contracts.IServices;
 using DocumentGenerator.Services.Infrastructure;
+using DocumentGenerator.Services.Services;
 using DocumentGenerator.Web.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
@@ -59,6 +61,7 @@ namespace DocumentGenerator.Web
             builder.Services.AddScoped<IUnitOfWork>(x => x.GetRequiredService<DocumentGeneratorContext>());
             builder.Services.AddScoped<IProductServices, ProductServices>();
             builder.Services.AddScoped<IPartyServices, PartyServices>();
+            builder.Services.AddScoped<IDocumentServices, DocumentServices>();
 
             builder.Services.AddSingleton<IValidateService, ValidateService>();
             builder.Services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
@@ -79,6 +82,9 @@ namespace DocumentGenerator.Web
 
             builder.Services.AddScoped<IPartyReadRepository, PartyReadRepository>();
             builder.Services.AddScoped<IPartyWriteRepository, PartyWriteRepository>();
+
+            builder.Services.AddScoped<IDocumentReadRepository, DocumentReadRepository>();
+            builder.Services.AddScoped<IDocumentWriteRepository, DocumentWriteRepository>();
 
 
             var app = builder.Build();

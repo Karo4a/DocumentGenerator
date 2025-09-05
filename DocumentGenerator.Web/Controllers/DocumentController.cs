@@ -1,28 +1,28 @@
 ﻿using AutoMapper;
 using DocumentGenerator.Services.Contracts;
 using DocumentGenerator.Services.Contracts.IServices;
-using DocumentGenerator.Services.Contracts.Models.Party;
+using DocumentGenerator.Services.Contracts.Models.Document;
 using DocumentGenerator.Web.Models.Exceptions;
-using DocumentGenerator.Web.Models.Party;
+using DocumentGenerator.Web.Models.Document;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DocumentGenerator.Web.Controllers
 {
     /// <summary>
-    /// CRUD контроллер по работе со сторонами актов
+    /// CRUD контроллер по работе с документами
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
-    public class PartyController : ControllerBase
+    public class DocumentController : ControllerBase
     {
-        private readonly IPartyServices service;
+        private readonly IDocumentServices service;
         private readonly IMapper mapper;
         private readonly IValidateService validateService;
 
         /// <summary>
         /// Конструктор
         /// </summary>
-        public PartyController(IPartyServices service,
+        public DocumentController(IDocumentServices service,
             IMapper mapper,
             IValidateService validateService)
         {
@@ -32,49 +32,49 @@ namespace DocumentGenerator.Web.Controllers
         }
 
         /// <summary>
-        /// Получает список всех сторон актов
+        /// Получает список всех документов
         /// </summary>
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<PartyApiModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<DocumentApiModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetAll(CancellationToken cancellationToken)
         {
             var items = await service.GetAll(cancellationToken);
-            return Ok(mapper.Map<IReadOnlyCollection<PartyApiModel>>(items));
+            return Ok(mapper.Map<IReadOnlyCollection<DocumentApiModel>>(items));
         }
 
         /// <summary>
-        /// Добавляет новую сторону акта
+        /// Добавляет новый документ
         /// </summary>
         [HttpPost]
-        [ProducesResponseType(typeof(PartyApiModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(DocumentApiModel), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status422UnprocessableEntity)]
-        public async Task<ActionResult> Create(PartyRequestApiModel request, CancellationToken cancellationToken)
+        public async Task<ActionResult> Create(DocumentRequestApiModel request, CancellationToken cancellationToken)
         {
-            var requestModel = mapper.Map<PartyCreateModel>(request);
+            var requestModel = mapper.Map<DocumentCreateModel>(request);
             await validateService.Validate(requestModel, cancellationToken);
             var result = await service.Create(requestModel, cancellationToken);
 
-            return Ok(mapper.Map<PartyApiModel>(result));
+            return Ok(mapper.Map<DocumentApiModel>(result));
         }
 
         /// <summary>
-        /// Редактирует сторону акта
+        /// Редактирует документ
         /// </summary>
         [HttpPut("{id:guid}")]
-        [ProducesResponseType(typeof(IEnumerable<PartyApiModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<DocumentApiModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Edit([FromRoute] Guid id, [FromBody] PartyRequestApiModel request, CancellationToken cancellationToken)
+        public async Task<IActionResult> Edit([FromRoute] Guid id, [FromBody] DocumentRequestApiModel request, CancellationToken cancellationToken)
         {
-            var requestModel = mapper.Map<PartyCreateModel>(request);
+            var requestModel = mapper.Map<DocumentCreateModel>(request);
             await validateService.Validate(requestModel, cancellationToken);
             var result = await service.Edit(id, requestModel, cancellationToken);
 
-            return Ok(mapper.Map<PartyModel>(result));
+            return Ok(mapper.Map<DocumentModel>(result));
         }
 
         /// <summary>
-        /// Удаляет сторону акта
+        /// Удаляет документ
         /// </summary>
         [HttpDelete("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]

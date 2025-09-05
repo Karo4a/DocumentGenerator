@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DocumentGenerator.Repositories.ReadRepositories
 {
-
+    /// <inheritdoc cref="IPartyReadRepository" />
     public class PartyReadRepository : IPartyReadRepository
     {
         private readonly IReader reader;

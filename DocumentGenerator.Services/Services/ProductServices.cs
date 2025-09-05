@@ -3,11 +3,11 @@ using DocumentGenerator.Context.Contracts;
 using DocumentGenerator.Entities;
 using DocumentGenerator.Repositories.Contracts.ReadRepositories;
 using DocumentGenerator.Repositories.Contracts.WriteRepositories;
-using DocumentGenerator.Services.Contracts;
 using DocumentGenerator.Services.Contracts.Exceptions;
+using DocumentGenerator.Services.Contracts.IServices;
 using DocumentGenerator.Services.Contracts.Models.Product;
 
-namespace DocumentGenerator.Services
+namespace DocumentGenerator.Services.Services
 {
 
     /// <inheritdoc cref="IProductServices"/>
@@ -54,13 +54,10 @@ namespace DocumentGenerator.Services
             return mapper.Map<ProductModel>(result);
         }
 
-        async Task<ProductModel> IProductServices.Edit(ProductModel model, CancellationToken cancellationToken)
+        async Task<ProductModel> IProductServices.Edit(Guid id, ProductCreateModel model, CancellationToken cancellationToken)
         {
-            var entity = await productReadRepository.GetById(model.Id, cancellationToken);
-            if (entity == null)
-            {
-                throw new DocumentGeneratorNotFoundException($"Не удалось найти товар с идентификатором {model.Id}");
-            }
+            var entity = await productReadRepository.GetById(id, cancellationToken)
+                ?? throw new DocumentGeneratorNotFoundException($"Не удалось найти товар с идентификатором {id}");
 
             entity.Name = model.Name;
             entity.Cost = model.Cost;

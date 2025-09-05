@@ -3,7 +3,7 @@
 namespace DocumentGenerator.Repositories.Contracts.ReadRepositories
 {
     /// <summary>
-    /// Интерфейс чтения сущности <see cref="Party"/>
+    /// Репозиторий чтения сущности <see cref="Party"/>
     /// </summary>
     public interface IPartyReadRepository
     {

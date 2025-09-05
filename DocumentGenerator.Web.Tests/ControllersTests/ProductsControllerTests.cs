@@ -28,7 +28,7 @@ namespace DocumentGenerator.Web.Tests.ControllersTests
         }
 
         /// <summary>
-        /// 
+        /// Возвращает все значения
         /// </summary>
         [Fact]
         public async Task GetAllShouldReturnValue()

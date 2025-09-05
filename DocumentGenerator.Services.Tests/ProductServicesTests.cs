@@ -7,6 +7,7 @@ using DocumentGenerator.Repositories.ReadRepositories;
 using DocumentGenerator.Repositories.WriteRepositories;
 using DocumentGenerator.Services.Contracts.Models.Product;
 using DocumentGenerator.Services.Infrastructure;
+using DocumentGenerator.Services.Services;
 using FluentAssertions;
 using Moq;
 using Xunit;
