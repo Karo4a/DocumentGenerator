@@ -1,14 +1,14 @@
 ﻿namespace DocumentGenerator.Services.Contracts.Exceptions
 {
     /// <summary>
-    /// Исключение не найденного товара
+    /// Исключение найденного повторения
     /// </summary>
-    public class DocumentGeneratorNotFoundException : DocumentGeneratorException
+    public class DocumentGeneratorDuplicateException : DocumentGeneratorException
     {
         /// <summary>
         /// Конструктор
         /// </summary>
-        public DocumentGeneratorNotFoundException(string message)
+        public DocumentGeneratorDuplicateException(string message)
             : base(message) { }
     }
 }

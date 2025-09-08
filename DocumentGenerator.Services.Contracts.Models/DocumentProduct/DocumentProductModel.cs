@@ -1,5 +1,4 @@
-﻿using DocumentGenerator.Services.Contracts.Models.Document;
-using DocumentGenerator.Services.Contracts.Models.Product;
+﻿using DocumentGenerator.Services.Contracts.Models.Product;
 
 namespace DocumentGenerator.Services.Contracts.Models.DocumentProduct
 {
@@ -17,11 +16,6 @@ namespace DocumentGenerator.Services.Contracts.Models.DocumentProduct
         /// Объект передачи данных <see cref="ProductModel"/>
         /// </summary>
         public ProductModel Product { get; set; } = null!;
-
-        /// <summary>
-        /// Объект передачи данных <see cref="DocumentModel"/>
-        /// </summary>
-        public DocumentModel Document { get; set; } = null!;
 
         /// <summary>
         /// Количество товара

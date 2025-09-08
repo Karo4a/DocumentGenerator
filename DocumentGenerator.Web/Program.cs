@@ -83,6 +83,8 @@ namespace DocumentGenerator.Web
             builder.Services.AddScoped<IPartyReadRepository, PartyReadRepository>();
             builder.Services.AddScoped<IPartyWriteRepository, PartyWriteRepository>();
 
+            builder.Services.AddScoped<IDocumentProductWriteRepository, DocumentProductWriteRepository>();
+
             builder.Services.AddScoped<IDocumentReadRepository, DocumentReadRepository>();
             builder.Services.AddScoped<IDocumentWriteRepository, DocumentWriteRepository>();
 

@@ -37,6 +37,12 @@ namespace DocumentGenerator.Web.Infrastructure
                         StatusCode = StatusCodes.Status422UnprocessableEntity,
                     }, context);
                     break;
+                case DocumentGeneratorDuplicateException ex:
+                    SetDataToContext(new BadRequestObjectResult(new ApiExceptionDetail(ex.Message))
+                    {
+                        StatusCode = StatusCodes.Status409Conflict,
+                    }, context);
+                    break;
                 default:
                     SetDataToContext(new BadRequestObjectResult(new ApiExceptionDetail(exception.Message)), context);
                     break;

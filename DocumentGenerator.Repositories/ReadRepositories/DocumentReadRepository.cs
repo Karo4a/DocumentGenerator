@@ -22,12 +22,18 @@ namespace DocumentGenerator.Repositories.ReadRepositories
             => reader.Read<Document>()
                 .NotDeletedAt()
                 .ById(id)
+                .Include(x => x.Seller)
+                .Include(x => x.Buyer)
+                .Include(x => x.Products.Where(x => x.DeletedAt == null))
+                    .ThenInclude(x => x.Product)
                 .FirstOrDefaultAsync(cancellationToken);
 
         Task<IReadOnlyCollection<Document>> IDocumentReadRepository.GetAll(CancellationToken cancellationToken)
             => reader.Read<Document>()
                 .NotDeletedAt()
-                .Include(x => x.Products)
+                .Include(x => x.Seller)
+                .Include(x => x.Buyer)
+                .Include(x => x.Products.Where(x => x.DeletedAt == null))
                     .ThenInclude(x => x.Product)
                 .OrderBy(x => x.DocumentNumber)
                 .ToReadOnlyCollectionAsync(cancellationToken);

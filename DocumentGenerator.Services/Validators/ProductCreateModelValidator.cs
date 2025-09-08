@@ -20,6 +20,10 @@ namespace DocumentGenerator.Services.Validators
                 .NotEmpty().WithMessage("Название товара не может быть пустым.")
                 .Length(MinLength, MaxLength)
                 .WithMessage($"Длина названия товара должна быть от {MinLength} до {MaxLength}");
+
+            RuleFor(x => x.Cost)
+                .GreaterThan(0).WithMessage("Цена товара должна быть больше нуля.");
+                
         }
     }
 }

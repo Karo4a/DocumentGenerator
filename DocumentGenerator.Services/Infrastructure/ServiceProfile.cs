@@ -2,6 +2,8 @@
 using DocumentGenerator.Entities;
 using DocumentGenerator.Services.Contracts.Models.Party;
 using DocumentGenerator.Services.Contracts.Models.Product;
+using DocumentGenerator.Services.Contracts.Models.DocumentProduct;
+using DocumentGenerator.Services.Contracts.Models.Document;
 
 namespace DocumentGenerator.Services.Infrastructure
 {
@@ -17,6 +19,9 @@ namespace DocumentGenerator.Services.Infrastructure
         {
             CreateMap<Product, ProductModel>(MemberList.Destination);
             CreateMap<Party, PartyModel>(MemberList.Destination);
+            CreateMap<DocumentProduct, DocumentProductModel>(MemberList.Destination);
+            CreateMap<DocumentProductCreateModel, DocumentProduct>(MemberList.Destination);
+            CreateMap<Document, DocumentModel>(MemberList.Destination);
         }
     }
 }

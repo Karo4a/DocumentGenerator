@@ -8,28 +8,45 @@ namespace DocumentGenerator.Services.Validators
     /// </summary>
     public class DocumentCreateModelValidator : AbstractValidator<DocumentCreateModel>
     {
-        private const int MinLength = 3;
+        private const int MinLength = 1;
         private const int MaxLength = 255;
-        private const int IndividualTaxIdLength = 10;
-        private const int LegalEntityTaxIdLength = 12;
 
         /// <summary>
         /// Конструктор
         /// </summary>
         public DocumentCreateModelValidator()
         {
-            //RuleFor(x => x.Name)
-            //    .NotEmpty().WithMessage("Полное имя стороны акта не может быть пустым.")
-            //    .Length(MinLength, MaxLength)
-            //    .WithMessage($"Длина полного имени стороны акта должна быть от {MinLength} до {MaxLength}");
+            RuleFor(x => x.DocumentNumber)
+                .NotEmpty().WithMessage("Номер документа не может быть пустым.")
+                .Length(MinLength, MaxLength);
 
-            //RuleFor(x => x.Job)
-            //    .NotEmpty().WithMessage("Должность стороны акта не может быть пустой.");
+            RuleFor(x => x.ContractNumber)
+                .NotEmpty().WithMessage("Номер договора не может быть пустым.")
+                .Length(MinLength, MaxLength);
 
-            //RuleFor(x => x.TaxId)
-            //    .NotEmpty().WithMessage("ИНН стороны акта не может быть пустым.")
-            //    .Must(x => x.Length == IndividualTaxIdLength || x.Length == LegalEntityTaxIdLength)
-            //    .WithMessage($"Длина ИНН стороны акта должна быть либо {IndividualTaxIdLength} для физических лиц, либо {LegalEntityTaxIdLength} для юридических лиц");
+            RuleFor(x => x.Date)
+                .LessThanOrEqualTo(DateOnly.FromDateTime(DateTime.UtcNow))
+                .WithMessage("Дата подписания документа не может быть в будущем");
+
+            RuleFor(x => x.SellerId)
+                .NotEmpty().WithMessage("Идентификатор продавца не может быть пустым.")
+                .NotEqual(x => x.BuyerId).WithMessage("Идентификаторы покупателя и продавца не могут совпадать");
+
+            RuleFor(x => x.BuyerId)
+                .NotEmpty().WithMessage("Идентификатор продавца не может быть пустым.");
+
+            RuleFor(x => x.Products)
+                .Must(x => x.Select(y => y.ProductId).Distinct().Count() == x.Count)
+                .WithMessage("Товары не могут повторяться.")
+                .NotEmpty().WithMessage("Список товаров не может быть пустым.");
+
+            RuleForEach(x => x.Products).ChildRules(x =>
+            {
+                x.RuleFor(x => x.Quantity)
+                    .GreaterThan(0).WithMessage("Количество товара не может быть меньше одного.");
+                x.RuleFor(x => x.Cost)
+                    .GreaterThan(0).WithMessage("Цена товара должна быть больше нуля.");
+            });
         }
     }
 }

@@ -19,11 +19,6 @@ namespace DocumentGenerator.Web.Models.DocumentProduct
         public ProductApiModel Product { get; set; } = null!;
 
         /// <summary>
-        /// Объект передачи данных <see cref="DocumentApiModel"/>
-        /// </summary>
-        public DocumentApiModel Document { get; set; } = null!;
-
-        /// <summary>
         /// Количество товара
         /// </summary>
         public int Quantity { get; set; }

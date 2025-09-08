@@ -40,7 +40,7 @@ namespace DocumentGenerator.Entities
         /// <summary>
         /// Навигационное свойство покупателя
         /// </summary>
-        public Party Buyer {  get; set; } = null!;
+        public Party Buyer { get; set; } = null!;
 
         /// <summary>
         /// Навигационное свойство списка <see cref="DocumentProduct"/>
