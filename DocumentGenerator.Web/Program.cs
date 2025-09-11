@@ -62,6 +62,7 @@ namespace DocumentGenerator.Web
             builder.Services.AddScoped<IProductServices, ProductServices>();
             builder.Services.AddScoped<IPartyServices, PartyServices>();
             builder.Services.AddScoped<IDocumentServices, DocumentServices>();
+            builder.Services.AddScoped<IExcelServices, ExcelServices>();
 
             builder.Services.AddSingleton<IValidateService, ValidateService>();
             builder.Services.AddSingleton<IDateTimeProvider, DateTimeProvider>();

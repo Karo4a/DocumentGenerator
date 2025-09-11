@@ -6,7 +6,6 @@ using DocumentGenerator.Repositories.Contracts.WriteRepositories;
 using DocumentGenerator.Services.Contracts.Exceptions;
 using DocumentGenerator.Services.Contracts.IServices;
 using DocumentGenerator.Services.Contracts.Models.Document;
-using System.Collections.ObjectModel;
 
 namespace DocumentGenerator.Services
 {
@@ -40,6 +39,13 @@ namespace DocumentGenerator.Services
             this.productReadRepository = productReadRepository;
             this.mapper = mapper;
             this.unitOfWork = unitOfWork;
+        }
+
+        async Task<DocumentModel> IDocumentServices.GetById(Guid id, CancellationToken cancellationToken)
+        {
+            var entity = await documentReadRepository.GetById(id, cancellationToken)
+                ?? throw new DocumentGeneratorNotFoundException($"Не удалось найти документ с идентификатором {id}");
+            return mapper.Map<DocumentModel>(entity);
         }
 
         async Task<IReadOnlyCollection<DocumentModel>> IDocumentServices.GetAll(CancellationToken cancellationToken)
