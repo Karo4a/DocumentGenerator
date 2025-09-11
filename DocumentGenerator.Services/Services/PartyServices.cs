@@ -32,6 +32,13 @@ namespace DocumentGenerator.Services.Services
             this.unitOfWork = unitOfWork;
         }
 
+        async Task<PartyModel> IPartyServices.GetById(Guid id, CancellationToken cancellationToken)
+        {
+            var item = await partyReadRepository.GetById(id, cancellationToken)
+                ?? throw new DocumentGeneratorNotFoundException($"Не удалось найти сторону акта с идентификатором {id}");
+            return mapper.Map<PartyModel>(item);
+        }
+
         async Task<IReadOnlyCollection<PartyModel>> IPartyServices.GetAll(CancellationToken cancellationToken)
         {
             var items = await partyReadRepository.GetAll(cancellationToken);

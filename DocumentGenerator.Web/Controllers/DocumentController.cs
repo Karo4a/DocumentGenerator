@@ -50,11 +50,23 @@ namespace DocumentGenerator.Web.Controllers
         }
 
         /// <summary>
+        /// Получает документ по идентификатору
+        /// </summary>
+        [HttpGet("{id:guid}")]
+        [ProducesResponseType(typeof(DocumentApiModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetById([FromRoute] Guid id, CancellationToken cancellationToken)
+        {
+            var item = await service.GetById(id, cancellationToken);
+            return Ok(mapper.Map<DocumentApiModel>(item));
+        }
+
+        /// <summary>
         /// Получает список всех документов
         /// </summary>
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<DocumentApiModel>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> GetAll(CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
         {
             var items = await service.GetAll(cancellationToken);
             return Ok(mapper.Map<IReadOnlyCollection<DocumentApiModel>>(items));
@@ -67,7 +79,7 @@ namespace DocumentGenerator.Web.Controllers
         [ProducesResponseType(typeof(DocumentApiModel), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status409Conflict)]
-        public async Task<ActionResult> Create(DocumentRequestApiModel request, CancellationToken cancellationToken)
+        public async Task<IActionResult> Create([FromBody] DocumentRequestApiModel request, CancellationToken cancellationToken)
         {
             var requestModel = mapper.Map<DocumentCreateModel>(request);
             await validateService.Validate(requestModel, cancellationToken);

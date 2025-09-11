@@ -1,5 +1,4 @@
-﻿using DocumentGenerator.Web.Models.Document;
-using DocumentGenerator.Web.Models.Product;
+﻿using DocumentGenerator.Web.Models.Product;
 
 namespace DocumentGenerator.Web.Models.DocumentProduct
 {

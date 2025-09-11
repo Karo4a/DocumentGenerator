@@ -32,6 +32,18 @@ namespace DocumentGenerator.Web.Controllers
         }
 
         /// <summary>
+        /// Получает товар по идентификатору
+        /// </summary>
+        [HttpGet("{id:guid}")]
+        [ProducesResponseType(typeof(ProductApiModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetById([FromRoute] Guid id, CancellationToken cancellationToken)
+        {
+            var item = await service.GetById(id, cancellationToken);
+            return Ok(mapper.Map<ProductApiModel>(item));
+        }
+
+        /// <summary>
         /// Получает список всех товаров
         /// </summary>
         [HttpGet]
@@ -48,7 +60,7 @@ namespace DocumentGenerator.Web.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(ProductApiModel), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status422UnprocessableEntity)]
-        public async Task<ActionResult> Create(ProductRequestApiModel request, CancellationToken cancellationToken)
+        public async Task<ActionResult> Create([FromBody] ProductRequestApiModel request, CancellationToken cancellationToken)
         {
             var requestModel = mapper.Map<ProductCreateModel>(request);
             await validateService.Validate(requestModel, cancellationToken);

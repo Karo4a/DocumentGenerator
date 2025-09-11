@@ -8,6 +8,11 @@ namespace DocumentGenerator.Services.Contracts.IServices
     public interface IProductServices
     {
         /// <summary>
+        /// Возвращает <see cref="ProductModel"/> по идентификатору
+        /// </summary>
+        Task<ProductModel> GetById(Guid id, CancellationToken cancellationToken);
+
+        /// <summary>
         /// Возвращает список <see cref="ProductModel"/>
         /// </summary>
         Task<IReadOnlyCollection<ProductModel>> GetAll(CancellationToken cancellationToken);

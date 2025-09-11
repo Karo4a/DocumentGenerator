@@ -11,7 +11,7 @@
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Название
+        /// Полное имя
         /// </summary>
         public string Name { get; set; } = string.Empty;
 

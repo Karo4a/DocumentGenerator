@@ -32,6 +32,18 @@ namespace DocumentGenerator.Web.Controllers
         }
 
         /// <summary>
+        /// Получает сторону акта по идентификатору
+        /// </summary>
+        [HttpGet("{id:guid}")]
+        [ProducesResponseType(typeof(PartyApiModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetById([FromRoute] Guid id, CancellationToken cancellationToken)
+        {
+            var item = await service.GetById(id, cancellationToken);
+            return Ok(mapper.Map<PartyApiModel>(item));
+        }
+
+        /// <summary>
         /// Получает список всех сторон актов
         /// </summary>
         [HttpGet]
@@ -48,7 +60,7 @@ namespace DocumentGenerator.Web.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(PartyApiModel), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status422UnprocessableEntity)]
-        public async Task<ActionResult> Create(PartyRequestApiModel request, CancellationToken cancellationToken)
+        public async Task<ActionResult> Create([FromBody] PartyRequestApiModel request, CancellationToken cancellationToken)
         {
             var requestModel = mapper.Map<PartyCreateModel>(request);
             await validateService.Validate(requestModel, cancellationToken);

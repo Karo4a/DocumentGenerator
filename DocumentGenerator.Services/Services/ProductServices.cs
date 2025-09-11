@@ -32,6 +32,13 @@ namespace DocumentGenerator.Services.Services
             this.unitOfWork = unitOfWork;
         }
 
+        async Task<ProductModel> IProductServices.GetById(Guid id, CancellationToken cancellationToken)
+        {
+            var item = await productReadRepository.GetById(id, cancellationToken)
+                ?? throw new DocumentGeneratorNotFoundException($"Не удалось найти товар с идентификатором {id}");
+            return mapper.Map<ProductModel>(item);
+        }
+
         async Task<IReadOnlyCollection<ProductModel>> IProductServices.GetAll(CancellationToken cancellationToken)
         {
             var items = await productReadRepository.GetAll(cancellationToken);

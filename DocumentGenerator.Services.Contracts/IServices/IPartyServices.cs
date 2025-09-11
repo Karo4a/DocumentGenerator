@@ -8,6 +8,11 @@ namespace DocumentGenerator.Services.Contracts.IServices
     public interface IPartyServices
     {
         /// <summary>
+        /// Возвращает <see cref="PartyModel"/> по идентификатору
+        /// </summary>
+        Task<PartyModel> GetById(Guid id, CancellationToken cancellationToken);
+
+        /// <summary>
         /// Возвращает список <see cref="PartyModel"/>
         /// </summary>
         Task<IReadOnlyCollection<PartyModel>> GetAll(CancellationToken cancellationToken);
