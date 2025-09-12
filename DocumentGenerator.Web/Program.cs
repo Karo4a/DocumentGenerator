@@ -66,6 +66,7 @@ namespace DocumentGenerator.Web
 
             builder.Services.AddSingleton<IValidateService, ValidateService>();
             builder.Services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
+            builder.Services.AddSingleton<IVatRateProvider, VatRateProvider>();
 
             builder.Services.AddSingleton(_ =>
             {

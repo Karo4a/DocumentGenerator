@@ -1,6 +1,8 @@
 ﻿using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Office2013.Excel;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
+using DocumentGenerator.Common.Contracts;
 using DocumentGenerator.Services.Contracts.IServices;
 using DocumentGenerator.Services.Contracts.Models.Document;
 using DocumentGenerator.Services.Contracts.Models.DocumentProduct;
@@ -11,6 +13,16 @@ namespace DocumentGenerator.Services.Services
     /// <inheritdoc cref="IExcelServices" />
     public class ExcelServices : IExcelServices
     {
+        private readonly IVatRateProvider vatRateProvider;
+
+        /// <summary>
+        /// Конструктор
+        /// </summary>
+        public ExcelServices(IVatRateProvider vatRateProvider)
+        {
+            this.vatRateProvider = vatRateProvider;
+        }
+
         MemoryStream IExcelServices.Export(DocumentModel documentModel, CancellationToken cancellationToken)
         {
             using var stream = new MemoryStream();
@@ -40,7 +52,8 @@ namespace DocumentGenerator.Services.Services
                 };
                 sheets.Append(sheet);
 
-                var totalCost = documentModel.Products.Sum(x => x.Cost * x.Quantity * 1.13m);
+                var vatRate = vatRateProvider.GetVatRate();
+                var totalCost = documentModel.Products.Sum(x => x.Cost * x.Quantity * (1.0m + vatRate));
 
                 AddRow(sheetData, 1, textCells: [$"Приложение №{documentModel.DocumentNumber}"]);
                 AddRow(sheetData, 1, textCells: ["к договору"]);
@@ -57,11 +70,16 @@ namespace DocumentGenerator.Services.Services
                     CreateCell("Итого на сумму", 3),
                     CreateNumericCell(totalCost, 5)));
 
-                AddRow(sheetData, 0, "Стоимость Товара поставленного в соответствии с условия Договора составляет");
-                AddRow(sheetData, 0, $"{totalCost:f2} рублей, с учетом НДС.");
+                AddRow(sheetData, 7, $"Стоимость Товара поставленного в соответствии с условия Договора составляет {totalCost:f2} рублей, с учетом НДС.");
+                AddRow(sheetData, 0, "");
                 AddRow(sheetData, 2, "Покупатель:", "", "", "Продавец:");
                 AddRow(sheetData, 2, $"{documentModel.Buyer.Job}", "", "", $"{documentModel.Seller.Job}");
-                AddRow(sheetData, 2, "__________", $"{documentModel.Buyer.Name}", "", "__________", $"{documentModel.Seller.Name}");
+                sheetData.Append(new Row(
+                    CreateCell("__________", 2),
+                    CreateCell($"{documentModel.Buyer.Name}", 0),
+                    CreateCell("", 0),
+                    CreateCell("__________", 2),
+                    CreateCell($"{documentModel.Seller.Name}", 0)));
                 AddRow(sheetData, 2, "М.П.", "", "", "М.П.");
 
                 var mergeCells = CreateMergeCells(documentModel.Products.Count);
@@ -106,6 +124,7 @@ namespace DocumentGenerator.Services.Services
 
         private void AddProductRows(SheetData sheetData, ICollection<DocumentProductModel> products)
         {
+            var vatRate = vatRateProvider.GetVatRate();
             uint i = 1;
             foreach (var product in products)
             {
@@ -113,38 +132,54 @@ namespace DocumentGenerator.Services.Services
                     CreateNumericCell(i, 6),
                     CreateCell(product.Product.Name, 4),
                     CreateNumericCell(product.Quantity, 5),
-                    CreateNumericCell(product.Cost * 1.13m, 5),
-                    CreateNumericCell(product.Cost * product.Quantity * 1.13m, 5)));
+                    CreateNumericCell(product.Cost * (1.0m + vatRate), 5),
+                    CreateNumericCell(product.Cost * product.Quantity * (1.0m + vatRate), 5)));
                 ++i;
             }
         }
 
         private MergeCells CreateMergeCells(int productsCount)
         {
+            const int titleLines = 5,
+                tableExtraLines = 2,
+                underTableLine = 2,
+                partiesJobTwoColumns = 2,
+                partiesNameTwoColumns = 2;
+
+            int productsBlockEnd = titleLines + tableExtraLines + productsCount;
+            int underTableLineEnd = productsBlockEnd + underTableLine;
+            int partiesHeaderBlockEnd = underTableLineEnd + partiesJobTwoColumns;
+            int totalLines = partiesHeaderBlockEnd + partiesNameTwoColumns;
+
             var mergeCells = new MergeCells();
-            for (int i = 1; i <= 5; ++i)
-                mergeCells.Append(CreateMergeCell($"A{i}:E{i}"));
-            for (int i = productsCount + 8; i <= productsCount + 9; ++i)
-                mergeCells.Append(CreateMergeCell($"A{i}:E{i}"));
-            for (int i = productsCount + 10; i <= productsCount + 11; ++i)
+            for (int i = 1; i <= totalLines; ++i)
             {
-                mergeCells.Append(CreateMergeCell($"A{i}:C{i}"));
-                mergeCells.Append(CreateMergeCell($"D{i}:F{i}"));
+                if (i <= titleLines)
+                {
+                    mergeCells.Append(CreateMergeCell($"A{i}:E{i}"));
+                }
+                else if (i > underTableLineEnd && i <= partiesHeaderBlockEnd)
+                {
+                    mergeCells.Append(CreateMergeCell($"A{i}:C{i}"));
+                    mergeCells.Append(CreateMergeCell($"D{i}:F{i}"));
+                }
+                else if (i > underTableLineEnd && i <= totalLines)
+                {
+                    mergeCells.Append(CreateMergeCell($"B{i}:C{i}"));
+                    mergeCells.Append(CreateMergeCell($"E{i}:F{i}"));
+                }
             }
-            for (int i = productsCount + 12; i <= productsCount + 13; ++i)
-            {
-                mergeCells.Append(CreateMergeCell($"B{i}:C{i}"));
-                mergeCells.Append(CreateMergeCell($"E{i}:F{i}"));
-            }
+            mergeCells.Append(CreateMergeCell($"A{productsBlockEnd+1}:E{underTableLineEnd}"));
+
             return mergeCells;
         }
 
         private static Columns CreateColumns()
             => new Columns(
-                new Column { Min = 1, Max = 1, Width = 20, CustomWidth = true },
+                new Column { Min = 1, Max = 1, Width = 15, CustomWidth = true },
                 new Column { Min = 2, Max = 2, Width = 25, CustomWidth = true },
                 new Column { Min = 3, Max = 3, Width = 10, CustomWidth = true },
-                new Column { Min = 4, Max = 4, Width = 20, CustomWidth = true },
+                new Column { Min = 4, Max = 4, Width = 15, CustomWidth = true },
                 new Column { Min = 5, Max = 5, Width = 20, CustomWidth = true } 
             );
 
@@ -224,6 +259,11 @@ namespace DocumentGenerator.Services.Services
                         ApplyAlignment = true,
                         ApplyBorder = true,
                         ApplyNumberFormat = true,
+                    },
+                    new CellFormat() // Under Table Wrap Line = 7
+                    {
+                        Alignment = new() { WrapText = true },
+                        ApplyAlignment = true,
                     }
                 )
             );
