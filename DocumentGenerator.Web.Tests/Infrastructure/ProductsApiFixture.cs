@@ -1,4 +1,5 @@
 ﻿using DocumentGenerator.Context;
+using DocumentGenerator.Web.Tests.Client;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net;
@@ -34,7 +35,14 @@ namespace DocumentGenerator.Web.Tests.Infrastructure
             }
         }
 
-        internal HttpClient WebClient => factory.CreateClient();
+        internal IDocumentGeneratorApiClient WebClient
+        {
+            get
+            {
+                var client = factory.CreateClient();
+                return new DocumentGeneratorApiClient(string.Empty, client);
+            }
+        }
 
         /// <summary>
         /// Асинхронная инициализация

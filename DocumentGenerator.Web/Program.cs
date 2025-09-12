@@ -29,8 +29,6 @@ namespace DocumentGenerator.Web
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-
             var controllers = builder.Services.AddControllers(opt =>
             {
                 opt.Filters.Add<DocumentGeneratorExceptionFilter>();
@@ -41,7 +39,6 @@ namespace DocumentGenerator.Web
                 controllers.AddControllersAsServices();
             }
 
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(c =>
             {
@@ -90,10 +87,8 @@ namespace DocumentGenerator.Web
             builder.Services.AddScoped<IDocumentReadRepository, DocumentReadRepository>();
             builder.Services.AddScoped<IDocumentWriteRepository, DocumentWriteRepository>();
 
-
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();

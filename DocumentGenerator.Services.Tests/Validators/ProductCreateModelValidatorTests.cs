@@ -1,4 +1,4 @@
-﻿using DocumentGenerator.Services.Contracts.Models;
+﻿using DocumentGenerator.Services.Contracts.Models.Product;
 using DocumentGenerator.Services.Validators;
 using FluentValidation.TestHelper;
 using Xunit;
@@ -46,7 +46,7 @@ namespace DocumentGenerator.Services.Tests.Validators
             var model = new ProductCreateModel
             { 
                 Name = "12",
-                Description = string.Empty,
+                Cost = 1,
             };
 
             // Act
@@ -66,7 +66,7 @@ namespace DocumentGenerator.Services.Tests.Validators
             var model = new ProductCreateModel
             {
                 Name = new string('1', 300),
-                Description = string.Empty,
+                Cost = 1,
             };
 
             // Act
@@ -86,7 +86,7 @@ namespace DocumentGenerator.Services.Tests.Validators
             var model = new ProductCreateModel
             {
                 Name = "1234",
-                Description = string.Empty,
+                Cost = 1,
             };
 
             // Act
@@ -94,7 +94,7 @@ namespace DocumentGenerator.Services.Tests.Validators
 
             // Assert
             result.ShouldNotHaveValidationErrorFor(x => x.Name);
-            result.ShouldNotHaveValidationErrorFor(x => x.Description);
+            result.ShouldNotHaveValidationErrorFor(x => x.Cost);
         }
     }
 }

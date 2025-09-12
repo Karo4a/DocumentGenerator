@@ -1,11 +1,12 @@
 ﻿using Ahatornn.TestGenerator;
 using AutoMapper;
-using DocumentGenerator.Common;
+using DocumentGenerator.Common.Contracts;
 using DocumentGenerator.Context.Tests;
 using DocumentGenerator.Entities;
 using DocumentGenerator.Repositories.ReadRepositories;
 using DocumentGenerator.Repositories.WriteRepositories;
 using DocumentGenerator.Services.Contracts.Models.Product;
+using DocumentGenerator.Services.Contracts.IServices;
 using DocumentGenerator.Services.Infrastructure;
 using DocumentGenerator.Services.Services;
 using FluentAssertions;
@@ -17,7 +18,7 @@ namespace DocumentGenerator.Services.Tests
     /// <summary>
     /// Тесты на <see cref="ProductServices"/>
     /// </summary>
-    public class ProductServicesTests : ProductsContextInMemory
+    public class ProductServicesTests : DocumentGeneratorContextInMemory
     {
         private readonly IProductServices service;
 
@@ -81,7 +82,7 @@ namespace DocumentGenerator.Services.Tests
             result.Should().NotBeNull()
                 .And.BeEquivalentTo(request);
 
-            // Для проверки Delete
+            //// Для проверки Delete
             //var newValue = Context.Set<Product>().Single(x => x.Id == Guid.Empty);
             //newValue.Should().NotBeNull();
         }
