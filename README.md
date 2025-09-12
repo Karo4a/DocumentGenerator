@@ -4,10 +4,41 @@
 - Задание AspNetCore WEB API "Акт приема передачи товаров"
 ## Схема базы данных
 ```mermaid
-erDiagram
-  BUYER ||--}| ORDER: ""
-  SELLER ||--}| ORDER: ""
-  PRODUCT ||--}| ORDER: ""
+classDiagram
+  class Party {
+    Guid Id
+    String Name
+    String Job
+    String TaxId
+   }
+  class Product {
+    Guid Id
+    String Name
+    String Cost
+   }
+  class DocumentProduct {
+    Guid Id
+    Guid ProductId
+    Guid DocumentId
+    Int Quantity
+    Product Product
+    Document Document
+   }
+  class Document {
+    Guid Id
+    String DocumentNumber
+    String ContractNumber
+    DateOnly Date
+    Guid SellerId
+    Guid BuyerId
+    Party Seller
+    Party Buyer
+    ICollection[DocumentProduct] Products
+   }
+  Document "1" --> "1" Party : Seller
+  Document "1" --> "1" Party : Buyer
+  DocumentProduct "0.." --> "1" Product
+  Document "1" *-- "0..*" DocumentProduct
 ```
 
 ## Реализация API
