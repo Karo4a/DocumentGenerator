@@ -47,10 +47,14 @@ namespace DocumentGenerator.Services.Tests
         public async Task GetAllShouldReturnValues()
         {
             // Arrange
-            var product1 = TestEntityProvider.Shared.Create<Product>();
-            var product2 = TestEntityProvider.Shared.Create<Product>();
-            var product3 = TestEntityProvider.Shared.Create<Product>();
-            var product4 = TestEntityProvider.Shared.Create<Product>(x => x.DeletedAt = DateTimeOffset.UtcNow);
+            var product1 = TestEntityProvider.Shared.Create<Product>(x => x.Name = "2");
+            var product2 = TestEntityProvider.Shared.Create<Product>(x => x.Name = "1");
+            var product3 = TestEntityProvider.Shared.Create<Product>(x => x.Name = "3");
+            var product4 = TestEntityProvider.Shared.Create<Product>(x =>
+            {
+                x.Name = "3";
+                x.DeletedAt = DateTimeOffset.UtcNow;
+            });
             await Context.AddRangeAsync(product1, product2, product3, product4);
             await UnitOfWork.SaveChangesAsync();
 
@@ -77,6 +81,10 @@ namespace DocumentGenerator.Services.Tests
             // Assert
             result.Should().NotBeNull()
                 .And.BeEquivalentTo(request);
+
+            //// Для проверки Delete
+            //var newValue = Context.Set<Product>().Single(x => x.Id == Guid.Empty);
+            //newValue.Should().NotBeNull();
         }
     }
 }

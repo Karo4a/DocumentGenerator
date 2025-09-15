@@ -64,7 +64,7 @@ namespace DocumentGenerator.Web.Tests.Client
         /// </summary>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<DocumentApiModel> DocumentPUTAsync(System.Guid id, DocumentRequestApiModel? body);
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<DocumentApiModel>> DocumentAllPUTAsync(System.Guid id, DocumentRequestApiModel? body);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
@@ -72,7 +72,7 @@ namespace DocumentGenerator.Web.Tests.Client
         /// </summary>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<DocumentApiModel> DocumentPUTAsync(System.Guid id, DocumentRequestApiModel? body, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<DocumentApiModel>> DocumentAllPUTAsync(System.Guid id, DocumentRequestApiModel? body, System.Threading.CancellationToken cancellationToken);
 
         /// <summary>
         /// Удаляет документ
@@ -94,7 +94,7 @@ namespace DocumentGenerator.Web.Tests.Client
         /// </summary>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<DocumentApiModel>> DocumentAllAsync();
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<DocumentApiModel>> DocumentAllGETAsync();
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
@@ -102,7 +102,7 @@ namespace DocumentGenerator.Web.Tests.Client
         /// </summary>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<DocumentApiModel>> DocumentAllAsync(System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<DocumentApiModel>> DocumentAllGETAsync(System.Threading.CancellationToken cancellationToken);
 
         /// <summary>
         /// Добавляет новый документ
@@ -139,7 +139,7 @@ namespace DocumentGenerator.Web.Tests.Client
         /// </summary>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<PartyApiModel> PartyPUTAsync(System.Guid id, PartyRequestApiModel? body);
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<PartyApiModel>> PartyAllPUTAsync(System.Guid id, PartyRequestApiModel? body);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
@@ -147,7 +147,7 @@ namespace DocumentGenerator.Web.Tests.Client
         /// </summary>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<PartyApiModel> PartyPUTAsync(System.Guid id, PartyRequestApiModel? body, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<PartyApiModel>> PartyAllPUTAsync(System.Guid id, PartyRequestApiModel? body, System.Threading.CancellationToken cancellationToken);
 
         /// <summary>
         /// Удаляет сторону акта
@@ -169,7 +169,7 @@ namespace DocumentGenerator.Web.Tests.Client
         /// </summary>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<PartyApiModel>> PartyAllAsync();
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<PartyApiModel>> PartyAllGETAsync();
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
@@ -177,7 +177,7 @@ namespace DocumentGenerator.Web.Tests.Client
         /// </summary>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<PartyApiModel>> PartyAllAsync(System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<PartyApiModel>> PartyAllGETAsync(System.Threading.CancellationToken cancellationToken);
 
         /// <summary>
         /// Добавляет новую сторону акта
@@ -214,7 +214,7 @@ namespace DocumentGenerator.Web.Tests.Client
         /// </summary>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<ProductApiModel> ProductPUTAsync(System.Guid id, ProductRequestApiModel? body);
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ProductApiModel>> ProductAllPUTAsync(System.Guid id, ProductRequestApiModel? body);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
@@ -222,7 +222,7 @@ namespace DocumentGenerator.Web.Tests.Client
         /// </summary>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<ProductApiModel> ProductPUTAsync(System.Guid id, ProductRequestApiModel? body, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ProductApiModel>> ProductAllPUTAsync(System.Guid id, ProductRequestApiModel? body, System.Threading.CancellationToken cancellationToken);
 
         /// <summary>
         /// Удаляет товар
@@ -244,7 +244,7 @@ namespace DocumentGenerator.Web.Tests.Client
         /// </summary>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ProductApiModel>> ProductAllAsync();
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ProductApiModel>> ProductAllGETAsync();
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
@@ -252,7 +252,7 @@ namespace DocumentGenerator.Web.Tests.Client
         /// </summary>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ProductApiModel>> ProductAllAsync(System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ProductApiModel>> ProductAllGETAsync(System.Threading.CancellationToken cancellationToken);
 
         /// <summary>
         /// Добавляет новый товар
@@ -515,9 +515,9 @@ namespace DocumentGenerator.Web.Tests.Client
         /// </summary>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<DocumentApiModel> DocumentPUTAsync(System.Guid id, DocumentRequestApiModel? body)
+        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<DocumentApiModel>> DocumentAllPUTAsync(System.Guid id, DocumentRequestApiModel? body)
         {
-            return DocumentPUTAsync(id, body, System.Threading.CancellationToken.None);
+            return DocumentAllPUTAsync(id, body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -526,7 +526,7 @@ namespace DocumentGenerator.Web.Tests.Client
         /// </summary>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<DocumentApiModel> DocumentPUTAsync(System.Guid id, DocumentRequestApiModel? body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<DocumentApiModel>> DocumentAllPUTAsync(System.Guid id, DocumentRequestApiModel? body, System.Threading.CancellationToken cancellationToken)
         {
             if (id == null)
                 throw new System.ArgumentNullException("id");
@@ -575,7 +575,7 @@ namespace DocumentGenerator.Web.Tests.Client
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<DocumentApiModel>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<DocumentApiModel>>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -729,9 +729,9 @@ namespace DocumentGenerator.Web.Tests.Client
         /// </summary>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<DocumentApiModel>> DocumentAllAsync()
+        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<DocumentApiModel>> DocumentAllGETAsync()
         {
-            return DocumentAllAsync(System.Threading.CancellationToken.None);
+            return DocumentAllGETAsync(System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -740,7 +740,7 @@ namespace DocumentGenerator.Web.Tests.Client
         /// </summary>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<DocumentApiModel>> DocumentAllAsync(System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<DocumentApiModel>> DocumentAllGETAsync(System.Threading.CancellationToken cancellationToken)
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -1019,9 +1019,9 @@ namespace DocumentGenerator.Web.Tests.Client
         /// </summary>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<PartyApiModel> PartyPUTAsync(System.Guid id, PartyRequestApiModel? body)
+        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<PartyApiModel>> PartyAllPUTAsync(System.Guid id, PartyRequestApiModel? body)
         {
-            return PartyPUTAsync(id, body, System.Threading.CancellationToken.None);
+            return PartyAllPUTAsync(id, body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -1030,7 +1030,7 @@ namespace DocumentGenerator.Web.Tests.Client
         /// </summary>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<PartyApiModel> PartyPUTAsync(System.Guid id, PartyRequestApiModel? body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<PartyApiModel>> PartyAllPUTAsync(System.Guid id, PartyRequestApiModel? body, System.Threading.CancellationToken cancellationToken)
         {
             if (id == null)
                 throw new System.ArgumentNullException("id");
@@ -1079,7 +1079,7 @@ namespace DocumentGenerator.Web.Tests.Client
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<PartyApiModel>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<PartyApiModel>>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -1223,9 +1223,9 @@ namespace DocumentGenerator.Web.Tests.Client
         /// </summary>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<PartyApiModel>> PartyAllAsync()
+        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<PartyApiModel>> PartyAllGETAsync()
         {
-            return PartyAllAsync(System.Threading.CancellationToken.None);
+            return PartyAllGETAsync(System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -1234,7 +1234,7 @@ namespace DocumentGenerator.Web.Tests.Client
         /// </summary>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<PartyApiModel>> PartyAllAsync(System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<PartyApiModel>> PartyAllGETAsync(System.Threading.CancellationToken cancellationToken)
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -1503,9 +1503,9 @@ namespace DocumentGenerator.Web.Tests.Client
         /// </summary>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<ProductApiModel> ProductPUTAsync(System.Guid id, ProductRequestApiModel? body)
+        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ProductApiModel>> ProductAllPUTAsync(System.Guid id, ProductRequestApiModel? body)
         {
-            return ProductPUTAsync(id, body, System.Threading.CancellationToken.None);
+            return ProductAllPUTAsync(id, body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -1514,7 +1514,7 @@ namespace DocumentGenerator.Web.Tests.Client
         /// </summary>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ProductApiModel> ProductPUTAsync(System.Guid id, ProductRequestApiModel? body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ProductApiModel>> ProductAllPUTAsync(System.Guid id, ProductRequestApiModel? body, System.Threading.CancellationToken cancellationToken)
         {
             if (id == null)
                 throw new System.ArgumentNullException("id");
@@ -1563,7 +1563,7 @@ namespace DocumentGenerator.Web.Tests.Client
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<ProductApiModel>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<ProductApiModel>>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -1707,9 +1707,9 @@ namespace DocumentGenerator.Web.Tests.Client
         /// </summary>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ProductApiModel>> ProductAllAsync()
+        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ProductApiModel>> ProductAllGETAsync()
         {
-            return ProductAllAsync(System.Threading.CancellationToken.None);
+            return ProductAllGETAsync(System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -1718,7 +1718,7 @@ namespace DocumentGenerator.Web.Tests.Client
         /// </summary>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ProductApiModel>> ProductAllAsync(System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ProductApiModel>> ProductAllGETAsync(System.Threading.CancellationToken cancellationToken)
         {
             var client_ = _httpClient;
             var disposeClient_ = false;

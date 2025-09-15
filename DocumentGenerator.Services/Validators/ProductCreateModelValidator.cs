@@ -23,6 +23,7 @@ namespace DocumentGenerator.Services.Validators
 
             RuleFor(x => x.Cost)
                 .GreaterThan(0).WithMessage("Цена товара должна быть больше нуля.");
+                
         }
     }
 }

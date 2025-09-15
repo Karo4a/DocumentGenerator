@@ -2,14 +2,12 @@
 using DocumentGenerator.Web.Tests.Client;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System.Net;
 using Xunit;
 
 namespace DocumentGenerator.Web.Tests.Infrastructure
 {
-    /// <summary>
-    /// Фикстура API для интеграционных тестов
-    /// </summary>
-    public class DocumentGeneratorApiFixture : IAsyncLifetime
+    public class ProductsApiFixture : IAsyncLifetime
     {
         private readonly TestWebApplicationFactory factory;
         private DocumentGeneratorContext? context;
@@ -17,7 +15,7 @@ namespace DocumentGenerator.Web.Tests.Infrastructure
         /// <summary>
         /// Конструтор
         /// </summary>
-        public DocumentGeneratorApiFixture()
+        public ProductsApiFixture()
         {
             factory = new TestWebApplicationFactory();
         }

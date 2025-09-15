@@ -92,7 +92,7 @@ namespace DocumentGenerator.Web.Controllers
         /// Редактирует документ
         /// </summary>
         [HttpPut("{id:guid}")]
-        [ProducesResponseType(typeof(DocumentApiModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<DocumentApiModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status409Conflict)]
@@ -102,7 +102,7 @@ namespace DocumentGenerator.Web.Controllers
             await validateService.Validate(requestModel, cancellationToken);
             var result = await service.Edit(id, requestModel, cancellationToken);
 
-            return Ok(mapper.Map<DocumentApiModel>(result));
+            return Ok(mapper.Map<DocumentModel>(result));
         }
 
         /// <summary>
