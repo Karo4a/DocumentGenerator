@@ -77,6 +77,24 @@ namespace DocumentGenerator.Services.Tests.Validators
         }
 
         /// <summary>
+        /// Валидация падает с ошибкой нулевой цены товара
+        /// </summary>
+        [Fact]
+        public async Task ShouldHaveZeroCostErrorMessage()
+        {
+            // Arrange
+            var model = new ProductCreateModel
+            {
+                Name 
+            };
+
+            // Act
+
+            // Assert
+
+        }
+
+        /// <summary>
         /// Валидация проходит без ошибок
         /// </summary>
         [Fact]

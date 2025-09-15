@@ -73,7 +73,7 @@ namespace DocumentGenerator.Web.Controllers
         /// Редактирует товар
         /// </summary>
         [HttpPut("{id:guid}")]
-        [ProducesResponseType(typeof(IEnumerable<ProductApiModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProductApiModel), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Edit([FromRoute] Guid id, [FromBody] ProductRequestApiModel  request, CancellationToken cancellationToken)
@@ -82,7 +82,7 @@ namespace DocumentGenerator.Web.Controllers
             await validateService.Validate(requestModel, cancellationToken);
             var result = await service.Edit(id, requestModel, cancellationToken);
 
-            return Ok(mapper.Map<ProductModel>(result));
+            return Ok(mapper.Map<ProductApiModel>(result));
         }
 
         /// <summary>
