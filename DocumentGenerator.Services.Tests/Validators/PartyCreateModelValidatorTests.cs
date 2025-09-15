@@ -1,5 +1,5 @@
 ﻿using Ahatornn.TestGenerator;
-using DocumentGenerator.Services.Contracts.Models.Product;
+using DocumentGenerator.Services.Contracts.Models.Party;
 using DocumentGenerator.Services.Validators;
 using FluentValidation.TestHelper;
 using Xunit;
@@ -7,18 +7,18 @@ using Xunit;
 namespace DocumentGenerator.Services.Tests.Validators
 {
     /// <summary>
-    /// Тесты для <see cref="ProductCreateModelValidator"/>
+    /// Тесты для <see cref="PartyCreateModelValidator"/>
     /// </summary>
-    public class ProductCreateModelValidatorTests
+    public class PartyCreateModelValidatorTests
     {
-        private readonly ProductCreateModelValidator validator;
+        private readonly PartyCreateModelValidator validator;
 
         /// <summary>
         /// Конструктор
         /// </summary>
-        public ProductCreateModelValidatorTests()
+        public PartyCreateModelValidatorTests()
         {
-            validator = new ProductCreateModelValidator();
+            validator = new PartyCreateModelValidator();
         }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace DocumentGenerator.Services.Tests.Validators
         public async Task ShouldHaveEmptyNameErrorMessage()
         {
             // Arrange
-            var model = new ProductCreateModel();
+            var model = new PartyCreateModel();
 
             // Act
             var result = await validator.TestValidateAsync(model);
@@ -44,11 +44,10 @@ namespace DocumentGenerator.Services.Tests.Validators
         public async Task ShouldHaveShortNameErrorMessage()
         {
             // Arrange
-            var model = new ProductCreateModel
-            { 
-                Name = "12",
-                Cost = 1,
-            };
+            var model = TestEntityProvider.Shared.Create<PartyCreateModel>(x =>
+            {
+                x.Name = "1";
+            });
 
             // Act
             var result = await validator.TestValidateAsync(model);
@@ -64,11 +63,10 @@ namespace DocumentGenerator.Services.Tests.Validators
         public async Task ShouldHaveLongNameErrorMessage()
         {
             // Arrange
-            var model = new ProductCreateModel
+            var model = TestEntityProvider.Shared.Create<PartyCreateModel>(x =>
             {
-                Name = new string('1', 300),
-                Cost = 1,
-            };
+                x.Name = new string('1', 300);
+            });
 
             // Act
             var result = await validator.TestValidateAsync(model);
@@ -78,22 +76,54 @@ namespace DocumentGenerator.Services.Tests.Validators
         }
 
         /// <summary>
-        /// Валидация падает с ошибкой нулевой цены товара
+        /// Валидация падает с ошибкой пустой работы
         /// </summary>
         [Fact]
-        public async Task ShouldHaveZeroCostErrorMessage()
+        public async Task ShouldHaveEmptyJobErrorMessage()
         {
             // Arrange
-            var model = TestEntityProvider.Shared.Create<ProductCreateModel>(x =>
+            var model = new PartyCreateModel();
+
+            // Act
+            var result = await validator.TestValidateAsync(model);
+
+            // Assert
+            result.ShouldHaveValidationErrorFor(x => x.Job);
+        }
+
+        /// <summary>
+        /// Валидация падает с ошибкой пустого ИНН
+        /// </summary>
+        [Fact]
+        public async Task ShouldHaveEmptyTaxIdMessage()
+        {
+            // Arrange
+            var model = new PartyCreateModel();
+
+            // Act
+            var result = await validator.TestValidateAsync(model);
+
+            // Assert
+            result.ShouldHaveValidationErrorFor(x => x.TaxId);
+        }
+
+        /// <summary>
+        /// Валидация падает с ошибкой неправильной длины ИНН
+        /// </summary>
+        [Fact]
+        public async Task ShouldHaveWrongLengthTaxIdErrorMessage()
+        {
+            // Arrange
+            var model = TestEntityProvider.Shared.Create<PartyCreateModel>(x =>
             {
-                x.Cost = 0;
+                x.TaxId = new string('0', 11);
             });
 
             // Act
             var result = await validator.TestValidateAsync(model);
 
             // Assert
-            result.ShouldHaveValidationErrorFor(x => x.Cost);
+            result.ShouldHaveValidationErrorFor(x => x.TaxId);
         }
 
         /// <summary>
@@ -103,11 +133,10 @@ namespace DocumentGenerator.Services.Tests.Validators
         public async Task ShouldNotHaveErrorMessage()
         {
             // Arrange
-            var model = new ProductCreateModel
+            var model = TestEntityProvider.Shared.Create<PartyCreateModel>(x =>
             {
-                Name = "1234",
-                Cost = 1,
-            };
+                x.TaxId = new string('0', 10);
+            });
 
             // Act
             var result = await validator.TestValidateAsync(model);
