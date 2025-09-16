@@ -7,18 +7,18 @@ using Xunit;
 namespace DocumentGenerator.ProductRepository.Tests
 {
     /// <summary>
-    /// Тесты на <see cref="ProductReadRepository"/>
+    /// Тесты на <see cref="PartyReadRepository"/>
     /// </summary>
-    public class ProductReadRepositoryTests : DocumentGeneratorContextInMemory
+    public class PartyReadRepositoryTests : DocumentGeneratorContextInMemory
     {
-        private readonly IProductReadRepository readRepository;
+        private readonly IPartyReadRepository readRepository;
 
         /// <summary>
         /// Конструктор
         /// </summary>
-        public ProductReadRepositoryTests()
+        public PartyReadRepositoryTests()
         {
-            readRepository = new ProductReadRepository(Context);
+            readRepository = new PartyReadRepository(Context);
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace DocumentGenerator.ProductRepository.Tests
         public async Task GetByIdShouldReturnNullByDelete()
         {
             // Arrange
-            var entity = await PrepareProduct(DateTime.UtcNow);
+            var entity = await PrepareParty(DateTime.UtcNow);
 
             // Act
             var result = await readRepository.GetById(entity.Id, CancellationToken.None);
@@ -60,7 +60,7 @@ namespace DocumentGenerator.ProductRepository.Tests
         public async Task GetByIdShouldReturnValue()
         {
             // Arrange
-            var entity = await PrepareProduct();
+            var entity = await PrepareParty();
 
             // Act
             var result = await readRepository.GetById(entity.Id, CancellationToken.None);
@@ -92,9 +92,9 @@ namespace DocumentGenerator.ProductRepository.Tests
             // Arrange
             for (int i = 0; i < 3; ++i)
             {
-                await PrepareProduct();
+                await PrepareParty();
             }
-            await PrepareProduct(DateTime.UtcNow);
+            await PrepareParty(DateTime.UtcNow);
 
             // Act
             var result = await readRepository.GetAll(CancellationToken.None);

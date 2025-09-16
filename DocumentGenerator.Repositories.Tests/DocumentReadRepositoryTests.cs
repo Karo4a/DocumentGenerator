@@ -7,18 +7,18 @@ using Xunit;
 namespace DocumentGenerator.ProductRepository.Tests
 {
     /// <summary>
-    /// Тесты на <see cref="ProductReadRepository"/>
+    /// Тесты на <see cref="DocumentReadRepository"/>
     /// </summary>
-    public class ProductReadRepositoryTests : DocumentGeneratorContextInMemory
+    public class DocumentReadRepositoryTests : DocumentGeneratorContextInMemory
     {
-        private readonly IProductReadRepository readRepository;
+        private readonly IDocumentReadRepository readRepository;
 
         /// <summary>
         /// Конструктор
         /// </summary>
-        public ProductReadRepositoryTests()
+        public DocumentReadRepositoryTests()
         {
-            readRepository = new ProductReadRepository(Context);
+            readRepository = new DocumentReadRepository(Context);
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace DocumentGenerator.ProductRepository.Tests
         public async Task GetByIdShouldReturnNullByDelete()
         {
             // Arrange
-            var entity = await PrepareProduct(DateTime.UtcNow);
+            var entity = await PrepareDocument(DateTime.UtcNow);
 
             // Act
             var result = await readRepository.GetById(entity.Id, CancellationToken.None);
@@ -60,14 +60,15 @@ namespace DocumentGenerator.ProductRepository.Tests
         public async Task GetByIdShouldReturnValue()
         {
             // Arrange
-            var entity = await PrepareProduct();
+            var entity = await PrepareDocument();
 
             // Act
             var result = await readRepository.GetById(entity.Id, CancellationToken.None);
 
             // Assert
             result.Should().NotBeNull()
-                .And.BeEquivalentTo(entity);
+                .And.BeEquivalentTo(entity, opt => opt
+                    .IgnoringCyclicReferences());
         }
 
         /// <summary>
@@ -92,9 +93,9 @@ namespace DocumentGenerator.ProductRepository.Tests
             // Arrange
             for (int i = 0; i < 3; ++i)
             {
-                await PrepareProduct();
+                await PrepareDocument();
             }
-            await PrepareProduct(DateTime.UtcNow);
+            await PrepareDocument(DateTime.UtcNow);
 
             // Act
             var result = await readRepository.GetAll(CancellationToken.None);
@@ -102,7 +103,7 @@ namespace DocumentGenerator.ProductRepository.Tests
             // Assert
             result.Should()
                 .NotBeEmpty()
-                .And.BeInAscendingOrder(x => x.Name)
+                .And.BeInAscendingOrder(x => x.DocumentNumber)
                 .And.HaveCount(3);
         }
     }
