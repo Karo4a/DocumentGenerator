@@ -60,6 +60,7 @@ namespace DocumentGenerator.Web.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(PartyApiModel), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status409Conflict)]
         public async Task<ActionResult> Create([FromBody] PartyRequestApiModel request, CancellationToken cancellationToken)
         {
             var requestModel = mapper.Map<PartyCreateModel>(request);
@@ -76,6 +77,7 @@ namespace DocumentGenerator.Web.Controllers
         [ProducesResponseType(typeof(PartyApiModel), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status409Conflict)]
         public async Task<IActionResult> Edit([FromRoute] Guid id, [FromBody] PartyRequestApiModel request, CancellationToken cancellationToken)
         {
             var requestModel = mapper.Map<PartyCreateModel>(request);

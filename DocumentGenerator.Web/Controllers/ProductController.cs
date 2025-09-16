@@ -60,6 +60,7 @@ namespace DocumentGenerator.Web.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(ProductApiModel), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status409Conflict)]
         public async Task<ActionResult> Create([FromBody] ProductRequestApiModel request, CancellationToken cancellationToken)
         {
             var requestModel = mapper.Map<ProductCreateModel>(request);
@@ -76,6 +77,7 @@ namespace DocumentGenerator.Web.Controllers
         [ProducesResponseType(typeof(ProductApiModel), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status409Conflict)]
         public async Task<IActionResult> Edit([FromRoute] Guid id, [FromBody] ProductRequestApiModel  request, CancellationToken cancellationToken)
         {
             var requestModel = mapper.Map<ProductCreateModel>(request);
