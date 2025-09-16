@@ -47,6 +47,10 @@ namespace DocumentGenerator.Services.Services
 
         async Task<ProductModel> IProductServices.Create(ProductCreateModel model, CancellationToken cancellationToken)
         {
+            var products = await productReadRepository.GetAll(cancellationToken);
+            if (products.Any(x => x.Name == model.Name))
+                throw new DocumentGeneratorDuplicateException($"Товар с именем {model.Name} уже существует.");
+
             var result = new Product
             {
                 Id = Guid.NewGuid(),
@@ -63,6 +67,10 @@ namespace DocumentGenerator.Services.Services
 
         async Task<ProductModel> IProductServices.Edit(Guid id, ProductCreateModel model, CancellationToken cancellationToken)
         {
+            var products = await productReadRepository.GetAll(cancellationToken);
+            if (products.Any(x => x.Name == model.Name && x.Id != id))
+                throw new DocumentGeneratorDuplicateException($"Товар с именем {model.Name} уже существует.");
+
             var entity = await productReadRepository.GetById(id, cancellationToken)
                 ?? throw new DocumentGeneratorNotFoundException($"Не удалось найти товар с идентификатором {id}");
 

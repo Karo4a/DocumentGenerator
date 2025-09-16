@@ -6,6 +6,7 @@ using DocumentGenerator.Repositories.ReadRepositories;
 using DocumentGenerator.Repositories.WriteRepositories;
 using DocumentGenerator.Services.Contracts.Exceptions;
 using DocumentGenerator.Services.Contracts.IServices;
+using DocumentGenerator.Services.Contracts.Models.Party;
 using DocumentGenerator.Services.Contracts.Models.Product;
 using DocumentGenerator.Services.Infrastructure;
 using DocumentGenerator.Services.Services;
@@ -16,17 +17,17 @@ using Xunit;
 namespace DocumentGenerator.Services.Tests
 {
     /// <summary>
-    /// Тесты на <see cref="ProductServices"/>
+    /// Тесты на <see cref="PartyServices"/>
     /// </summary>
-    public class ProductServicesTests : DocumentGeneratorContextInMemory
+    public class PartyServicesTests : DocumentGeneratorContextInMemory
     {
-        private readonly IProductServices service;
+        private readonly IPartyServices service;
         private readonly IMapper mapper;
 
         /// <summary>
         /// Конструктор
         /// </summary>
-        public ProductServicesTests()
+        public PartyServicesTests()
         {
             mapper = new MapperConfiguration(opts => opts.AddProfile<TestsMapperProfile>()).CreateMapper();
 
@@ -36,15 +37,15 @@ namespace DocumentGenerator.Services.Tests
             });
             var serviceMapper = config.CreateMapper();
 
-            service = new ProductServices(new ProductReadRepository(Context),
-                new ProductWriteRepository(Context, Mock.Of<IDateTimeProvider>()),
+            service = new PartyServices(new PartyReadRepository(Context),
+                new PartyWriteRepository(Context, Mock.Of<IDateTimeProvider>()),
                 serviceMapper,
                 UnitOfWork
                 );
         }
 
         /// <summary>
-        /// Падает с ошибкой не найденного товара
+        /// Падает с ошибкой не найденной стороны акта
         /// </summary>
         [Fact]
         public async Task GetByIdShouldThrowNotFoundException()
@@ -61,13 +62,13 @@ namespace DocumentGenerator.Services.Tests
         }
 
         /// <summary>
-        /// Возвращает модель товара
+        /// Возвращает модель стороны акта
         /// </summary>
         [Fact]
         public async Task GetByIdShouldReturnValue()
         {
             // Arrange
-            var entity = await PrepareProduct();
+            var entity = await PrepareParty();
 
             // Act 
             var result = await service.GetById(entity.Id, CancellationToken.None);
@@ -78,7 +79,7 @@ namespace DocumentGenerator.Services.Tests
         }
 
         /// <summary>
-        /// Возвращает список с товарами
+        /// Возвращает список сторон актов
         /// </summary>
         [Fact]
         public async Task GetAllShouldReturnValues()
@@ -86,9 +87,9 @@ namespace DocumentGenerator.Services.Tests
             // Arrange
             for (int i = 0; i < 3; ++i)
             {
-                await PrepareProduct();
+                await PrepareParty();
             }
-            await PrepareProduct(DateTimeOffset.UtcNow);
+            await PrepareParty(DateTimeOffset.UtcNow);
 
             // Act
             var result = await service.GetAll(CancellationToken.None);
@@ -99,14 +100,14 @@ namespace DocumentGenerator.Services.Tests
         }
 
         /// <summary>
-        /// Создание падает с ошибкой существующего товара
+        /// Создание падает с ошибкой существующей стороны акта
         /// </summary>
         [Fact]
         public async Task CreateShouldThrowDuplicateException()
         {
             // Arrange
-            var entity = await PrepareProduct();
-            var request = mapper.Map<ProductCreateModel>(entity);
+            var entity = await PrepareParty();
+            var request = mapper.Map<PartyCreateModel>(entity);
             
             // Act
             var result = () => service.Create(request, CancellationToken.None);
@@ -116,13 +117,13 @@ namespace DocumentGenerator.Services.Tests
         }
 
         /// <summary>
-        /// Товар успешно создается
+        /// Сторона акта успешно создается
         /// </summary>
         [Fact]
         public async Task CreateShouldWork()
         {
             // Arrange
-            var request = mapper.Map<ProductCreateModel>(await PrepareProduct(save: false));
+            var request = mapper.Map<PartyCreateModel>(await PrepareParty(save: false));
 
             // Act
             var result = await service.Create(request, CancellationToken.None);
@@ -133,14 +134,14 @@ namespace DocumentGenerator.Services.Tests
         }
 
         /// <summary>
-        /// Редактирование падает с ошибкой не найденного товара
+        /// Редактирование падает с ошибкой не найденной стороны акта
         /// </summary>
         [Fact]
         public async Task EditShouldThrowNotFoundException()
         {
             // Arrange
-            var entity = await PrepareProduct(save: false);
-            var request = mapper.Map<ProductCreateModel>(entity);
+            var entity = await PrepareParty(save: false);
+            var request = mapper.Map<PartyCreateModel>(entity);
 
             // Act 
             var result = () => service.Edit(entity.Id, request, CancellationToken.None);
@@ -150,14 +151,14 @@ namespace DocumentGenerator.Services.Tests
         }
 
         /// <summary>
-        /// Редактирование падает с ошибкой существующего товара
+        /// Редактирование падает с ошибкой существующей стороны акта
         /// </summary>
         [Fact]
         public async Task EditShouldThrowDuplicateException()
         {
             // Arrange
-            var entity = await PrepareProduct();
-            var request = mapper.Map<ProductCreateModel>(entity);
+            var entity = await PrepareParty();
+            var request = mapper.Map<PartyCreateModel>(entity);
             var id = Guid.NewGuid();
 
             // Act
@@ -168,14 +169,14 @@ namespace DocumentGenerator.Services.Tests
         }
 
         /// <summary>
-        /// Товар успешно редактируется
+        /// Сторона акта успешно редактируется
         /// </summary>
         [Fact]
         public async Task EditShouldWork()
         {
             // Arrange
-            var entity = await PrepareProduct();
-            var request = mapper.Map<ProductCreateModel>(entity);
+            var entity = await PrepareParty();
+            var request = mapper.Map<PartyCreateModel>(entity);
 
             // Act 
             var result = await service.Edit(entity.Id, request, CancellationToken.None);
@@ -186,7 +187,7 @@ namespace DocumentGenerator.Services.Tests
         }
 
         /// <summary>
-        /// Удаление падает с ошибкой не найденного товара
+        /// Удаление падает с ошибкой не найденной стороны акта
         /// </summary>
         [Fact]
         public async Task DeleteShouldThrowNotFoundException()
@@ -202,19 +203,19 @@ namespace DocumentGenerator.Services.Tests
         }
 
         /// <summary>
-        /// Товар успешно удаляется
+        /// Сторона акта успешно удаляется
         /// </summary>
         [Fact]
         public async Task DeleteShouldWork()
         {
             // Arrange
-            var entity = await PrepareProduct();
+            var entity = await PrepareParty();
 
             // Act
             await service.Delete(entity.Id, CancellationToken.None);
 
             // Assert
-            var newValue = Context.Set<Product>().Single(x => x.Id == entity.Id && x.DeletedAt != null);
+            var newValue = Context.Set<Party>().Single(x => x.Id == entity.Id && x.DeletedAt != null);
             newValue.Should().NotBeNull();
         }
     }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using DocumentGenerator.Context.Contracts;
 using DocumentGenerator.Entities;
 using DocumentGenerator.Repositories.Contracts.ReadRepositories;
@@ -56,7 +57,7 @@ namespace DocumentGenerator.Services
 
         async Task<DocumentModel> IDocumentServices.Create(DocumentCreateModel model, CancellationToken cancellationToken)
         {
-            await ValidateConnections(model, cancellationToken);
+            await ValidateConnections(null, model, cancellationToken);
 
             var result = new Document
             {
@@ -87,7 +88,7 @@ namespace DocumentGenerator.Services
 
         async Task<DocumentModel> IDocumentServices.Edit(Guid id, DocumentCreateModel model, CancellationToken cancellationToken)
         {
-            await ValidateConnections(model, cancellationToken);
+            await ValidateConnections(id, model, cancellationToken);
 
             var entity = await documentReadRepository.GetById(id, cancellationToken)
                 ?? throw new DocumentGeneratorNotFoundException($"Не удалось найти документ с идентификатором {id}");
@@ -150,11 +151,11 @@ namespace DocumentGenerator.Services
             await unitOfWork.SaveChangesAsync(cancellationToken);
         }
 
-        private async Task ValidateConnections(DocumentCreateModel model, CancellationToken cancellationToken)
+        private async Task ValidateConnections(Guid? id, DocumentCreateModel model, CancellationToken cancellationToken)
         {
-            if ((await documentReadRepository.GetAll(cancellationToken)).Any(x => x.DocumentNumber == model.DocumentNumber))
+            if ((await documentReadRepository.GetAll(cancellationToken)).Any(x => x.DocumentNumber == model.DocumentNumber && x.Id != id))
             {
-                throw new DocumentGeneratorDuplicateException($"Документ с номер {model.DocumentNumber} уже существует");
+                throw new DocumentGeneratorDuplicateException($"Документ с номером {model.DocumentNumber} уже существует");
             }
             else if (await partyReadRepository.GetById(model.SellerId, cancellationToken) == null)
             {

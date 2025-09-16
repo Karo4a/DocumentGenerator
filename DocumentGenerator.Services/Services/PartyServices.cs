@@ -47,6 +47,10 @@ namespace DocumentGenerator.Services.Services
 
         async Task<PartyModel> IPartyServices.Create(PartyCreateModel model, CancellationToken cancellationToken)
         {
+            var parties = await partyReadRepository.GetAll(cancellationToken);
+            if (parties.Any(x => x.Name == model.Name))
+                throw new DocumentGeneratorDuplicateException($"Сторона акта с именем {model.Name} уже существует.");
+
             var result = new Party
             {
                 Id = Guid.NewGuid(),
@@ -64,6 +68,10 @@ namespace DocumentGenerator.Services.Services
 
         async Task<PartyModel> IPartyServices.Edit(Guid id, PartyCreateModel model, CancellationToken cancellationToken)
         {
+            var parties = await partyReadRepository.GetAll(cancellationToken);
+            if (parties.Any(x => x.Name == model.Name && x.Id != id))
+                throw new DocumentGeneratorDuplicateException($"Сторона акта с именем {model.Name} уже существует.");
+
             var entity = await partyReadRepository.GetById(id, cancellationToken)
                 ?? throw new DocumentGeneratorNotFoundException($"Не удалось найти сторону акта с идентификатором {id}");
 
