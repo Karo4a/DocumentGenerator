@@ -39,8 +39,8 @@ classDiagram
     Party Buyer
     ICollection[DocumentProduct] Products
    }
-  Document "1" --> "1" Party : Seller
-  Document "1" --> "1" Party : Buyer
+  Document "0..*" --> "1" Party : Seller
+  Document "0..*" --> "1" Party : Buyer
   DocumentProduct "0.." --> "1" Product
   Document "1" *-- "0..*" DocumentProduct
 ```
