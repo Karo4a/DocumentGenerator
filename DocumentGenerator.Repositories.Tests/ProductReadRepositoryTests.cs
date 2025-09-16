@@ -1,5 +1,4 @@
-﻿using Ahatornn.TestGenerator;
-using DocumentGenerator.Context.Tests;
+﻿using DocumentGenerator.Context.Tests;
 using DocumentGenerator.Entities;
 using DocumentGenerator.Repositories.Contracts.ReadRepositories;
 using DocumentGenerator.Repositories.ReadRepositories;
@@ -46,12 +45,10 @@ namespace DocumentGenerator.ProductRepository.Tests
         public async Task GetByIdShouldReturnNullByDelete()
         {
             // Arrange
-            var product = TestEntityProvider.Shared.Create<Product>(x => x.DeletedAt = DateTimeOffset.UtcNow);
-            await Context.AddAsync(product);
-            await UnitOfWork.SaveChangesAsync();
+            var entity = await PrepareProduct(DateTime.UtcNow);
 
             // Act
-            var result = await productReadRepository.GetById(product.Id, CancellationToken.None);
+            var result = await productReadRepository.GetById(entity.Id, CancellationToken.None);
 
             // Assert
             result.Should().BeNull();
@@ -64,16 +61,14 @@ namespace DocumentGenerator.ProductRepository.Tests
         public async Task GetByIdShouldReturnValue()
         {
             // Arrange
-            var product = TestEntityProvider.Shared.Create<Product>();
-            await Context.AddAsync(product);
-            await UnitOfWork.SaveChangesAsync();
+            var entity = await PrepareProduct();
 
             // Act
-            var result = await productReadRepository.GetById(product.Id, CancellationToken.None);
+            var result = await productReadRepository.GetById(entity.Id, CancellationToken.None);
 
             // Assert
             result.Should().NotBeNull()
-                .And.BeEquivalentTo(product);
+                .And.BeEquivalentTo(entity);
         }
 
         /// <summary>
@@ -96,16 +91,11 @@ namespace DocumentGenerator.ProductRepository.Tests
         public async Task GetAllShouldReturnValues()
         {
             // Arrange
-            var product1 = TestEntityProvider.Shared.Create<Product>(x => x.Name = "2");
-            var product2 = TestEntityProvider.Shared.Create<Product>(x => x.Name = "1");
-            var product3 = TestEntityProvider.Shared.Create<Product>(x => x.Name = "3");
-            var product4 = TestEntityProvider.Shared.Create<Product>(x =>
+            for (int i = 0; i < 3; ++i)
             {
-                x.Name = "3";
-                x.DeletedAt = DateTimeOffset.UtcNow;
-            });
-            await Context.AddRangeAsync(product1, product2, product3, product4);
-            await UnitOfWork.SaveChangesAsync();
+                await PrepareProduct();
+            }
+            await PrepareProduct(DateTime.UtcNow);
 
             // Act
             var result = await productReadRepository.GetAll(CancellationToken.None);

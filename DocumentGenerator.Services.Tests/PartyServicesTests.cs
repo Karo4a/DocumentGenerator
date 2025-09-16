@@ -79,6 +79,19 @@ namespace DocumentGenerator.Services.Tests
         }
 
         /// <summary>
+        /// Возвращает пустой список
+        /// </summary>
+        [Fact]
+        public async Task GetAllShouldBeEmpty()
+        {
+            // Act
+            var result = await service.GetAll(CancellationToken.None);
+
+            // Assert
+            result.Should().BeEmpty();
+        }
+
+        /// <summary>
         /// Возвращает список сторон актов
         /// </summary>
         [Fact]
