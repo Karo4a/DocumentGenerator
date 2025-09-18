@@ -1,5 +1,4 @@
-﻿using Ahatornn.TestGenerator;
-using DocumentGenerator.Context;
+﻿using DocumentGenerator.Context;
 using DocumentGenerator.Entities;
 using DocumentGenerator.Web.Tests.Client;
 using DocumentGenerator.Web.Tests.Infrastructure;

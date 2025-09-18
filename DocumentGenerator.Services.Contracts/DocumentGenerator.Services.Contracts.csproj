@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DocumentGenerator.Entities\DocumentGenerator.Entities.csproj" />
-    <ProjectReference Include="..\DocumentGenerator.Services.Contracts.Models\DocumentGenerator.Services.Contracts.Models.csproj" />
   </ItemGroup>
 
 </Project>

@@ -16,6 +16,6 @@
         /// <summary>
         /// Сообщение ошибки
         /// </summary>
-        string Message { get; }
+        public string Message { get; }
     }
 }

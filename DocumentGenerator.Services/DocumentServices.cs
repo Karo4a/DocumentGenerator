@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using DocumentFormat.OpenXml.Office2010.Excel;
 using DocumentGenerator.Context.Contracts;
 using DocumentGenerator.Entities;
 using DocumentGenerator.Repositories.Contracts.ReadRepositories;
@@ -104,11 +103,6 @@ namespace DocumentGenerator.Services
             var existingProducts = entity.Products;
             var existingProductsDictionary = existingProducts.ToDictionary(x => x.ProductId);
 
-            var comparer = EqualityComparer<DocumentProduct>.Create(
-                (x, y) => x!.ProductId == y!.ProductId,
-                obj => obj.ProductId.GetHashCode()
-            );
-
             foreach (var product in products)
             {
                 if (existingProductsDictionary.TryGetValue(product.ProductId, out var foundProduct))
@@ -123,7 +117,7 @@ namespace DocumentGenerator.Services
                 }
             }
 
-            foreach (var exceptProduct in existingProducts.Except(products, comparer))
+            foreach (var exceptProduct in existingProducts.ExceptBy(products.Select(x => x.ProductId), x => x.ProductId))
             {
                 documentProductWriteRepository.Delete(existingProductsDictionary[exceptProduct.ProductId]);
             }
@@ -157,11 +151,15 @@ namespace DocumentGenerator.Services
             {
                 throw new DocumentGeneratorDuplicateException($"Документ с номером {model.DocumentNumber} уже существует");
             }
-            else if (await partyReadRepository.GetById(model.SellerId, cancellationToken) == null)
+
+            var seller = await partyReadRepository.GetById(model.SellerId, cancellationToken);
+            if (seller == null)
             {
                 throw new DocumentGeneratorNotFoundException($"Не удалось найти продавца с идентификатором {model.SellerId}");
             }
-            else if (await partyReadRepository.GetById(model.BuyerId, cancellationToken) == null)
+
+            var buyer = await partyReadRepository.GetById(model.BuyerId, cancellationToken);
+            if (buyer == null)
             {
                 throw new DocumentGeneratorNotFoundException($"Не удалось найти покупателя с идентификатором {model.BuyerId}");
             }

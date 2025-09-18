@@ -7,7 +7,7 @@ using DocumentGenerator.Services.Contracts.Exceptions;
 using DocumentGenerator.Services.Contracts.IServices;
 using DocumentGenerator.Services.Contracts.Models.Product;
 
-namespace DocumentGenerator.Services.Services
+namespace DocumentGenerator.Services
 {
 
     /// <inheritdoc cref="IProductServices"/>
@@ -56,9 +56,6 @@ namespace DocumentGenerator.Services.Services
                 Id = Guid.NewGuid(),
                 Name = model.Name,
                 Cost = model.Cost,
-                CreatedAt = DateTimeOffset.UtcNow,
-                UpdatedAt = DateTimeOffset.UtcNow,
-                DeletedAt = null,
             };
             productWriteRepository.Add(result);
             await unitOfWork.SaveChangesAsync(cancellationToken);

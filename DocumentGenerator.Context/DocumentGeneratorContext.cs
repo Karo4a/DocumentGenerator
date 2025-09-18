@@ -14,12 +14,7 @@ namespace DocumentGenerator.Context
         /// Конструктор
         /// </summary>
         public DocumentGeneratorContext(DbContextOptions<DocumentGeneratorContext> options)
-            : base(options)
-        {
-            // https://support.aspnetzero.com/QA/Questions/11011/Cannot-write-DateTime-with-KindLocal-to-PostgreSQL-type-%27timestamp-with-time-zone%27-only-UTC-is-supported
-            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-            AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
-        }
+            : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

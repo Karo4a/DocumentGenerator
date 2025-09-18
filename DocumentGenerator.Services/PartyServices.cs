@@ -7,7 +7,7 @@ using DocumentGenerator.Services.Contracts.Exceptions;
 using DocumentGenerator.Services.Contracts.Models.Party;
 using DocumentGenerator.Services.Contracts.IServices;
 
-namespace DocumentGenerator.Services.Services
+namespace DocumentGenerator.Services
 {
 
     /// <inheritdoc cref="IPartyServices"/>
@@ -57,9 +57,6 @@ namespace DocumentGenerator.Services.Services
                 Name = model.Name,
                 Job = model.Job,
                 TaxId = model.TaxId,
-                CreatedAt = DateTimeOffset.UtcNow,
-                UpdatedAt = DateTimeOffset.UtcNow,
-                DeletedAt = null,
             };
             partyWriteRepository.Add(result);
             await unitOfWork.SaveChangesAsync(cancellationToken);

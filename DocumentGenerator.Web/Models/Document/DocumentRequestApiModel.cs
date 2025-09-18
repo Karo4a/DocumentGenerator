@@ -5,17 +5,37 @@ namespace DocumentGenerator.Web.Models.Document
     /// <summary>
     /// Модель редактирования документа
     /// </summary>
-    /// <param name="DocumentNumber">Номер документа</param>
-    /// <param name="ContractNumber">Номер основного договора</param>
-    /// <param name="Date">Дата подписания документа</param>
-    /// <param name="SellerId">Идентификатор продавца</param>
-    /// <param name="BuyerId">Идентификатор покупателя</param>
-    /// <param name="Products">Список товаров для документа <see cref="DocumentProductRequestApiModel"/></param>
-    public record DocumentRequestApiModel(
-        string DocumentNumber,
-        string ContractNumber,
-        DateOnly Date,
-        Guid SellerId,
-        Guid BuyerId,
-        ICollection<DocumentProductRequestApiModel> Products);
+    public class DocumentRequestApiModel(
+)
+    {
+        /// <summary>
+        /// Номер документа
+        /// </summary>
+        public string DocumentNumber { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Номер основного договора
+        /// </summary>
+        public string ContractNumber { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Дата подписания документа
+        /// </summary>
+        public DateOnly Date { get; set; }
+
+        /// <summary>
+        /// Идентификатор продавца
+        /// </summary>
+        public Guid SellerId { get; set; }
+
+        /// <summary>
+        /// Идентификатор покупателя
+        /// </summary>
+        public Guid BuyerId { get; set; }
+
+        /// <summary>
+        /// Список товаров для документа <see cref="DocumentProductRequestApiModel"/>
+        /// </summary>
+        ICollection<DocumentProductRequestApiModel> Products { get; set; } = null!;
+    }
 }

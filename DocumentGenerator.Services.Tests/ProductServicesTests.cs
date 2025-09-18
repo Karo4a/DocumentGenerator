@@ -8,7 +8,6 @@ using DocumentGenerator.Services.Contracts.Exceptions;
 using DocumentGenerator.Services.Contracts.IServices;
 using DocumentGenerator.Services.Contracts.Models.Product;
 using DocumentGenerator.Services.Infrastructure;
-using DocumentGenerator.Services.Services;
 using FluentAssertions;
 using Moq;
 using Xunit;

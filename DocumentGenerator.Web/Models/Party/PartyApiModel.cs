@@ -3,26 +3,11 @@
     /// <summary>
     /// Модель стороны акта
     /// </summary>
-    public class PartyApiModel
+    public class PartyApiModel : PartyRequestApiModel
     {
         /// <summary>
         /// Идентификатор
         /// </summary>
         public Guid Id { get; set; }
-
-        /// <summary>
-        /// Полное имя
-        /// </summary>
-        public string Name { get; set; } = string.Empty;
-
-        /// <summary>
-        /// Должность
-        /// </summary>
-        public string Job { get; set; } = string.Empty;
-
-        /// <summary>
-        /// ИНН
-        /// </summary>
-        public string TaxId { get; set; } = string.Empty;
     }
 }

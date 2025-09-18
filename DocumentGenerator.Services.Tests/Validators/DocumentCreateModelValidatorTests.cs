@@ -8,7 +8,7 @@ using Xunit;
 namespace DocumentGenerator.Services.Tests.Validators
 {
     /// <summary>
-    /// Тесты для <see cref="PartyCreateModeDocumentCreateModelValidatorlValidator"/>
+    /// Тесты для <see cref="DocumentCreateModelValidator"/>
     /// </summary>
     public class DocumentCreateModelValidatorTests
     {
@@ -171,10 +171,10 @@ namespace DocumentGenerator.Services.Tests.Validators
             var model = TestEntityProvider.Shared.Create<DocumentCreateModel>(x =>
             {
                 x.Date = DateOnly.FromDateTime(DateTime.Now);
-                x.Products.Add(TestEntityProvider.Shared.Create<DocumentProductCreateModel>(x =>
+                x.Products.Add(TestEntityProvider.Shared.Create<DocumentProductCreateModel>(y =>
                 {
-                    x.Quantity = 1;
-                    x.Cost = 1;
+                    y.Quantity = 1;
+                    y.Cost = 1;
                 }));
             });
 

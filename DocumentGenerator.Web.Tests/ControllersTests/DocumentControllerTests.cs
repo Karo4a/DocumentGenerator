@@ -60,7 +60,9 @@ namespace DocumentGenerator.Web.Tests.ControllersTests
             await context.Database.EnsureCreatedAsync();
 
             for (int i = 0; i < 3; ++i)
+            {
                 await entitiesGenerator.Document();
+            }
             await entitiesGenerator.Document(DateTimeOffset.Now);
 
             // Act

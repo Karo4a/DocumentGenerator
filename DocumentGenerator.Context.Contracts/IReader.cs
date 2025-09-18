@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace DocumentGenerator.Context.Contracts
+﻿namespace DocumentGenerator.Context.Contracts
 {
     /// <summary>
     /// Интерфейс получения записей из контекста

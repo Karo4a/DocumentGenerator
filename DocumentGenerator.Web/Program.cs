@@ -11,7 +11,6 @@ using DocumentGenerator.Services;
 using DocumentGenerator.Services.Contracts;
 using DocumentGenerator.Services.Contracts.IServices;
 using DocumentGenerator.Services.Infrastructure;
-using DocumentGenerator.Services.Services;
 using DocumentGenerator.Web.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,6 +27,10 @@ namespace DocumentGenerator.Web
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            // https://support.aspnetzero.com/QA/Questions/11011/Cannot-write-DateTime-with-KindLocal-to-PostgreSQL-type-%27timestamp-with-time-zone%27-only-UTC-is-supported
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+            AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
 
             var controllers = builder.Services.AddControllers(opt =>
             {

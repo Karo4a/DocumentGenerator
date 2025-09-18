@@ -18,15 +18,14 @@ classDiagram
   class Product {
     Guid Id
     String Name
-    String Cost
+    Decimal Cost
    }
   class DocumentProduct {
     Guid Id
     Guid ProductId
     Guid DocumentId
     Int Quantity
-    Product Product
-    Document Document
+    Decimal Cost
    }
   class Document {
     Guid Id
@@ -35,9 +34,6 @@ classDiagram
     DateOnly Date
     Guid SellerId
     Guid BuyerId
-    Party Seller
-    Party Buyer
-    ICollection[DocumentProduct] Products
    }
   Document "0..*" --> "1" Party : Seller
   Document "0..*" --> "1" Party : Buyer

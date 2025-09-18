@@ -39,7 +39,7 @@ namespace DocumentGenerator.Web.Tests.Infrastructure
         }
 
         /// <summary>
-        /// Создает <see cref="Entities.ProductRequestApiModel"/> со случайными данными
+        /// Создает <see cref="Client.ProductRequestApiModel"/> со случайными данными
         /// </summary>
         public ProductRequestApiModel ProductRequestApiModel()
             => new() {
@@ -67,7 +67,7 @@ namespace DocumentGenerator.Web.Tests.Infrastructure
         }
 
         /// <summary>
-        /// Создает <see cref="Entities.PartyRequestApiModel"/> со случайными данными
+        /// Создает <see cref="Client.PartyRequestApiModel"/> со случайными данными
         /// </summary>
         public PartyRequestApiModel PartyRequestApiModel()
             => new()
@@ -107,7 +107,7 @@ namespace DocumentGenerator.Web.Tests.Infrastructure
         }
 
         /// <summary>
-        /// Создает <see cref="Entities.DocumentRequestApiModel"/> со случайными данными
+        /// Создает <see cref="Client.DocumentRequestApiModel"/> со случайными данными
         /// </summary>
         public async Task<DocumentRequestApiModel> DocumentRequestApiModel()
         {

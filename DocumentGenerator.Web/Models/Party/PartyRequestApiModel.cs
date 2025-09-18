@@ -3,8 +3,21 @@
     /// <summary>
     /// Модель редактирования стороны акта
     /// </summary>
-    /// <param name="Name">Полное имя</param>
-    /// <param name="Job">Должность</param>
-    /// <param name="TaxId">ИНН</param>
-    public record PartyRequestApiModel(string Name, string Job, string TaxId);
+    public class PartyRequestApiModel
+    {
+        /// <summary>
+        /// Полное имя
+        /// </summary>
+        public string Name { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Должность
+        /// </summary>
+        public string Job { get; set; } = string.Empty;
+
+        /// <summary>
+        /// ИНН
+        /// </summary>
+        public string TaxId { get; set; } = string.Empty;
+    }
 }

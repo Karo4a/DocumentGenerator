@@ -7,7 +7,7 @@ using DocumentGenerator.Services.Contracts.Models.Document;
 using DocumentGenerator.Services.Contracts.Models.DocumentProduct;
 using System.Globalization;
 
-namespace DocumentGenerator.Services.Services
+namespace DocumentGenerator.Services
 {
     /// <inheritdoc cref="IExcelServices" />
     public class ExcelServices : IExcelServices

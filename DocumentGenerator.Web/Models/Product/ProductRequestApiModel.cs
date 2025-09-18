@@ -3,7 +3,16 @@
     /// <summary>
     /// Модель редактирования товара
     /// </summary>
-    /// <param name="Name">Наименование</param>
-    /// <param name="Cost">Актуальная цена</param>
-    public record ProductRequestApiModel(string Name, decimal Cost);
+    public class ProductRequestApiModel
+    {
+        /// <summary>
+        /// Название
+        /// </summary>
+        public string Name { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Актуальная цена
+        /// </summary>
+        public decimal Cost { get; set; }
+    }
 }

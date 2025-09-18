@@ -6,7 +6,7 @@
     public abstract class DbBaseEntity : IEntityWithId, IEntityWithAudit, IEntityWithSoftDeleted
     {
         /// <inheritdoc cref="IEntityWithId.Id"/>
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
 
         /// <inheritdoc cref="IEntityWithAudit.CreatedAt"/>
         public DateTimeOffset CreatedAt { get; set; }

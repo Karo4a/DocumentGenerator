@@ -28,7 +28,7 @@ namespace DocumentGenerator.Entities.Configurations
                 .IsRequired()
                 .HasMaxLength(12);
 
-            builder.HasIndex(x => x.TaxId, $"IX_{nameof(Party)}_{nameof(Party.DeletedAt)}")
+            builder.HasIndex(x => x.TaxId, $"IX_{nameof(Party)}_{nameof(Party.TaxId)}")
                 .IsUnique()
                 .HasFilter($"\"{nameof(Party.DeletedAt)}\" IS NULL");
         }

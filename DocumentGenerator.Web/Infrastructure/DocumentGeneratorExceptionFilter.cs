@@ -22,12 +22,6 @@ namespace DocumentGenerator.Web.Infrastructure
                 case DocumentGeneratorNotFoundException ex:
                     SetDataToContext(new NotFoundObjectResult(new ApiExceptionDetail(ex.Message)), context);
                     break;
-                case DocumentGeneratorInvalidOperationException ex:
-                    SetDataToContext(new BadRequestObjectResult(new ApiExceptionDetail(ex.Message))
-                    {
-                        StatusCode = StatusCodes.Status406NotAcceptable,
-                    }, context);
-                    break;
                 case DocumentGeneratorValidationException ex:
                     SetDataToContext(new BadRequestObjectResult(new ApiValidationExceptionDetail()
                     {

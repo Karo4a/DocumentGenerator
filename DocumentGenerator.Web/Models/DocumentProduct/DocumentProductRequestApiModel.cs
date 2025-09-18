@@ -3,8 +3,21 @@
     /// <summary>
     /// Модель редактирования документа
     /// </summary>
-    /// <param name="ProductId">Идентификатор товара</param>
-    /// <param name="Quantity">Количество товара</param>
-    /// <param name="Cost">Цена товара на момент создания документа</param>
-    public record DocumentProductRequestApiModel(Guid ProductId, int Quantity, decimal Cost);
+    public class DocumentProductRequestApiModel
+    {
+        /// <summary>
+        /// Идентификатор товара
+        /// </summary>
+        public Guid ProductId { get; set; }
+
+        /// <summary>
+        /// Количество товара
+        /// </summary>
+        public int Quantity { get; set; }
+
+        /// <summary>
+        /// Цена товара на момент создания документа
+        /// </summary>
+        public decimal Cost { get; set; }
+    }
 }

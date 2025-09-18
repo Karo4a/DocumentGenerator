@@ -42,9 +42,9 @@ namespace DocumentGenerator.Services.Validators
 
             RuleForEach(x => x.Products).ChildRules(x =>
             {
-                x.RuleFor(x => x.Quantity)
+                x.RuleFor(y => y.Quantity)
                     .GreaterThan(0).WithMessage("Количество товара не может быть меньше одного.");
-                x.RuleFor(x => x.Cost)
+                x.RuleFor(y => y.Cost)
                     .GreaterThan(0).WithMessage("Цена товара должна быть больше нуля.");
             });
         }

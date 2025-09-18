@@ -4,7 +4,7 @@ using DocumentGenerator.Repositories.ReadRepositories;
 using FluentAssertions;
 using Xunit;
 
-namespace DocumentGenerator.ProductRepository.Tests
+namespace DocumentGenerator.Repositories.Tests
 {
     /// <summary>
     /// Тесты на <see cref="DocumentReadRepository"/>

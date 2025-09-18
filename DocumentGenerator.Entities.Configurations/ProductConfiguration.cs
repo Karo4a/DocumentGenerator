@@ -23,7 +23,7 @@ namespace DocumentGenerator.Entities.Configurations
             builder.Property(x => x.Cost)
                 .IsRequired();
 
-            builder.HasIndex(x => x.Name, $"IX_{nameof(Product)}_{nameof(Product.DeletedAt)}")
+            builder.HasIndex(x => x.Name, $"IX_{nameof(Product)}_{nameof(Product.Name)}")
                 .IsUnique()
                 .HasFilter($"\"{nameof(Product.DeletedAt)}\" IS NULL");
         }

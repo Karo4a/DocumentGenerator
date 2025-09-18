@@ -17,8 +17,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DocumentGenerator.Services.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DocumentGenerator.Services", "DocumentGenerator.Services\DocumentGenerator.Services.csproj", "{6D491B22-6AF9-48FB-B371-327A8C72BF91}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DocumentGenerator.Services.Contracts.Models", "DocumentGenerator.Services.Contracts.Models\DocumentGenerator.Services.Contracts.Models.csproj", "{0C93770F-CDCE-4974-B9BE-C0305B6F8C2A}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DocumentGenerator.Services.Tests", "DocumentGenerator.Services.Tests\DocumentGenerator.Services.Tests.csproj", "{C8845329-0CAE-4712-A518-315E183D0CBD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0F4B0A71-9A80-49D0-A442-840C1E08B4A7}"
@@ -75,10 +73,6 @@ Global
 		{6D491B22-6AF9-48FB-B371-327A8C72BF91}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D491B22-6AF9-48FB-B371-327A8C72BF91}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D491B22-6AF9-48FB-B371-327A8C72BF91}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0C93770F-CDCE-4974-B9BE-C0305B6F8C2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0C93770F-CDCE-4974-B9BE-C0305B6F8C2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0C93770F-CDCE-4974-B9BE-C0305B6F8C2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0C93770F-CDCE-4974-B9BE-C0305B6F8C2A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C8845329-0CAE-4712-A518-315E183D0CBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C8845329-0CAE-4712-A518-315E183D0CBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C8845329-0CAE-4712-A518-315E183D0CBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
