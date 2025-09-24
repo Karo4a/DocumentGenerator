@@ -1097,6 +1097,16 @@ namespace DocumentGenerator.Web.Tests.Client
                             throw new ApiException<ApiExceptionDetail>("Not Found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
                         }
                         else
+                        if (status_ == 409)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionDetail>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new ApiException<ApiExceptionDetail>("Conflict", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
                         if (status_ == 422)
                         {
                             var objectResponse_ = await ReadObjectResponseAsync<ApiValidationExceptionDetail>(response_, headers_, cancellationToken).ConfigureAwait(false);
@@ -1371,6 +1381,16 @@ namespace DocumentGenerator.Web.Tests.Client
                             return objectResponse_.Object;
                         }
                         else
+                        if (status_ == 409)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionDetail>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new ApiException<ApiExceptionDetail>("Conflict", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
                         if (status_ == 422)
                         {
                             var objectResponse_ = await ReadObjectResponseAsync<ApiValidationExceptionDetail>(response_, headers_, cancellationToken).ConfigureAwait(false);
@@ -1579,6 +1599,16 @@ namespace DocumentGenerator.Web.Tests.Client
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
                             throw new ApiException<ApiExceptionDetail>("Not Found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 409)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionDetail>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new ApiException<ApiExceptionDetail>("Conflict", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
                         }
                         else
                         if (status_ == 422)
@@ -1855,6 +1885,16 @@ namespace DocumentGenerator.Web.Tests.Client
                             return objectResponse_.Object;
                         }
                         else
+                        if (status_ == 409)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionDetail>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new ApiException<ApiExceptionDetail>("Conflict", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
                         if (status_ == 422)
                         {
                             var objectResponse_ = await ReadObjectResponseAsync<ApiValidationExceptionDetail>(response_, headers_, cancellationToken).ConfigureAwait(false);
@@ -2023,6 +2063,12 @@ namespace DocumentGenerator.Web.Tests.Client
     public partial record ApiExceptionDetail
     {
 
+        /// <summary>
+        /// Сообщение ошибки
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("message", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string? Message { get; set; } = default!;
+
     }
 
     /// <summary>
@@ -2048,12 +2094,6 @@ namespace DocumentGenerator.Web.Tests.Client
     {
 
         /// <summary>
-        /// Идентификатор
-        /// </summary>
-        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Guid Id { get; set; } = default!;
-
-        /// <summary>
         /// Номер документа
         /// </summary>
         [Newtonsoft.Json.JsonProperty("documentNumber", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
@@ -2071,6 +2111,12 @@ namespace DocumentGenerator.Web.Tests.Client
         [Newtonsoft.Json.JsonProperty("date", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         [Newtonsoft.Json.JsonConverter(typeof(DateFormatConverter))]
         public System.DateTimeOffset Date { get; set; } = default!;
+
+        /// <summary>
+        /// Идентификатор
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Guid Id { get; set; } = default!;
 
         [Newtonsoft.Json.JsonProperty("seller", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public PartyApiModel Seller { get; set; } = default!;
@@ -2094,15 +2140,6 @@ namespace DocumentGenerator.Web.Tests.Client
     {
 
         /// <summary>
-        /// Идентификатор
-        /// </summary>
-        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Guid Id { get; set; } = default!;
-
-        [Newtonsoft.Json.JsonProperty("product", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public ProductApiModel Product { get; set; } = default!;
-
-        /// <summary>
         /// Количество товара
         /// </summary>
         [Newtonsoft.Json.JsonProperty("quantity", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
@@ -2113,6 +2150,15 @@ namespace DocumentGenerator.Web.Tests.Client
         /// </summary>
         [Newtonsoft.Json.JsonProperty("cost", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public double Cost { get; set; } = default!;
+
+        /// <summary>
+        /// Идентификатор
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Guid Id { get; set; } = default!;
+
+        [Newtonsoft.Json.JsonProperty("product", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public ProductApiModel Product { get; set; } = default!;
 
     }
 
@@ -2124,12 +2170,6 @@ namespace DocumentGenerator.Web.Tests.Client
     {
 
         /// <summary>
-        /// Идентификатор товара
-        /// </summary>
-        [Newtonsoft.Json.JsonProperty("productId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Guid ProductId { get; set; } = default!;
-
-        /// <summary>
         /// Количество товара
         /// </summary>
         [Newtonsoft.Json.JsonProperty("quantity", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
@@ -2140,6 +2180,12 @@ namespace DocumentGenerator.Web.Tests.Client
         /// </summary>
         [Newtonsoft.Json.JsonProperty("cost", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public double Cost { get; set; } = default!;
+
+        /// <summary>
+        /// Идентификатор товара
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("productId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Guid ProductId { get; set; } = default!;
 
     }
 
@@ -2209,12 +2255,6 @@ namespace DocumentGenerator.Web.Tests.Client
     {
 
         /// <summary>
-        /// Идентификатор
-        /// </summary>
-        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Guid Id { get; set; } = default!;
-
-        /// <summary>
         /// Полное имя
         /// </summary>
         [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
@@ -2231,6 +2271,12 @@ namespace DocumentGenerator.Web.Tests.Client
         /// </summary>
         [Newtonsoft.Json.JsonProperty("taxId", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string? TaxId { get; set; } = default!;
+
+        /// <summary>
+        /// Идентификатор
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Guid Id { get; set; } = default!;
 
     }
 
@@ -2269,12 +2315,6 @@ namespace DocumentGenerator.Web.Tests.Client
     {
 
         /// <summary>
-        /// Идентификатор
-        /// </summary>
-        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Guid Id { get; set; } = default!;
-
-        /// <summary>
         /// Название
         /// </summary>
         [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
@@ -2286,6 +2326,12 @@ namespace DocumentGenerator.Web.Tests.Client
         [Newtonsoft.Json.JsonProperty("cost", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public double Cost { get; set; } = default!;
 
+        /// <summary>
+        /// Идентификатор
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Guid Id { get; set; } = default!;
+
     }
 
     /// <summary>
@@ -2296,7 +2342,7 @@ namespace DocumentGenerator.Web.Tests.Client
     {
 
         /// <summary>
-        /// Наименование
+        /// Название
         /// </summary>
         [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string? Name { get; set; } = default!;

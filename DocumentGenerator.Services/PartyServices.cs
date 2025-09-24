@@ -64,7 +64,7 @@ namespace DocumentGenerator.Services
 
         async Task<PartyModel> IPartyServices.Edit(Guid id, PartyCreateModel model, CancellationToken cancellationToken)
         {
-            if (await partyReadRepository.Any(x => x.TaxId == model.TaxId, cancellationToken))
+            if (await partyReadRepository.Any(x => x.TaxId == model.TaxId && x.Id != id, cancellationToken))
                 throw new DocumentGeneratorDuplicateException($"Сторона акта с ИНН {model.TaxId} уже существует");
 
             var entity = await partyReadRepository.GetById(id, cancellationToken)

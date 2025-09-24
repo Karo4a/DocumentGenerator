@@ -47,8 +47,7 @@ namespace DocumentGenerator.Services
 
         async Task<ProductModel> IProductServices.Create(ProductCreateModel model, CancellationToken cancellationToken)
         {
-            var products = await productReadRepository.GetAll(cancellationToken);
-            if (products.Any(x => x.Name == model.Name))
+            if (await productReadRepository.Any(x => x.Name == model.Name, cancellationToken))
                 throw new DocumentGeneratorDuplicateException($"Товар с именем {model.Name} уже существует.");
 
             var result = new Product

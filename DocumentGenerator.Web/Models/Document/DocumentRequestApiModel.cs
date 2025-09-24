@@ -20,6 +20,6 @@ namespace DocumentGenerator.Web.Models.Document
         /// <summary>
         /// Список товаров для документа <see cref="DocumentProductRequestApiModel"/>
         /// </summary>
-        ICollection<DocumentProductRequestApiModel> Products { get; set; } = null!;
+        public ICollection<DocumentProductRequestApiModel> Products { get; set; } = null!;
     }
 }

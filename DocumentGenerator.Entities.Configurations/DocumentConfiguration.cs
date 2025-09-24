@@ -44,6 +44,10 @@ namespace DocumentGenerator.Entities.Configurations
                 .WithMany()
                 .HasForeignKey(x => x.BuyerId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasIndex(x => x.DocumentNumber, $"IX_{nameof(Document)}_{nameof(Document.DocumentNumber)}")
+                .IsUnique()
+                .HasFilter($"\"{nameof(Document.DeletedAt)}\" IS NULL"); ;
         }
     }
 }
