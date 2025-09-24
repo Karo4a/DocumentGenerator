@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using DocumentGenerator.Context.Contracts;
 using DocumentGenerator.Entities;
 using DocumentGenerator.Repositories.Contracts.ReadRepositories;
@@ -56,7 +57,32 @@ namespace DocumentGenerator.Services
 
         async Task<DocumentModel> IDocumentServices.Create(DocumentCreateModel model, CancellationToken cancellationToken)
         {
-            await ValidateConnections(null, model, cancellationToken);
+            if (await documentReadRepository.Any(x => x.DocumentNumber == model.DocumentNumber, cancellationToken))
+            {
+                throw new DocumentGeneratorDuplicateException($"Документ с номером {model.DocumentNumber} уже существует");
+            }
+
+            var seller = await partyReadRepository.GetById(model.SellerId, cancellationToken);
+            if (seller == null)
+            {
+                throw new DocumentGeneratorNotFoundException($"Не удалось найти продавца с идентификатором {model.SellerId}");
+            }
+
+            var buyer = await partyReadRepository.GetById(model.BuyerId, cancellationToken);
+            if (buyer == null)
+            {
+                throw new DocumentGeneratorNotFoundException($"Не удалось найти покупателя с идентификатором {model.BuyerId}");
+            }
+
+            var modelProductsIds = model.Products.Select(x => x.ProductId).ToList();
+            var existingProducts = await productReadRepository.GetByIds(modelProductsIds, cancellationToken);
+            var existingProductIds = existingProducts.Select(x => x.Id).ToList();
+            var missingProductIds = modelProductsIds.Except(existingProductIds).ToList();
+
+            if (missingProductIds.Count > 0)
+            {
+                throw new DocumentGeneratorNotFoundException($"Не удалось найти товары с идентификаторами: {string.Join(", ", missingProductIds)}");
+            }
 
             var result = new Document
             {
@@ -87,66 +113,6 @@ namespace DocumentGenerator.Services
 
         async Task<DocumentModel> IDocumentServices.Edit(Guid id, DocumentCreateModel model, CancellationToken cancellationToken)
         {
-            await ValidateConnections(id, model, cancellationToken);
-
-            var entity = await documentReadRepository.GetById(id, cancellationToken)
-                ?? throw new DocumentGeneratorNotFoundException($"Не удалось найти документ с идентификатором {id}");
-
-            entity.DocumentNumber = model.DocumentNumber;
-            entity.ContractNumber = model.ContractNumber;
-            entity.Date = model.Date;
-            entity.SellerId = model.SellerId;
-            entity.BuyerId = model.BuyerId;
-            entity.UpdatedAt = DateTimeOffset.UtcNow;
-
-            var products = mapper.Map<ICollection<DocumentProduct>>(model.Products);
-            var existingProducts = entity.Products;
-            var existingProductsDictionary = existingProducts.ToDictionary(x => x.ProductId);
-
-            foreach (var product in products)
-            {
-                if (existingProductsDictionary.TryGetValue(product.ProductId, out var foundProduct))
-                {
-                    foundProduct.Quantity = product.Quantity;
-                    foundProduct.Cost = product.Cost;
-                    documentProductWriteRepository.Edit(foundProduct);
-                } else
-                {
-                    product.DocumentId = id;
-                    documentProductWriteRepository.Add(product);
-                }
-            }
-
-            foreach (var exceptProduct in existingProducts.ExceptBy(products.Select(x => x.ProductId), x => x.ProductId))
-            {
-                documentProductWriteRepository.Delete(existingProductsDictionary[exceptProduct.ProductId]);
-            }
-
-            documentWriteRepository.Edit(entity);
-            await unitOfWork.SaveChangesAsync(cancellationToken);
-
-            var editedEntity = await documentReadRepository.GetById(id, cancellationToken)
-                ?? throw new InvalidOperationException($"Не удалось найти документ с идентификатором {id}");
-
-            return mapper.Map<DocumentModel>(editedEntity);
-        }
-
-        async Task IDocumentServices.Delete(Guid id, CancellationToken cancellationToken)
-        {
-            var entity = await documentReadRepository.GetById(id, cancellationToken)
-                ?? throw new DocumentGeneratorNotFoundException($"Не удалось найти документ с идентификатором {id}");
-
-            foreach (var product in entity.Products)
-            {
-                documentProductWriteRepository.Delete(product);
-            }
-
-            documentWriteRepository.Delete(entity);
-            await unitOfWork.SaveChangesAsync(cancellationToken);
-        }
-
-        private async Task ValidateConnections(Guid? id, DocumentCreateModel model, CancellationToken cancellationToken)
-        {
             if (await documentReadRepository.Any(x => x.DocumentNumber == model.DocumentNumber && x.Id != id, cancellationToken))
             {
                 throw new DocumentGeneratorDuplicateException($"Документ с номером {model.DocumentNumber} уже существует");
@@ -173,6 +139,95 @@ namespace DocumentGenerator.Services
             {
                 throw new DocumentGeneratorNotFoundException($"Не удалось найти товары с идентификаторами: {string.Join(", ", missingProductIds)}");
             }
+
+            var entityDbModel = await documentReadRepository.GetById(id, cancellationToken)
+                ?? throw new DocumentGeneratorNotFoundException($"Не удалось найти документ с идентификатором {id}");
+            var entity = mapper.Map<Document>(entityDbModel);
+
+            entity.DocumentNumber = model.DocumentNumber;
+            entity.ContractNumber = model.ContractNumber;
+            entity.Date = model.Date;
+            entity.SellerId = model.SellerId;
+            entity.BuyerId = model.BuyerId;
+            entity.Seller = seller;
+            entity.Buyer = buyer;
+            entity.UpdatedAt = DateTimeOffset.UtcNow;
+
+            var products = mapper.Map<ICollection<DocumentProduct>>(model.Products);
+            var existingDocumentProducts = entity.Products;
+            var existingDocumentProductsDictionary = existingDocumentProducts.ToDictionary(x => x.ProductId);
+
+            foreach (var product in products)
+            {
+                if (existingDocumentProductsDictionary.TryGetValue(product.ProductId, out var foundProduct))
+                {
+                    foundProduct.Quantity = product.Quantity;
+                    foundProduct.Cost = product.Cost;
+                    documentProductWriteRepository.Edit(foundProduct);
+                } else
+                {
+                    product.DocumentId = id;
+                    documentProductWriteRepository.Add(product);
+                }
+            }
+
+            foreach (var exceptProduct in existingDocumentProducts.ExceptBy(products.Select(x => x.ProductId), x => x.ProductId))
+            {
+                documentProductWriteRepository.Delete(existingDocumentProductsDictionary[exceptProduct.ProductId]);
+            }
+
+            documentWriteRepository.Edit(entity);
+            await unitOfWork.SaveChangesAsync(cancellationToken);
+
+            var editedEntity = await documentReadRepository.GetById(id, cancellationToken)
+                ?? throw new InvalidOperationException($"Не удалось найти документ с идентификатором {id}");
+
+            return mapper.Map<DocumentModel>(editedEntity);
         }
+
+        async Task IDocumentServices.Delete(Guid id, CancellationToken cancellationToken)
+        {
+            var entityDbModel = await documentReadRepository.GetById(id, cancellationToken)
+                ?? throw new DocumentGeneratorNotFoundException($"Не удалось найти документ с идентификатором {id}");
+            var entity = mapper.Map<Document>(entityDbModel);
+
+            foreach (var product in entity.Products)
+            {
+                documentProductWriteRepository.Delete(product);
+            }
+
+            documentWriteRepository.Delete(entity);
+            await unitOfWork.SaveChangesAsync(cancellationToken);
+        }
+
+        //private async Task ValidateConnections(Guid? id, DocumentCreateModel model, CancellationToken cancellationToken)
+        //{
+        //    if (await documentReadRepository.Any(x => x.DocumentNumber == model.DocumentNumber && x.Id != id, cancellationToken))
+        //    {
+        //        throw new DocumentGeneratorDuplicateException($"Документ с номером {model.DocumentNumber} уже существует");
+        //    }
+
+        //    var seller = await partyReadRepository.GetById(model.SellerId, cancellationToken);
+        //    if (seller == null)
+        //    {
+        //        throw new DocumentGeneratorNotFoundException($"Не удалось найти продавца с идентификатором {model.SellerId}");
+        //    }
+
+        //    var buyer = await partyReadRepository.GetById(model.BuyerId, cancellationToken);
+        //    if (buyer == null)
+        //    {
+        //        throw new DocumentGeneratorNotFoundException($"Не удалось найти покупателя с идентификатором {model.BuyerId}");
+        //    }
+
+        //    var modelProductsIds = model.Products.Select(x => x.ProductId).ToList();
+        //    var existingProducts = await productReadRepository.GetByIds(modelProductsIds, cancellationToken);
+        //    var existingProductIds = existingProducts.Select(x => x.Id).ToList();
+        //    var missingProductIds = modelProductsIds.Except(existingProductIds).ToList();
+
+        //    if (missingProductIds.Count > 0)
+        //    {
+        //        throw new DocumentGeneratorNotFoundException($"Не удалось найти товары с идентификаторами: {string.Join(", ", missingProductIds)}");
+        //    }
+        //}
     }
 }

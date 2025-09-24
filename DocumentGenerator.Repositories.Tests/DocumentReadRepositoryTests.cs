@@ -1,4 +1,5 @@
 ﻿using DocumentGenerator.Context.Tests;
+using DocumentGenerator.Repositories.Contracts;
 using DocumentGenerator.Repositories.Contracts.ReadRepositories;
 using DocumentGenerator.Repositories.ReadRepositories;
 using FluentAssertions;
@@ -61,14 +62,29 @@ namespace DocumentGenerator.Repositories.Tests
         {
             // Arrange
             var entity = await PrepareDocument();
+            var entityDbModel = new DocumentDbModel
+            {
+                Id = entity.Id,
+                DocumentNumber = entity.DocumentNumber,
+                ContractNumber = entity.ContractNumber,
+                Date = entity.Date,
+                Seller = entity.Seller,
+                Buyer = entity.Buyer,
+                Products = entity.Products.Select(x => new DocumentProductDbModel
+                {
+                    Id = x.Id,
+                    Product = x.Product,
+                    Quantity = x.Quantity,
+                    Cost = x.Cost,
+                }).ToList(),
+            };
 
             // Act
             var result = await readRepository.GetById(entity.Id, CancellationToken.None);
 
             // Assert
             result.Should().NotBeNull()
-                .And.BeEquivalentTo(entity, opt => opt
-                    .IgnoringCyclicReferences());
+                .And.BeEquivalentTo(entityDbModel);
         }
 
         /// <summary>

@@ -16,7 +16,7 @@ namespace DocumentGenerator.Web.Infrastructure
     public class ApiMapper : Profile
     {
         /// <summary>
-        /// Констуктор
+        /// Конструктор
         /// </summary>
         public ApiMapper()
         {

@@ -16,11 +16,11 @@ namespace DocumentGenerator.Repositories.Contracts.ReadRepositories
         /// <summary>
         /// Получает <see cref="Document"/> по идентификатору
         /// </summary>
-        Task<Document?> GetById(Guid id, CancellationToken cancellationToken);
+        Task<DocumentDbModel?> GetById(Guid id, CancellationToken cancellationToken);
 
         /// <summary>
         /// Получает коллекцию <see cref="Document"/>
         /// </summary>
-        Task<IReadOnlyCollection<Document>> GetAll(CancellationToken cancellationToken);
+        Task<IReadOnlyCollection<DocumentDbModel>> GetAll(CancellationToken cancellationToken);
     }
 }
