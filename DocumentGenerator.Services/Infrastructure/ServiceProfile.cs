@@ -20,9 +20,7 @@ namespace DocumentGenerator.Services.Infrastructure
         {
             CreateMap<Product, ProductModel>(MemberList.Destination);
             CreateMap<Party, PartyModel>(MemberList.Destination);
-            //CreateMap<DocumentProduct, DocumentProductModel>(MemberList.Destination);
             CreateMap<DocumentProductCreateModel, DocumentProduct>(MemberList.Destination);
-            //CreateMap<Document, DocumentModel>(MemberList.Destination);
 
             CreateMap<DocumentProductDbModel, DocumentProductModel>(MemberList.Destination);
             CreateMap<DocumentProductDbModel, DocumentProduct>(MemberList.Destination);

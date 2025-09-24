@@ -199,35 +199,5 @@ namespace DocumentGenerator.Services
             documentWriteRepository.Delete(entity);
             await unitOfWork.SaveChangesAsync(cancellationToken);
         }
-
-        //private async Task ValidateConnections(Guid? id, DocumentCreateModel model, CancellationToken cancellationToken)
-        //{
-        //    if (await documentReadRepository.Any(x => x.DocumentNumber == model.DocumentNumber && x.Id != id, cancellationToken))
-        //    {
-        //        throw new DocumentGeneratorDuplicateException($"Документ с номером {model.DocumentNumber} уже существует");
-        //    }
-
-        //    var seller = await partyReadRepository.GetById(model.SellerId, cancellationToken);
-        //    if (seller == null)
-        //    {
-        //        throw new DocumentGeneratorNotFoundException($"Не удалось найти продавца с идентификатором {model.SellerId}");
-        //    }
-
-        //    var buyer = await partyReadRepository.GetById(model.BuyerId, cancellationToken);
-        //    if (buyer == null)
-        //    {
-        //        throw new DocumentGeneratorNotFoundException($"Не удалось найти покупателя с идентификатором {model.BuyerId}");
-        //    }
-
-        //    var modelProductsIds = model.Products.Select(x => x.ProductId).ToList();
-        //    var existingProducts = await productReadRepository.GetByIds(modelProductsIds, cancellationToken);
-        //    var existingProductIds = existingProducts.Select(x => x.Id).ToList();
-        //    var missingProductIds = modelProductsIds.Except(existingProductIds).ToList();
-
-        //    if (missingProductIds.Count > 0)
-        //    {
-        //        throw new DocumentGeneratorNotFoundException($"Не удалось найти товары с идентификаторами: {string.Join(", ", missingProductIds)}");
-        //    }
-        //}
     }
 }
