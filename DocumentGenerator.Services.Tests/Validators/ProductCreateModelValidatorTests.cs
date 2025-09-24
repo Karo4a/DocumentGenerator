@@ -1,4 +1,5 @@
 ﻿using Ahatornn.TestGenerator;
+using DocumentGenerator.Entities.ValidationConstants;
 using DocumentGenerator.Services.Contracts.Models.Product;
 using DocumentGenerator.Services.Validators;
 using FluentValidation.TestHelper;
@@ -66,7 +67,7 @@ namespace DocumentGenerator.Services.Tests.Validators
             // Arrange
             var model = new ProductCreateModel
             {
-                Name = new string('1', 300),
+                Name = new string('1', ProductValidationConstants.NameMaxLength+1),
                 Cost = 1,
             };
 

@@ -10,14 +10,13 @@ using Microsoft.Extensions.Configuration;
 namespace DocumentGenerator.Web.Tests.Infrastructure
 {
     /// <summary>
-    /// 
+    /// Фабрика для интеграционных тестов
     /// </summary>
     public class TestWebApplicationFactory : WebApplicationFactory<Program>
     {
         /// <inheritdoc cref="WebApplicationFactory{TEntryPoint}.CreateHost"/>
         protected override IHost CreateHost(IHostBuilder builder)
         {
-            builder.UseEnvironment("integration_tests");
             return base.CreateHost(builder);
         }
 

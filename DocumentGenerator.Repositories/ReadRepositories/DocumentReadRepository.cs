@@ -2,6 +2,7 @@
 using DocumentGenerator.Entities;
 using DocumentGenerator.Repositories.Contracts.ReadRepositories;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace DocumentGenerator.Repositories.ReadRepositories
 {
@@ -17,6 +18,11 @@ namespace DocumentGenerator.Repositories.ReadRepositories
         {
             this.reader = reader;
         }
+
+        Task<bool> IDocumentReadRepository.Any(Expression<Func<Document, bool>> action, CancellationToken cancellationToken)
+             => reader.Read<Document>()
+                .NotDeletedAt()
+                .AnyAsync(action, cancellationToken);
 
         Task<Document?> IDocumentReadRepository.GetById(Guid id, CancellationToken cancellationToken)
             => reader.Read<Document>()

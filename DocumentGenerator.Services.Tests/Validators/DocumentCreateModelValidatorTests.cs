@@ -1,4 +1,5 @@
 ﻿using Ahatornn.TestGenerator;
+using DocumentGenerator.Entities.ValidationConstants;
 using DocumentGenerator.Services.Contracts.Models.Document;
 using DocumentGenerator.Services.Contracts.Models.DocumentProduct;
 using DocumentGenerator.Services.Validators;
@@ -39,6 +40,25 @@ namespace DocumentGenerator.Services.Tests.Validators
         }
 
         /// <summary>
+        /// Валидация падает с ошибкой слишком длинного номера документа
+        /// </summary>
+        [Fact]
+        public async Task ShouldHaveLongDocumentNumberErrorMessage()
+        {
+            // Arrange
+            var model = TestEntityProvider.Shared.Create<DocumentCreateModel>(x =>
+            {
+                x.DocumentNumber = new string('1', DocumentValidationConstants.DocumentNumberMaxLength+1);
+            });
+
+            // Act
+            var result = await validator.TestValidateAsync(model);
+
+            // Assert
+            result.ShouldHaveValidationErrorFor(x => x.DocumentNumber);
+        }
+
+        /// <summary>
         /// Валидация падает с ошибкой пустого номера контракта
         /// </summary>
         [Fact]
@@ -52,6 +72,25 @@ namespace DocumentGenerator.Services.Tests.Validators
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.DocumentNumber);
+        }
+
+        /// <summary>
+        /// Валидация падает с ошибкой слишком длинного номера договора
+        /// </summary>
+        [Fact]
+        public async Task ShouldHaveLongContractNumberErrorMessage()
+        {
+            // Arrange
+            var model = TestEntityProvider.Shared.Create<DocumentCreateModel>(x =>
+            {
+                x.ContractNumber = new string('1', DocumentValidationConstants.ContractNumberMaxLength + 1);
+            });
+
+            // Act
+            var result = await validator.TestValidateAsync(model);
+
+            // Assert
+            result.ShouldHaveValidationErrorFor(x => x.ContractNumber);
         }
 
         /// <summary>

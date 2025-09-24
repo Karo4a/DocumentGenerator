@@ -1,4 +1,5 @@
 ﻿using Ahatornn.TestGenerator;
+using DocumentGenerator.Entities.ValidationConstants;
 using DocumentGenerator.Services.Contracts.Models.Party;
 using DocumentGenerator.Services.Validators;
 using FluentValidation.TestHelper;
@@ -65,7 +66,7 @@ namespace DocumentGenerator.Services.Tests.Validators
             // Arrange
             var model = TestEntityProvider.Shared.Create<PartyCreateModel>(x =>
             {
-                x.Name = new string('1', 300);
+                x.Name = new string('1', PartyValidationConstants.NameMaxLength+1);
             });
 
             // Act
@@ -135,7 +136,7 @@ namespace DocumentGenerator.Services.Tests.Validators
             // Arrange
             var model = TestEntityProvider.Shared.Create<PartyCreateModel>(x =>
             {
-                x.TaxId = new string('0', 10);
+                x.TaxId = new string('0', PartyValidationConstants.IndividualTaxIdLength);
             });
 
             // Act

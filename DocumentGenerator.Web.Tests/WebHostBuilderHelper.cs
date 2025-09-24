@@ -13,6 +13,7 @@ namespace DocumentGenerator.Web.Tests
                 var configPath = Path.Combine(projectDir, "appsettings.integration.json");
                 config.AddJsonFile(configPath).AddEnvironmentVariables();
             });
+            builder.UseEnvironment(EnvironmentProvider.IntegrationEnviroment);
         }
     }
 }

@@ -8,26 +8,26 @@
 
 ## Схема базы данных
 ```mermaid
-classDiagram
-  class Party {
+erDiagram
+  Party {
     Guid Id
     String Name
     String Job
     String TaxId
    }
-  class Product {
+  Product {
     Guid Id
     String Name
     Decimal Cost
    }
-  class DocumentProduct {
+  DocumentProduct {
     Guid Id
     Guid ProductId
     Guid DocumentId
     Int Quantity
     Decimal Cost
    }
-  class Document {
+  Document {
     Guid Id
     String DocumentNumber
     String ContractNumber
@@ -35,17 +35,16 @@ classDiagram
     Guid SellerId
     Guid BuyerId
    }
-  Document "0..*" --> "1" Party : Seller
-  Document "0..*" --> "1" Party : Buyer
-  DocumentProduct "0.." --> "1" Product
-  Document "1" *-- "0..*" DocumentProduct
+  Document ||--o{ Party : "signs by"
+  DocumentProduct }o--|| Product : "references to"
+  Document ||--o{  DocumentProduct : "contains"
 ```
 
 ## Реализация API
 ### CRUD товаров
 |verb|url|description|request|response|codes|
 |-|-|-|-|-|-|
-|GET|api/products/|Получает список всех товаров| |`[productApiModel,]`|200 OK|
+|GET|api/products/|Получает список всех товаров| |`productApiModel[]`|200 OK|
 |GET|api/products/{id}|Получает товар с идентификатором id| fromRoute: id|`productApiModel`|200 OK<br/>404 Not Found|
 |POST|api/products/|Добавляет новый товар|fromBody: `productRequestApiModel`|`productApiModel`|200 OK<br/>409 Conflict<br/>422 Unprocessable Entity|
 |PUT|api/products/{id}|Редактирует товар с идентификатором id| fromRoute: id <br/>fromBody: `productRequestApiModel`|`productApiModel`|200 OK<br/>404 Not Found<br/>409 Conflict<br/>422 Unprocessable Entity|
@@ -69,7 +68,7 @@ classDiagram
 ### CRUD стороны акта
 |verb|url|description|request|response|codes|
 |-|-|-|-|-|-|
-|GET|api/party/|Получает список всех сторон актов| |`[partyApiModel,]`|200 OK|
+|GET|api/party/|Получает список всех сторон актов| |`partyApiModel[]`|200 OK|
 |GET|api/party/{id}|Получает сторону акта с идентификатором id| fromRoute: id|`partyApiModel`|200 OK<br/>404 Not Found|
 |POST|api/party/|Добавляет новую сторону акта| fromBody: `partyRequestApiModel`|`partyApiModel`|200 OK<br/>409 Conflict<br/>422 Unprocessable Entity|
 |PUT|api/party/{id}|Редактирует сторону акта с идентификатором id| fromRoute: id <br/>fromBody: `partyRequestApiModel`|`partyApiModel`|200 OK<br/>404 Not Found<br/>409 Conflict<br/>422 Unprocessable Entity|
@@ -96,7 +95,7 @@ classDiagram
 |verb|url|description|request|response|codes|
 |-|-|-|-|-|-|
 |GET|api/document/{id}/export|Экспортирует документ в формате Excel с идентификатором id|fromRoute: id|`file.xlsx`|200 OK<br/>404 Not Found|
-|GET|api/document/|Получает список всех документов| |`[documentApiModel,]`|200 OK|
+|GET|api/document/|Получает список всех документов| |`documentApiModel[]`|200 OK|
 |GET|api/document/{id}|Получает документ с идентификатором id| fromRoute: id|`documentApiModel`|200 OK<br/>404 Not Found|
 |POST|api/document/|Добавляет новый документ| fromBody: `documentRequestApiModel`|`documentApiModel`|200 OK<br/>404 Not Found<br/>409 Conflict|
 |PUT|api/document/{id}|Редактирует документ с идентификатором id| fromRoute: id <br/>fromBody: `documentRequestApiModel`|`documentApiModel`|200 OK<br/>404 Not Found<br/>409 Conflict<br/>422 Unprocessable Entity|

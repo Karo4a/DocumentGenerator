@@ -6,27 +6,12 @@ namespace DocumentGenerator.Web.Models.Document
     /// <summary>
     /// Модель стороны акта
     /// </summary>
-    public class DocumentApiModel
+    public class DocumentApiModel : DocumentBaseApiModel
     {
         /// <summary>
         /// Идентификатор
         /// </summary>
         public Guid Id { get; set; }
-
-        /// <summary>
-        /// Номер документа
-        /// </summary>
-        public string DocumentNumber { get; set; } = string.Empty;
-
-        /// <summary>
-        /// Номер основного договора
-        /// </summary>
-        public string ContractNumber { get; set; } = string.Empty;
-
-        /// <summary>
-        /// Дата подписания документа
-        /// </summary>
-        public DateOnly Date { get; set; }
 
         /// <summary>
         /// Объект передачи данных продавца

@@ -147,7 +147,7 @@ namespace DocumentGenerator.Services
 
         private async Task ValidateConnections(Guid? id, DocumentCreateModel model, CancellationToken cancellationToken)
         {
-            if ((await documentReadRepository.GetAll(cancellationToken)).Any(x => x.DocumentNumber == model.DocumentNumber && x.Id != id))
+            if (await documentReadRepository.Any(x => x.DocumentNumber == model.DocumentNumber && x.Id != id, cancellationToken))
             {
                 throw new DocumentGeneratorDuplicateException($"Документ с номером {model.DocumentNumber} уже существует");
             }
@@ -164,14 +164,10 @@ namespace DocumentGenerator.Services
                 throw new DocumentGeneratorNotFoundException($"Не удалось найти покупателя с идентификатором {model.BuyerId}");
             }
 
-            var missingProductIds = new List<Guid>();
-            foreach (var product in model.Products)
-            {
-                if (await productReadRepository.GetById(product.ProductId, cancellationToken) == null)
-                {
-                    missingProductIds.Add(product.ProductId);
-                }
-            }
+            var modelProductsIds = model.Products.Select(x => x.ProductId).ToList();
+            var existingProducts = await productReadRepository.GetByIds(modelProductsIds, cancellationToken);
+            var existingProductIds = existingProducts.Select(x => x.Id).ToList();
+            var missingProductIds = modelProductsIds.Except(existingProductIds).ToList();
 
             if (missingProductIds.Count > 0)
             {

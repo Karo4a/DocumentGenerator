@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DocumentGenerator.Entities.ValidationConstants;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DocumentGenerator.Entities.Configurations
@@ -18,11 +19,11 @@ namespace DocumentGenerator.Entities.Configurations
 
             builder.Property(x => x.DocumentNumber)
                 .IsRequired()
-                .HasMaxLength(255);
+                .HasMaxLength(DocumentValidationConstants.DocumentNumberMaxLength);
 
             builder.Property(x => x.ContractNumber)
                 .IsRequired()
-                .HasMaxLength(255);
+                .HasMaxLength(DocumentValidationConstants.ContractNumberMaxLength);
 
             builder.Property(x => x.Date)
                 .HasColumnType("date")

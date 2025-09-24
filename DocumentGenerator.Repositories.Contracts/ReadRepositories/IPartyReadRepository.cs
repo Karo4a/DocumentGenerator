@@ -1,4 +1,5 @@
 ﻿using DocumentGenerator.Entities;
+using System.Linq.Expressions;
 
 namespace DocumentGenerator.Repositories.Contracts.ReadRepositories
 {
@@ -7,6 +8,11 @@ namespace DocumentGenerator.Repositories.Contracts.ReadRepositories
     /// </summary>
     public interface IPartyReadRepository
     {
+        /// <summary>
+        /// Возвращает true, если хотя бы один <see cref="Party"/> в БД удовлетворяет условию, иначе false
+        /// </summary>
+        Task<bool> Any(Expression<Func<Party, bool>> action, CancellationToken cancellationToken);
+
         /// <summary>
         /// Получает <see cref="Party"/> по идентификатору
         /// </summary>

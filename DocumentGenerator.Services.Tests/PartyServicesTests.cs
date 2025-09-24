@@ -111,20 +111,20 @@ namespace DocumentGenerator.Services.Tests
         }
 
         /// <summary>
-        /// Создание падает с ошибкой существующей стороны акта
+        /// Создание падает с ошибкой одинаковых ИНН сторон акта
         /// </summary>
         [Fact]
-        public async Task CreateShouldThrowDuplicateException()
+        public async Task CreateShouldThrowTaxIdDuplicateException()
         {
             // Arrange
             var entity = await PrepareParty();
             var request = mapper.Map<PartyCreateModel>(entity);
-            
+
             // Act
             var result = () => service.Create(request, CancellationToken.None);
 
             // Assert
-            await result.Should().ThrowAsync<DocumentGeneratorDuplicateException>().WithMessage($"*{entity.Name}*");
+            await result.Should().ThrowAsync<DocumentGeneratorDuplicateException>().WithMessage($"*{entity.TaxId}*");
         }
 
         /// <summary>
@@ -162,10 +162,10 @@ namespace DocumentGenerator.Services.Tests
         }
 
         /// <summary>
-        /// Редактирование падает с ошибкой существующей стороны акта
+        /// Редактирование падает с ошибкой одинаковых ИНН сторон акта
         /// </summary>
         [Fact]
-        public async Task EditShouldThrowDuplicateException()
+        public async Task EditShouldThrowTaxIdDuplicateException()
         {
             // Arrange
             var entity = await PrepareParty();
@@ -176,7 +176,7 @@ namespace DocumentGenerator.Services.Tests
             var result = () => service.Edit(id, request, CancellationToken.None);
 
             // Assert
-            await result.Should().ThrowAsync<DocumentGeneratorDuplicateException>().WithMessage($"*{entity.Name}*");
+            await result.Should().ThrowAsync<DocumentGeneratorDuplicateException>().WithMessage($"*{entity.TaxId}*");
         }
 
         /// <summary>

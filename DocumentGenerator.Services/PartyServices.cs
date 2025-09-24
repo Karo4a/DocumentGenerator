@@ -47,17 +47,16 @@ namespace DocumentGenerator.Services
 
         async Task<PartyModel> IPartyServices.Create(PartyCreateModel model, CancellationToken cancellationToken)
         {
-            var parties = await partyReadRepository.GetAll(cancellationToken);
-            if (parties.Any(x => x.Name == model.Name))
-                throw new DocumentGeneratorDuplicateException($"Сторона акта с именем {model.Name} уже существует.");
+            if (await partyReadRepository.Any(x => x.TaxId == model.TaxId, cancellationToken))
+                throw new DocumentGeneratorDuplicateException($"Сторона акта с ИНН {model.TaxId} уже существует");
 
-            var result = new Party
-            {
-                Id = Guid.NewGuid(),
-                Name = model.Name,
-                Job = model.Job,
-                TaxId = model.TaxId,
-            };
+                var result = new Party
+                {
+                    Id = Guid.NewGuid(),
+                    Name = model.Name,
+                    Job = model.Job,
+                    TaxId = model.TaxId,
+                };
             partyWriteRepository.Add(result);
             await unitOfWork.SaveChangesAsync(cancellationToken);
             return mapper.Map<PartyModel>(result);
@@ -65,9 +64,8 @@ namespace DocumentGenerator.Services
 
         async Task<PartyModel> IPartyServices.Edit(Guid id, PartyCreateModel model, CancellationToken cancellationToken)
         {
-            var parties = await partyReadRepository.GetAll(cancellationToken);
-            if (parties.Any(x => x.Name == model.Name && x.Id != id))
-                throw new DocumentGeneratorDuplicateException($"Сторона акта с именем {model.Name} уже существует.");
+            if (await partyReadRepository.Any(x => x.TaxId == model.TaxId, cancellationToken))
+                throw new DocumentGeneratorDuplicateException($"Сторона акта с ИНН {model.TaxId} уже существует");
 
             var entity = await partyReadRepository.GetById(id, cancellationToken)
                 ?? throw new DocumentGeneratorNotFoundException($"Не удалось найти сторону акта с идентификатором {id}");

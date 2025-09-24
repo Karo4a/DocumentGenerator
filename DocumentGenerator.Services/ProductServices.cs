@@ -64,8 +64,7 @@ namespace DocumentGenerator.Services
 
         async Task<ProductModel> IProductServices.Edit(Guid id, ProductCreateModel model, CancellationToken cancellationToken)
         {
-            var products = await productReadRepository.GetAll(cancellationToken);
-            if (products.Any(x => x.Name == model.Name && x.Id != id))
+            if (await productReadRepository.Any(x => x.Name == model.Name && x.Id != id, cancellationToken))
                 throw new DocumentGeneratorDuplicateException($"Товар с именем {model.Name} уже существует.");
 
             var entity = await productReadRepository.GetById(id, cancellationToken)

@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using DocumentGenerator.Services.Contracts.Models.Product;
+using DocumentGenerator.Entities.ValidationConstants;
 
 namespace DocumentGenerator.Services.Validators
 {
@@ -8,9 +9,6 @@ namespace DocumentGenerator.Services.Validators
     /// </summary>
     public class ProductCreateModelValidator : AbstractValidator<ProductCreateModel>
     {
-        private const int MinLength = 3;
-        private const int MaxLength = 255;
-
         /// <summary>
         /// Конструктор
         /// </summary>
@@ -18,8 +16,8 @@ namespace DocumentGenerator.Services.Validators
         {
             RuleFor(x => x.Name)
                 .NotEmpty().WithMessage("Название товара не может быть пустым.")
-                .Length(MinLength, MaxLength)
-                .WithMessage($"Длина названия товара должна быть от {MinLength} до {MaxLength}");
+                .Length(ProductValidationConstants.NameMinLength, ProductValidationConstants.NameMaxLength)
+                .WithMessage($"Длина названия товара должна быть от {ProductValidationConstants.NameMinLength} до {ProductValidationConstants.NameMaxLength}");
 
             RuleFor(x => x.Cost)
                 .GreaterThan(0).WithMessage("Цена товара должна быть больше нуля.");

@@ -43,6 +43,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocumentGenerator.Entities.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocumentGenerator.Common.Contracts", "DocumentGenerator.Common.Contracts\DocumentGenerator.Common.Contracts.csproj", "{CBD8FD0F-CDFB-4D8D-BA4F-05CB413FBABE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocumentGenerator.Entities.ValidationConstants", "DocumentGenerator.Entities.ValidationConstants\DocumentGenerator.Entities.ValidationConstants.csproj", "{009B03C4-CAFD-45DA-A112-13675EA975AC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -113,6 +115,10 @@ Global
 		{CBD8FD0F-CDFB-4D8D-BA4F-05CB413FBABE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CBD8FD0F-CDFB-4D8D-BA4F-05CB413FBABE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CBD8FD0F-CDFB-4D8D-BA4F-05CB413FBABE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{009B03C4-CAFD-45DA-A112-13675EA975AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{009B03C4-CAFD-45DA-A112-13675EA975AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{009B03C4-CAFD-45DA-A112-13675EA975AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{009B03C4-CAFD-45DA-A112-13675EA975AC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -124,6 +130,7 @@ Global
 		{AA2BA5F1-430F-4FC4-8E72-ADA5F8F97241} = {554B7A59-7CE6-40E2-A96C-CDA6FD7F03DF}
 		{DFB11D27-4434-4270-9335-3D88D12ABB14} = {554B7A59-7CE6-40E2-A96C-CDA6FD7F03DF}
 		{0EEFC652-55AB-4182-9A28-E61DC7D07167} = {554B7A59-7CE6-40E2-A96C-CDA6FD7F03DF}
+		{009B03C4-CAFD-45DA-A112-13675EA975AC} = {554B7A59-7CE6-40E2-A96C-CDA6FD7F03DF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4BD38D58-68E5-4A6F-92E2-5E38D69DA1D3}

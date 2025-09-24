@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DocumentGenerator.Entities.ValidationConstants;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DocumentGenerator.Entities.Configurations
@@ -18,7 +19,7 @@ namespace DocumentGenerator.Entities.Configurations
 
             builder.Property(x => x.Name)
                 .IsRequired()
-                .HasMaxLength(255);
+                .HasMaxLength(PartyValidationConstants.NameMaxLength);
 
             builder.Property(x => x.Cost)
                 .IsRequired();

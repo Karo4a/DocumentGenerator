@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DocumentGenerator.Entities.ValidationConstants;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DocumentGenerator.Entities.Configurations
@@ -18,15 +19,15 @@ namespace DocumentGenerator.Entities.Configurations
 
             builder.Property(x => x.Name)
                 .IsRequired()
-                .HasMaxLength(255);
+                .HasMaxLength(PartyValidationConstants.NameMaxLength);
 
             builder.Property(x => x.Job)
                 .IsRequired()
-                .HasMaxLength(255);
+                .HasMaxLength(PartyValidationConstants.JobMaxLength);
 
             builder.Property(x => x.TaxId)
                 .IsRequired()
-                .HasMaxLength(12);
+                .HasMaxLength(PartyValidationConstants.TaxIdMaxLength);
 
             builder.HasIndex(x => x.TaxId, $"IX_{nameof(Party)}_{nameof(Party.TaxId)}")
                 .IsUnique()

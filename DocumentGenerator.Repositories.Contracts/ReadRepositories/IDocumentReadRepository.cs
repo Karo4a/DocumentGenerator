@@ -1,4 +1,5 @@
 ﻿using DocumentGenerator.Entities;
+using System.Linq.Expressions;
 
 namespace DocumentGenerator.Repositories.Contracts.ReadRepositories
 {
@@ -7,6 +8,11 @@ namespace DocumentGenerator.Repositories.Contracts.ReadRepositories
     /// </summary>
     public interface IDocumentReadRepository
     {
+        /// <summary>
+        /// Возвращает true, если хотя бы один <see cref="Document"/> в БД удовлетворяет условию, иначе false
+        /// </summary>
+        Task<bool> Any(Expression<Func<Document, bool>> action, CancellationToken cancellationToken);
+
         /// <summary>
         /// Получает <see cref="Document"/> по идентификатору
         /// </summary>

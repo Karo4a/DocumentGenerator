@@ -37,7 +37,7 @@ namespace DocumentGenerator.Web
                 opt.Filters.Add<DocumentGeneratorExceptionFilter>();
             });
 
-            if (builder.Environment.EnvironmentName == "integration")
+            if (builder.Environment.EnvironmentName == EnvironmentProvider.IntegrationEnviroment)
             {
                 controllers.AddControllersAsServices();
             }

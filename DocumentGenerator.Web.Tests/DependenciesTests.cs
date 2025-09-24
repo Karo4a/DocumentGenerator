@@ -1,6 +1,5 @@
 ﻿using DocumentGenerator.Web.Controllers;
 using FluentAssertions;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,7 +23,6 @@ namespace DocumentGenerator.Web.Tests
             this.factory = factory.WithWebHostBuilder(builder =>
             {
                 builder.ConfigureTestAppConfiguration();
-                builder.UseEnvironment("integration");
             });
         }
 

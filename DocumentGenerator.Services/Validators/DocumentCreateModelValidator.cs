@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using DocumentGenerator.Services.Contracts.Models.Document;
+using DocumentGenerator.Entities.ValidationConstants;
 
 namespace DocumentGenerator.Services.Validators
 {
@@ -8,9 +9,6 @@ namespace DocumentGenerator.Services.Validators
     /// </summary>
     public class DocumentCreateModelValidator : AbstractValidator<DocumentCreateModel>
     {
-        private const int MinLength = 1;
-        private const int MaxLength = 255;
-
         /// <summary>
         /// Конструктор
         /// </summary>
@@ -18,11 +16,13 @@ namespace DocumentGenerator.Services.Validators
         {
             RuleFor(x => x.DocumentNumber)
                 .NotEmpty().WithMessage("Номер документа не может быть пустым.")
-                .Length(MinLength, MaxLength);
+                .Length(DocumentValidationConstants.DocumentNumberMinLength, DocumentValidationConstants.DocumentNumberMaxLength)
+                .WithMessage($"Длина номера документа должна быть от {DocumentValidationConstants.DocumentNumberMinLength} до {DocumentValidationConstants.DocumentNumberMaxLength}");
 
             RuleFor(x => x.ContractNumber)
                 .NotEmpty().WithMessage("Номер договора не может быть пустым.")
-                .Length(MinLength, MaxLength);
+                .Length(DocumentValidationConstants.ContractNumberMinLength, DocumentValidationConstants.ContractNumberMaxLength)
+                .WithMessage($"Длина номера договора должна быть от {DocumentValidationConstants.ContractNumberMinLength} до {DocumentValidationConstants.ContractNumberMaxLength}");
 
             RuleFor(x => x.Date)
                 .LessThanOrEqualTo(DateOnly.FromDateTime(DateTime.UtcNow))
