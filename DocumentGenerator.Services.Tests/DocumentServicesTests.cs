@@ -128,7 +128,7 @@ namespace DocumentGenerator.Services.Tests
             var result = () => service.Create(request, CancellationToken.None);
 
             // Assert
-            await result.Should().ThrowAsync<DocumentGeneratorDuplicateException>().WithMessage($"*{entity.DocumentNumber}*");
+            await result.Should().ThrowAsync<DocumentGeneratorDuplicateException>().WithMessage($"*{entity.DocumentNumber}*{entity.ContractNumber}*");
         }
 
         /// <summary>
@@ -235,7 +235,7 @@ namespace DocumentGenerator.Services.Tests
             var result = () => service.Edit(id, request, CancellationToken.None);
 
             // Assert
-            await result.Should().ThrowAsync<DocumentGeneratorDuplicateException>().WithMessage($"*{entity.DocumentNumber}*");
+            await result.Should().ThrowAsync<DocumentGeneratorDuplicateException>().WithMessage($"*{entity.DocumentNumber}*{entity.ContractNumber}*");
         }
 
         /// <summary>

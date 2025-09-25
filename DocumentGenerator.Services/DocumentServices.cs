@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using DocumentGenerator.Context.Contracts;
 using DocumentGenerator.Entities;
 using DocumentGenerator.Repositories.Contracts.ReadRepositories;
@@ -56,9 +57,9 @@ namespace DocumentGenerator.Services
 
         async Task<DocumentModel> IDocumentServices.Create(DocumentCreateModel model, CancellationToken cancellationToken)
         {
-            if (await documentReadRepository.Any(x => x.DocumentNumber == model.DocumentNumber, cancellationToken))
+            if (await documentReadRepository.Any(x => x.DocumentNumber == model.DocumentNumber && x.ContractNumber == model.ContractNumber, cancellationToken))
             {
-                throw new DocumentGeneratorDuplicateException($"Документ с номером {model.DocumentNumber} уже существует");
+                throw new DocumentGeneratorDuplicateException($"Документ с номером {model.DocumentNumber} при договоре с номером {model.ContractNumber} уже существует");
             }
 
             var seller = await partyReadRepository.GetById(model.SellerId, cancellationToken);
@@ -112,9 +113,9 @@ namespace DocumentGenerator.Services
 
         async Task<DocumentModel> IDocumentServices.Edit(Guid id, DocumentCreateModel model, CancellationToken cancellationToken)
         {
-            if (await documentReadRepository.Any(x => x.DocumentNumber == model.DocumentNumber && x.Id != id, cancellationToken))
+            if (await documentReadRepository.Any(x => x.DocumentNumber == model.DocumentNumber && x.ContractNumber == model.ContractNumber && x.Id != id, cancellationToken))
             {
-                throw new DocumentGeneratorDuplicateException($"Документ с номером {model.DocumentNumber} уже существует");
+                throw new DocumentGeneratorDuplicateException($"Документ с номером {model.DocumentNumber} при договоре с номером {model.ContractNumber} уже существует");
             }
 
             var seller = await partyReadRepository.GetById(model.SellerId, cancellationToken);
