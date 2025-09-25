@@ -44,13 +44,13 @@ erDiagram
 ### CRUD товаров
 |verb|url|description|request|response|codes|
 |-|-|-|-|-|-|
-|GET|api/products/|Получает список всех товаров| |`productApiModel[]`|200 OK|
-|GET|api/products/{id}|Получает товар с идентификатором id| fromRoute: id|`productApiModel`|200 OK<br/>404 Not Found|
-|POST|api/products/|Добавляет новый товар|fromBody: `productRequestApiModel`|`productApiModel`|200 OK<br/>409 Conflict<br/>422 Unprocessable Entity|
-|PUT|api/products/{id}|Редактирует товар с идентификатором id| fromRoute: id <br/>fromBody: `productRequestApiModel`|`productApiModel`|200 OK<br/>404 Not Found<br/>409 Conflict<br/>422 Unprocessable Entity|
+|GET|api/products/|Получает список всех товаров| |`ProductApiModel[]`|200 OK|
+|GET|api/products/{id}|Получает товар с идентификатором id| fromRoute: id|`ProductApiModel`|200 OK<br/>404 Not Found|
+|POST|api/products/|Добавляет новый товар|fromBody: `ProductRequestApiModel`|`ProductApiModel`|200 OK<br/>409 Conflict<br/>422 Unprocessable Entity|
+|PUT|api/products/{id}|Редактирует товар с идентификатором id| fromRoute: id <br/>fromBody: `ProductRequestApiModel`|`ProductApiModel`|200 OK<br/>404 Not Found<br/>409 Conflict<br/>422 Unprocessable Entity|
 |DELETE|api/products/{id}|Удаляет товар с идентификатором id| fromRoute: id| |200 OK<br/>404 Not Found|
 ```javascript
-// productApiModel
+// ProductApiModel
 {
   id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
   name: "Товар 1",
@@ -58,7 +58,7 @@ erDiagram
 }
 ```
 ```javascript
-// productRequestApiModel
+// ProductRequestApiModel
 {
   name: "Товар 1",
   cost: 1
@@ -68,13 +68,13 @@ erDiagram
 ### CRUD стороны акта
 |verb|url|description|request|response|codes|
 |-|-|-|-|-|-|
-|GET|api/party/|Получает список всех сторон актов| |`partyApiModel[]`|200 OK|
-|GET|api/party/{id}|Получает сторону акта с идентификатором id| fromRoute: id|`partyApiModel`|200 OK<br/>404 Not Found|
-|POST|api/party/|Добавляет новую сторону акта| fromBody: `partyRequestApiModel`|`partyApiModel`|200 OK<br/>409 Conflict<br/>422 Unprocessable Entity|
-|PUT|api/party/{id}|Редактирует сторону акта с идентификатором id| fromRoute: id <br/>fromBody: `partyRequestApiModel`|`partyApiModel`|200 OK<br/>404 Not Found<br/>409 Conflict<br/>422 Unprocessable Entity|
+|GET|api/party/|Получает список всех сторон актов| |`PartyApiModel[]`|200 OK|
+|GET|api/party/{id}|Получает сторону акта с идентификатором id| fromRoute: id|`PartyApiModel`|200 OK<br/>404 Not Found|
+|POST|api/party/|Добавляет новую сторону акта| fromBody: `PartyRequestApiModel`|`PartyApiModel`|200 OK<br/>409 Conflict<br/>422 Unprocessable Entity|
+|PUT|api/party/{id}|Редактирует сторону акта с идентификатором id| fromRoute: id <br/>fromBody: `PartyRequestApiModel`|`PartyApiModel`|200 OK<br/>404 Not Found<br/>409 Conflict<br/>422 Unprocessable Entity|
 |DELETE|api/party/{id}|Удаляет сторону акта с идентификатором id| fromRoute: id| |200 OK<br/>404 Not Found|
 ```javascript
-// partyApiModel
+// PartyApiModel
 {
   id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
   name: "ФИО стороны акта",
@@ -83,7 +83,7 @@ erDiagram
 }
 ```
 ```javascript
-// partyRequestApiModel
+// PartyRequestApiModel
 {
   name: "ФИО стороны акта",
   job: "Работа стороны акта",
@@ -95,13 +95,13 @@ erDiagram
 |verb|url|description|request|response|codes|
 |-|-|-|-|-|-|
 |GET|api/document/{id}/export|Экспортирует документ в формате Excel с идентификатором id|fromRoute: id|`file.xlsx`|200 OK<br/>404 Not Found|
-|GET|api/document/|Получает список всех документов| |`documentApiModel[]`|200 OK|
-|GET|api/document/{id}|Получает документ с идентификатором id| fromRoute: id|`documentApiModel`|200 OK<br/>404 Not Found|
-|POST|api/document/|Добавляет новый документ| fromBody: `documentRequestApiModel`|`documentApiModel`|200 OK<br/>404 Not Found<br/>409 Conflict|
-|PUT|api/document/{id}|Редактирует документ с идентификатором id| fromRoute: id <br/>fromBody: `documentRequestApiModel`|`documentApiModel`|200 OK<br/>404 Not Found<br/>409 Conflict<br/>422 Unprocessable Entity|
+|GET|api/document/|Получает список всех документов| |`DocumentApiModel[]`|200 OK|
+|GET|api/document/{id}|Получает документ с идентификатором id| fromRoute: id|`DocumentApiModel`|200 OK<br/>404 Not Found|
+|POST|api/document/|Добавляет новый документ| fromBody: `DocumentRequestApiModel`|`DocumentApiModel`|200 OK<br/>404 Not Found<br/>409 Conflict|
+|PUT|api/document/{id}|Редактирует документ с идентификатором id| fromRoute: id <br/>fromBody: `DocumentRequestApiModel`|`DocumentApiModel`|200 OK<br/>404 Not Found<br/>409 Conflict<br/>422 Unprocessable Entity|
 |DELETE|api/document/{id}|Удаляет документ с идентификатором id| fromRoute: id| |200 OK<br/>404 Not Found|
 ```javascript
-// documentProductApiModel
+// DocumentProductApiModel
 {
   id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
   product: {
@@ -114,7 +114,7 @@ erDiagram
 }
 ```
 ```javascript
-// documentProductRequestApiModel
+// DocumentProductRequestApiModel
 {
   productId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
   quantity: 1,
@@ -122,7 +122,7 @@ erDiagram
 }
 ```
 ```javascript
-// documentApiModel
+// DocumentApiModel
 {
   id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
   documentNumber: "1",
@@ -155,7 +155,7 @@ erDiagram
 }
 ```
 ```javascript
-// documentRequestApiModel
+// DocumentRequestApiModel
 {
   documentNumber: "1",
   contractNumber: "1",

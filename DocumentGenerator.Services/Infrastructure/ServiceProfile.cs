@@ -23,7 +23,8 @@ namespace DocumentGenerator.Services.Infrastructure
             CreateMap<DocumentProductCreateModel, DocumentProduct>(MemberList.Destination);
 
             CreateMap<DocumentProductDbModel, DocumentProductModel>(MemberList.Destination);
-            CreateMap<DocumentProductDbModel, DocumentProduct>(MemberList.Destination);
+            CreateMap<DocumentProductDbModel, DocumentProduct>(MemberList.Destination)
+                .ForMember(x => x.ProductId, opt => opt.MapFrom(y => y.Product.Id));
             CreateMap<DocumentDbModel, DocumentModel>(MemberList.Destination);
             CreateMap<DocumentDbModel, Document>(MemberList.Destination)
                 .ForMember(x => x.SellerId, opt => opt.MapFrom(y => y.Seller.Id))
