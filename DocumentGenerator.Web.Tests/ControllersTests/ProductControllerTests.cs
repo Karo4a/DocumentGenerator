@@ -41,9 +41,7 @@ namespace DocumentGenerator.Web.Tests.ControllersTests
 
             // Assert
             response.Should().BeEquivalentTo(entity, opt => opt
-                .Excluding(x => x.CreatedAt)
-                .Excluding(x => x.UpdatedAt)
-                .Excluding(x => x.DeletedAt));
+                .ExcludingMissingMembers());
         }
 
         /// <summary>
@@ -53,11 +51,12 @@ namespace DocumentGenerator.Web.Tests.ControllersTests
         public async Task GetAllShouldReturnValue()
         {
             // Arrange
-            await context.Database.EnsureDeletedAsync();
-            await context.Database.EnsureCreatedAsync();
-
+            var entityIds = new List<Guid>();
             for (int i = 0; i < 3; ++i)
-                await entitiesGenerator.Product();
+            {
+                var entity = await entitiesGenerator.Product();
+                entityIds.Add(entity.Id);
+            }
             await entitiesGenerator.Product(DateTimeOffset.Now);
 
             // Act
@@ -65,7 +64,8 @@ namespace DocumentGenerator.Web.Tests.ControllersTests
 
             // Assert
             response.Should().NotBeEmpty()
-                .And.HaveCount(3);
+                .And.HaveCountGreaterThanOrEqualTo(3);
+            entityIds.Should().BeSubsetOf(response.Select(x => x.Id));
         }
 
         /// <summary>

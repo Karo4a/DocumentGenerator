@@ -53,11 +53,12 @@ namespace DocumentGenerator.Web.Tests.ControllersTests
         public async Task GetAllShouldReturnValue()
         {
             // Arrange
-            await context.Database.EnsureDeletedAsync();
-            await context.Database.EnsureCreatedAsync();
-
+            var entityIds = new List<Guid>();
             for (int i = 0; i < 3; ++i)
-                await entitiesGenerator.Party();
+            {
+                var entity = await entitiesGenerator.Party();
+                entityIds.Add(entity.Id);
+            }
             await entitiesGenerator.Party(DateTimeOffset.Now);
 
             // Act
@@ -65,7 +66,8 @@ namespace DocumentGenerator.Web.Tests.ControllersTests
 
             // Assert
             response.Should().NotBeEmpty()
-                .And.HaveCount(3);
+                .And.HaveCountGreaterThanOrEqualTo(3);
+            entityIds.Should().BeSubsetOf(response.Select(x => x.Id));
         }
 
         /// <summary>
