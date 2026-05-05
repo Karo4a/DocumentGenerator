@@ -1,108 +1,47 @@
-﻿using AutoMapper;
-using DocumentGenerator.Common;
-using DocumentGenerator.Common.Contracts;
-using DocumentGenerator.Context;
-using DocumentGenerator.Context.Contracts;
-using DocumentGenerator.Repositories.Contracts.ReadRepositories;
-using DocumentGenerator.Repositories.Contracts.WriteRepositories;
-using DocumentGenerator.Repositories.ReadRepositories;
-using DocumentGenerator.Repositories.WriteRepositories;
-using DocumentGenerator.Services;
-using DocumentGenerator.Services.Contracts;
-using DocumentGenerator.Services.Contracts.IServices;
-using DocumentGenerator.Services.Infrastructure;
-using DocumentGenerator.Web.Infrastructure;
-using Microsoft.EntityFrameworkCore;
+﻿using DocumentGenerator.Web.Components;
+using DocumentGenerator.Web.Services.Product;
 
 namespace DocumentGenerator.Web
 {
-    /// <summary>
-    /// Класс программы
-    /// </summary>
     public class Program
     {
-        /// <summary>
-        /// Точка входа программы
-        /// </summary>
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // https://support.aspnetzero.com/QA/Questions/11011/Cannot-write-DateTime-with-KindLocal-to-PostgreSQL-type-%27timestamp-with-time-zone%27-only-UTC-is-supported
-            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-            AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
+            // Add services to the container.
+            builder.Services.AddRazorComponents()
+                .AddInteractiveServerComponents();
 
-            var controllers = builder.Services.AddControllers(opt =>
+            builder.Services.AddBlazorBootstrap();
+
+            builder.Services.AddHttpClient("Api", client =>
             {
-                opt.Filters.Add<DocumentGeneratorExceptionFilter>();
+                client.BaseAddress = new Uri("https://localhost:7178/");
             });
 
-            if (builder.Environment.EnvironmentName == EnvironmentProvider.IntegrationEnviroment)
+            builder.Services.AddHttpClient<IProductService, ProductService>(client =>
             {
-                controllers.AddControllersAsServices();
-            }
-
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen(c =>
-            {
-                var baseDirectory = AppContext.BaseDirectory;
-                c.IncludeXmlComments(Path.Combine(baseDirectory, "DocumentGenerator.Web.xml"));
-                c.IncludeXmlComments(Path.Combine(baseDirectory, "DocumentGenerator.Entities.xml"));
+                client.BaseAddress = new Uri("https://localhost:7178/");
             });
-
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-
-            builder.Services.AddDbContext<DocumentGeneratorContext>(options =>
-                options.UseNpgsql(connectionString)
-                    .LogTo(Console.WriteLine)
-            );
-            builder.Services.AddScoped<IReader>(x => x.GetRequiredService<DocumentGeneratorContext>());
-            builder.Services.AddScoped<IWriter>(x => x.GetRequiredService<DocumentGeneratorContext>());
-            builder.Services.AddScoped<IUnitOfWork>(x => x.GetRequiredService<DocumentGeneratorContext>());
-            builder.Services.AddScoped<IProductServices, ProductServices>();
-            builder.Services.AddScoped<IPartyServices, PartyServices>();
-            builder.Services.AddScoped<IDocumentServices, DocumentServices>();
-            builder.Services.AddScoped<IExcelServices, ExcelServices>();
-
-            builder.Services.AddSingleton<IValidateService, ValidateService>();
-            builder.Services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
-            builder.Services.AddSingleton<IVatRateProvider, VatRateProvider>();
-
-            builder.Services.AddSingleton(_ =>
-            {
-                var mapConfig = new MapperConfiguration(cfg =>
-                {
-                    cfg.AddProfile<ServiceProfile>();
-                    cfg.AddProfile<ApiMapper>();
-                });
-
-                var mapper = mapConfig.CreateMapper();
-                return mapper;
-            });
-            builder.Services.AddScoped<IProductReadRepository, ProductReadRepository>();
-            builder.Services.AddScoped<IProductWriteRepository, ProductWriteRepository>();
-
-            builder.Services.AddScoped<IPartyReadRepository, PartyReadRepository>();
-            builder.Services.AddScoped<IPartyWriteRepository, PartyWriteRepository>();
-
-            builder.Services.AddScoped<IDocumentProductWriteRepository, DocumentProductWriteRepository>();
-
-            builder.Services.AddScoped<IDocumentReadRepository, DocumentReadRepository>();
-            builder.Services.AddScoped<IDocumentWriteRepository, DocumentWriteRepository>();
 
             var app = builder.Build();
 
-            if (app.Environment.IsDevelopment())
+            // Configure the HTTP request pipeline.
+            if (!app.Environment.IsDevelopment())
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
+                app.UseExceptionHandler("/Error");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
             }
 
             app.UseHttpsRedirection();
 
-            app.UseAuthorization();
+            app.UseStaticFiles();
+            app.UseAntiforgery();
 
-            app.MapControllers();
+            app.MapRazorComponents<App>()
+                .AddInteractiveServerRenderMode();
 
             app.Run();
         }
