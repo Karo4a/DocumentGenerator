@@ -16,7 +16,7 @@ namespace DocumentGenerator.Database.Tests
     [DefaultPriority(1)]
     public class DatabaseTests
     {
-        private string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=documentGeneratorDbTests;Integrated Security=True";
+        private string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=documentGenerator;Integrated Security=True";
         private IDatabaseModelFactory databaseModelFactory;
         private DatabaseModel actualDbModel;
 

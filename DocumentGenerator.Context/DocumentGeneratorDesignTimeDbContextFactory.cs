@@ -20,7 +20,7 @@ namespace DocumentGenerator.Context
         /// </remarks>
         public DocumentGeneratorContext CreateDbContext(string[] args)
         {
-            var connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=documentGeneratorDbTests;Integrated Security=True";
+            var connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=documentGenerator;Integrated Security=True";
             var options = new DbContextOptionsBuilder<DocumentGeneratorContext>()
                 .UseSqlServer(connectionString)
                 .LogTo(Console.WriteLine)
