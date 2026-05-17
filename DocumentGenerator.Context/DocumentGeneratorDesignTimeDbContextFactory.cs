@@ -15,13 +15,14 @@ namespace DocumentGenerator.Context
         /// 1) dotnet tool install --global dotnet-ef
         /// 2) dotnet tool update --global dotnet-ef
         /// 3) dotnet ef migrations add [name] --project DocumentGenerator.Context\DocumentGenerator.Context.csproj
-        /// 4) dotnet ef database update --project DocumentGenerator.Context\DocumentGenerator.Context.csproj --connection "Host=localhost;Port=5432;Database=documentGenerator;Username=postgres;Password=Qwerty123456!"
+        /// 4) dotnet ef database update --project DocumentGenerator.Context\DocumentGenerator.Context.csproj
         /// 5) dotnet ef database update [targetMigrationName] --project DocumentGenerator.Context\DocumentGenerator.Context.csproj
         /// </remarks>
         public DocumentGeneratorContext CreateDbContext(string[] args)
         {
+            var connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=documentGenerator;Integrated Security=True";
             var options = new DbContextOptionsBuilder<DocumentGeneratorContext>()
-                .UseNpgsql()
+                .UseSqlServer(connectionString)
                 .LogTo(Console.WriteLine)
                 .Options;
 
