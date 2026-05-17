@@ -9,9 +9,9 @@ namespace DocumentGenerator.Entities
     public class User : DbBaseEntity
     {
         /// <summary>
-        /// Имя пользователя
+        /// Логин пользователя
         /// </summary>
-        public string Username { get; set; } = string.Empty;
+        public string Login { get; set; } = string.Empty;
 
         /// <summary>
         /// Электронная почта
@@ -19,14 +19,14 @@ namespace DocumentGenerator.Entities
         public string Email { get; set; } = string.Empty;
 
         /// <summary>
-        /// Пароль
+        /// Хэш пароля
         /// </summary>
-        public string Password { get; set; } = string.Empty;
+        public string PasswordHash { get; set; } = string.Empty;
 
         /// <summary>
-        /// Соль
+        /// Соль пароля
         /// </summary>
-        public string Salt { get; set; } = string.Empty;
+        public string PasswordSalt { get; set; } = string.Empty;
 
         /// <summary>
         /// Роль пользователя

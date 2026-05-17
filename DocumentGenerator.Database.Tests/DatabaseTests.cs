@@ -65,6 +65,7 @@ namespace DocumentGenerator.Database.Tests
         [InlineData("Parties")]
         [InlineData("DocumentProducts")]
         [InlineData("Documents")]
+        [InlineData("Users")]
         public void TableShouldExists(string tableName)
         {
             // Act
@@ -82,6 +83,7 @@ namespace DocumentGenerator.Database.Tests
         [InlineData("Parties")]
         [InlineData("DocumentProducts")]
         [InlineData("Documents")]
+        [InlineData("Users")]
         public void TableColumnsShouldMatchEfModelColumns(string tableName)
         {
             // Arrange
