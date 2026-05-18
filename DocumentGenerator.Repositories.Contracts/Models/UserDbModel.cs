@@ -1,12 +1,17 @@
-﻿using DocumentGenerator.Entities.Contracts;
+﻿using DocumentGenerator.Entities;
 
-namespace DocumentGenerator.Entities
+namespace DocumentGenerator.Repositories.Contracts.Models
 {
     /// <summary>
-    /// Сущность пользователя
+    /// Модель пользователя для запроса из базы данных
     /// </summary>
-    public class User : DbBaseEntity
+    public class UserDbModel
     {
+        /// <summary>
+        /// Идентификатор
+        /// </summary>
+        public Guid Id { get; set; }
+
         /// <summary>
         /// Логин пользователя
         /// </summary>
@@ -26,11 +31,6 @@ namespace DocumentGenerator.Entities
         /// Соль пароля
         /// </summary>
         public string PasswordSalt { get; set; } = string.Empty;
-
-        /// <summary>
-        /// Идентификатор роли пользователя
-        /// </summary>
-        public Guid UserRoleId { get; set; }
 
         /// <summary>
         /// Навигационное свойство <see cref="UserRole"/>

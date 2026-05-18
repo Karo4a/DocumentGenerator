@@ -1,6 +1,6 @@
 ﻿using DocumentGenerator.Context.Contracts;
 using DocumentGenerator.Entities;
-using DocumentGenerator.Repositories.Contracts;
+using DocumentGenerator.Repositories.Contracts.Models;
 using DocumentGenerator.Repositories.Contracts.ReadRepositories;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
@@ -8,7 +8,7 @@ using System.Linq.Expressions;
 namespace DocumentGenerator.Repositories.ReadRepositories
 {
     /// <inheritdoc cref="IDocumentReadRepository" />
-    public class DocumentReadRepository : IDocumentReadRepository
+    public class DocumentReadRepository : IDocumentReadRepository, IRepositoryAnchor
     {
         private readonly IReader reader;
 

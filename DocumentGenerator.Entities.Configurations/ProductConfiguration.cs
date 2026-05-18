@@ -22,7 +22,7 @@ namespace DocumentGenerator.Entities.Configurations
                 .HasMaxLength(PartyValidationConstants.NameMaxLength);
 
             builder.Property(x => x.Cost)
-                .HasPrecision(38, 15)
+                .HasPrecision(18, 2)
                 .IsRequired();
 
             builder.HasIndex(x => x.Name, $"IX_{nameof(Product)}_{nameof(Product.Name)}")

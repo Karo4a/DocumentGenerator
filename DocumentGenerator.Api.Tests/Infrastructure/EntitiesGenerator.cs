@@ -29,7 +29,7 @@ namespace DocumentGenerator.Web.Tests.Infrastructure
             var product = TestEntityProvider.Shared.Create<Product>(x =>
             {
                 x.Name = productRequest.Name!;
-                x.Cost = (decimal)Math.Round(productRequest.Cost, 15);
+                x.Cost = (decimal)Math.Round(productRequest.Cost, 2);
                 x.DeletedAt = deletedAt;
             });
             await context.AddAsync(product);
@@ -150,7 +150,7 @@ namespace DocumentGenerator.Web.Tests.Infrastructure
             {
                 ProductId = product.Id,
                 Quantity = Random.Shared.Next(1, 10),
-                Cost = Math.Round(Random.Shared.NextDouble() * 10.0, 15)
+                Cost = Math.Round(Random.Shared.NextDouble() * 10.0, 2)
             };
 
         private static string RandomTaxId()

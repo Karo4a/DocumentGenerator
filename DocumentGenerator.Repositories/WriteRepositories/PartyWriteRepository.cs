@@ -6,7 +6,9 @@ using DocumentGenerator.Repositories.Contracts.WriteRepositories;
 namespace DocumentGenerator.Repositories.WriteRepositories
 {
     /// <inheritdoc cref="IPartyWriteRepository" />
-    public class PartyWriteRepository : BaseWriteRepository<Party>, IPartyWriteRepository
+    public class PartyWriteRepository : BaseWriteRepository<Party>,
+        IPartyWriteRepository,
+        IRepositoryAnchor
     {
         /// <summary>
         /// Конструктор

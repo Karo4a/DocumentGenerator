@@ -9,7 +9,7 @@ using DocumentGenerator.Services.Contracts.Models.Document;
 namespace DocumentGenerator.Services
 {
     /// <inheritdoc cref="IValidateService"/>
-    public class ValidateService : IValidateService
+    public class ValidateService : IValidateService, IServiceAnchor
     {
         private readonly IDictionary<Type, IValidator> validators;
 

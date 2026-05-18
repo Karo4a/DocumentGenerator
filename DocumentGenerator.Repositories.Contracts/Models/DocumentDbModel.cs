@@ -1,7 +1,7 @@
 ﻿using DocumentGenerator.Entities;
 using DocumentGenerator.Entities.Contracts;
 
-namespace DocumentGenerator.Repositories.Contracts
+namespace DocumentGenerator.Repositories.Contracts.Models
 {
     /// <summary>
     /// Модель документа для запроса из базы данных

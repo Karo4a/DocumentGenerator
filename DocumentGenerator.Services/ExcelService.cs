@@ -10,14 +10,14 @@ using System.Globalization;
 namespace DocumentGenerator.Services
 {
     /// <inheritdoc cref="IExcelServices" />
-    public class ExcelServices : IExcelServices
+    public class ExcelService : IExcelServices, IServiceAnchor
     {
         private readonly IVatRateProvider vatRateProvider;
 
         /// <summary>
         /// Конструктор
         /// </summary>
-        public ExcelServices(IVatRateProvider vatRateProvider)
+        public ExcelService(IVatRateProvider vatRateProvider)
         {
             this.vatRateProvider = vatRateProvider;
         }

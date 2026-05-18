@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using DocumentFormat.OpenXml.Office2010.Excel;
 using DocumentGenerator.Context.Contracts;
 using DocumentGenerator.Entities;
 using DocumentGenerator.Repositories.Contracts.ReadRepositories;
@@ -12,7 +11,7 @@ namespace DocumentGenerator.Services
 {
 
     /// <inheritdoc cref="IDocumentServices"/>
-    public class DocumentServices : IDocumentServices
+    public class DocumentService : IDocumentServices, IServiceAnchor
     {
         private readonly IDocumentReadRepository documentReadRepository;
         private readonly IDocumentWriteRepository documentWriteRepository;
@@ -25,7 +24,7 @@ namespace DocumentGenerator.Services
         /// <summary>
         /// Конструктор
         /// </summary>
-        public DocumentServices(IDocumentReadRepository documentReadRepository,
+        public DocumentService(IDocumentReadRepository documentReadRepository,
             IDocumentWriteRepository documentWriteRepository,
             IDocumentProductWriteRepository documentProductWriteRepository,
             IPartyReadRepository partyReadRepository,

@@ -5,15 +5,15 @@ using DocumentGenerator.Repositories.Contracts.WriteRepositories;
 
 namespace DocumentGenerator.Repositories.WriteRepositories
 {
-    /// <inheritdoc cref="IProductWriteRepository" />
-    public class ProductWriteRepository : BaseWriteRepository<Product>,
-        IProductWriteRepository,
+    /// <inheritdoc cref="IUserWriteRepository" />
+    public class UserWriteRepository : BaseWriteRepository<User>,
+        IUserWriteRepository,
         IRepositoryAnchor
     {
         /// <summary>
         /// Конструктор
         /// </summary>
-        public ProductWriteRepository(IWriter writer, IDateTimeProvider dateTimeProvider)
+        public UserWriteRepository(IWriter writer, IDateTimeProvider dateTimeProvider)
             : base(writer, dateTimeProvider)
         {
 

@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 namespace DocumentGenerator.Repositories.ReadRepositories
 {
     /// <inheritdoc cref="IProductReadRepository" />
-    public class ProductReadRepository : IProductReadRepository
+    public class ProductReadRepository : IProductReadRepository, IRepositoryAnchor
     {
         private readonly IReader reader;
 

@@ -2,15 +2,11 @@
 using DocumentGenerator.Api.Infrastructure;
 using DocumentGenerator.Common;
 using DocumentGenerator.Common.Contracts;
+using DocumentGenerator.Common.Mvc.Extensions;
 using DocumentGenerator.Context;
 using DocumentGenerator.Context.Contracts;
-using DocumentGenerator.Repositories.Contracts.ReadRepositories;
-using DocumentGenerator.Repositories.Contracts.WriteRepositories;
-using DocumentGenerator.Repositories.ReadRepositories;
-using DocumentGenerator.Repositories.WriteRepositories;
+using DocumentGenerator.Repositories;
 using DocumentGenerator.Services;
-using DocumentGenerator.Services.Contracts;
-using DocumentGenerator.Services.Contracts.IServices;
 using DocumentGenerator.Services.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
@@ -59,12 +55,9 @@ namespace DocumentGenerator.Api
             builder.Services.AddScoped<IReader>(x => x.GetRequiredService<DocumentGeneratorContext>());
             builder.Services.AddScoped<IWriter>(x => x.GetRequiredService<DocumentGeneratorContext>());
             builder.Services.AddScoped<IUnitOfWork>(x => x.GetRequiredService<DocumentGeneratorContext>());
-            builder.Services.AddScoped<IProductServices, ProductServices>();
-            builder.Services.AddScoped<IPartyServices, PartyServices>();
-            builder.Services.AddScoped<IDocumentServices, DocumentServices>();
-            builder.Services.AddScoped<IExcelServices, ExcelServices>();
 
-            builder.Services.AddSingleton<IValidateService, ValidateService>();
+            builder.Services.RegisterAssemblyInterfacesAssignableTo<IServiceAnchor>(ServiceLifetime.Scoped);
+
             builder.Services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
             builder.Services.AddSingleton<IVatRateProvider, VatRateProvider>();
 
@@ -79,16 +72,8 @@ namespace DocumentGenerator.Api
                 var mapper = mapConfig.CreateMapper();
                 return mapper;
             });
-            builder.Services.AddScoped<IProductReadRepository, ProductReadRepository>();
-            builder.Services.AddScoped<IProductWriteRepository, ProductWriteRepository>();
 
-            builder.Services.AddScoped<IPartyReadRepository, PartyReadRepository>();
-            builder.Services.AddScoped<IPartyWriteRepository, PartyWriteRepository>();
-
-            builder.Services.AddScoped<IDocumentProductWriteRepository, DocumentProductWriteRepository>();
-
-            builder.Services.AddScoped<IDocumentReadRepository, DocumentReadRepository>();
-            builder.Services.AddScoped<IDocumentWriteRepository, DocumentWriteRepository>();
+            builder.Services.RegisterAssemblyInterfacesAssignableTo<IRepositoryAnchor>(ServiceLifetime.Scoped);
 
             builder.Services.AddCors(options =>
             {

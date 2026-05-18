@@ -11,7 +11,7 @@ namespace DocumentGenerator.Services
 {
 
     /// <inheritdoc cref="IPartyServices"/>
-    public class PartyServices : IPartyServices
+    public class PartyService : IPartyServices, IServiceAnchor
     {
         private readonly IPartyReadRepository partyReadRepository;
         private readonly IPartyWriteRepository partyWriteRepository;
@@ -21,7 +21,7 @@ namespace DocumentGenerator.Services
         /// <summary>
         /// Конструктор
         /// </summary>
-        public PartyServices(IPartyReadRepository partyReadRepository,
+        public PartyService(IPartyReadRepository partyReadRepository,
             IPartyWriteRepository partyWriteRepository,
             IMapper mapper,
             IUnitOfWork unitOfWork)

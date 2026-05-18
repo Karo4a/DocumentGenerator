@@ -4,6 +4,7 @@ using DocumentGenerator.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DocumentGenerator.Context.Migrations
 {
     [DbContext(typeof(DocumentGeneratorContext))]
-    partial class DocumentGeneratorContextModelSnapshot : ModelSnapshot
+    [Migration("20260518174817_MoveUserRole")]
+    partial class MoveUserRole
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -250,29 +253,6 @@ namespace DocumentGenerator.Context.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Roles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("59d20b7b-420d-4dba-b8b5-be625764be5b"),
-                            CreatedAt = new DateTimeOffset(new DateTime(2026, 5, 18, 18, 5, 58, 14, DateTimeKind.Unspecified).AddTicks(4509), new TimeSpan(0, 0, 0, 0, 0)),
-                            Role = "Viewer",
-                            UpdatedAt = new DateTimeOffset(new DateTime(2026, 5, 18, 18, 5, 58, 14, DateTimeKind.Unspecified).AddTicks(4521), new TimeSpan(0, 0, 0, 0, 0))
-                        },
-                        new
-                        {
-                            Id = new Guid("213064b1-4ee0-40ea-bacf-d60dd358fedc"),
-                            CreatedAt = new DateTimeOffset(new DateTime(2026, 5, 18, 18, 5, 58, 14, DateTimeKind.Unspecified).AddTicks(4529), new TimeSpan(0, 0, 0, 0, 0)),
-                            Role = "Editor",
-                            UpdatedAt = new DateTimeOffset(new DateTime(2026, 5, 18, 18, 5, 58, 14, DateTimeKind.Unspecified).AddTicks(4529), new TimeSpan(0, 0, 0, 0, 0))
-                        },
-                        new
-                        {
-                            Id = new Guid("9af703f7-8fd7-49a7-b87d-a2c4215cfdb5"),
-                            CreatedAt = new DateTimeOffset(new DateTime(2026, 5, 18, 18, 5, 58, 14, DateTimeKind.Unspecified).AddTicks(4532), new TimeSpan(0, 0, 0, 0, 0)),
-                            Role = "Admin",
-                            UpdatedAt = new DateTimeOffset(new DateTime(2026, 5, 18, 18, 5, 58, 14, DateTimeKind.Unspecified).AddTicks(4533), new TimeSpan(0, 0, 0, 0, 0))
-                        });
                 });
 
             modelBuilder.Entity("DocumentGenerator.Entities.Document", b =>

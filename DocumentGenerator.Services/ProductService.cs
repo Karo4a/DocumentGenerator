@@ -11,7 +11,7 @@ namespace DocumentGenerator.Services
 {
 
     /// <inheritdoc cref="IProductServices"/>
-    public class ProductServices : IProductServices
+    public class ProductService : IProductServices, IServiceAnchor
     {
         private readonly IProductReadRepository productReadRepository;
         private readonly IProductWriteRepository productWriteRepository;
@@ -21,7 +21,7 @@ namespace DocumentGenerator.Services
         /// <summary>
         /// Конструктор
         /// </summary>
-        public ProductServices(IProductReadRepository productReadRepository,
+        public ProductService(IProductReadRepository productReadRepository,
             IProductWriteRepository productWriteRepository,
             IMapper mapper,
             IUnitOfWork unitOfWork)

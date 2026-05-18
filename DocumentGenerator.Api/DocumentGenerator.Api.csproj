@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DocumentGenerator.Api.Models\DocumentGenerator.Api.Models.csproj" />
+    <ProjectReference Include="..\DocumentGenerator.Common.Mvc\DocumentGenerator.Common.Mvc.csproj" />
     <ProjectReference Include="..\DocumentGenerator.Common\DocumentGenerator.Common.csproj" />
     <ProjectReference Include="..\DocumentGenerator.Context\DocumentGenerator.Context.csproj" />
     <ProjectReference Include="..\DocumentGenerator.Repositories\DocumentGenerator.Repositories.csproj" />

@@ -1,4 +1,5 @@
 ﻿using DocumentGenerator.Entities;
+using DocumentGenerator.Repositories.Contracts.Models;
 using System.Linq.Expressions;
 
 namespace DocumentGenerator.Repositories.Contracts.ReadRepositories

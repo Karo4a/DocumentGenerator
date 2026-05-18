@@ -6,7 +6,9 @@ using DocumentGenerator.Repositories.Contracts.WriteRepositories;
 namespace DocumentGenerator.Repositories.WriteRepositories
 {
     /// <inheritdoc cref="IDocumentProductWriteRepository" />
-    public class DocumentProductWriteRepository : BaseWriteRepository<DocumentProduct>, IDocumentProductWriteRepository
+    public class DocumentProductWriteRepository : BaseWriteRepository<DocumentProduct>,
+        IDocumentProductWriteRepository,
+        IRepositoryAnchor
     {
         /// <summary>
         /// Конструктор

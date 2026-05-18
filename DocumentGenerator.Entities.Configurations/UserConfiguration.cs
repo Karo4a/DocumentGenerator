@@ -10,7 +10,7 @@ namespace DocumentGenerator.Entities.Configurations
     public class UserConfiguration : IEntityTypeConfiguration<User>
     {
         /// <summary>
-        /// Конфигурация стороны акта
+        /// Конфигурация пользователя
         /// </summary>
         public void Configure(EntityTypeBuilder<User> builder)
         {
@@ -33,10 +33,13 @@ namespace DocumentGenerator.Entities.Configurations
                 .IsRequired()
                 .HasMaxLength(UserValidationConstants.PasswordSaltMaxLength);
 
-            builder.Property(x => x.Role)
-                .IsRequired()
-                .HasConversion<string>()
-                .HasMaxLength(UserValidationConstants.RoleMaxLength);
+            builder.Property(x => x.UserRoleId)
+                .IsRequired();
+
+            builder.HasOne(x => x.UserRole)
+                .WithMany()
+                .HasForeignKey(x => x.UserRoleId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasIndex(
                     x => x.Login,

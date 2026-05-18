@@ -26,7 +26,7 @@ namespace DocumentGenerator.Entities.Configurations
                 .IsRequired();
 
             builder.Property(x => x.Cost)
-                .HasPrecision(38, 15)
+                .HasPrecision(18, 2)
                 .IsRequired();
 
             builder.HasOne(x => x.Product)

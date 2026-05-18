@@ -29,10 +29,5 @@
         /// Максимальная длина <see cref="User.PasswordSalt"/>
         /// </summary>
         public const int PasswordSaltMaxLength = 44;
-
-        /// <summary>
-        /// Максимальная длина <see cref="User.Role"/>
-        /// </summary>
-        public const int RoleMaxLength = 255;
     }
 }

@@ -4,7 +4,7 @@ using DocumentGenerator.Services.Contracts.Models.Party;
 using DocumentGenerator.Services.Contracts.Models.Product;
 using DocumentGenerator.Services.Contracts.Models.DocumentProduct;
 using DocumentGenerator.Services.Contracts.Models.Document;
-using DocumentGenerator.Repositories.Contracts;
+using DocumentGenerator.Repositories.Contracts.Models;
 
 namespace DocumentGenerator.Services.Infrastructure
 {

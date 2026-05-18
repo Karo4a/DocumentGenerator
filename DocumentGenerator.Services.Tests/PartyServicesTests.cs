@@ -15,7 +15,7 @@ using Xunit;
 namespace DocumentGenerator.Services.Tests
 {
     /// <summary>
-    /// Тесты на <see cref="PartyServices"/>
+    /// Тесты на <see cref="PartyService"/>
     /// </summary>
     public class PartyServicesTests : DocumentGeneratorContextInMemory
     {
@@ -35,7 +35,7 @@ namespace DocumentGenerator.Services.Tests
             });
             var serviceMapper = config.CreateMapper();
 
-            service = new PartyServices(new PartyReadRepository(Context),
+            service = new PartyService(new PartyReadRepository(Context),
                 new PartyWriteRepository(Context, Mock.Of<IDateTimeProvider>()),
                 serviceMapper,
                 UnitOfWork
