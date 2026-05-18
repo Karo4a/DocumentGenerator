@@ -1,5 +1,5 @@
 ﻿using DocumentGenerator.Context.Tests;
-using DocumentGenerator.Repositories.Contracts;
+using DocumentGenerator.Repositories.Contracts.Models;
 using DocumentGenerator.Repositories.Contracts.ReadRepositories;
 using DocumentGenerator.Repositories.ReadRepositories;
 using FluentAssertions;
