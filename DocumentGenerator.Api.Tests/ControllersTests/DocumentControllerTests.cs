@@ -1,130 +1,129 @@
-﻿using DocumentGenerator.Context;
+﻿using DocumentGenerator.Api.Tests.Infrastructure;
+using DocumentGenerator.Context;
 using DocumentGenerator.Entities;
 using DocumentGenerator.Web.Tests.Client;
-using DocumentGenerator.Web.Tests.Infrastructure;
 using FluentAssertions;
 using Xunit;
 
-namespace DocumentGenerator.Web.Tests.ControllersTests
+namespace DocumentGenerator.Api.Tests.ControllersTests;
+
+/// <summary>
+/// Интеграционные тесты контроллера документов
+/// </summary>
+[Collection(nameof(DocumentGeneratorCollection))]
+public class DocumentControllerTests
 {
+    private readonly IDocumentGeneratorApiClient webClient;
+    private readonly DocumentGeneratorContext context;
+    private readonly EntitiesGenerator entitiesGenerator;
+
     /// <summary>
-    /// Интеграционные тесты контроллера документов
+    /// Конструктор
     /// </summary>
-    [Collection(nameof(DocumentGeneratorCollection))]
-    public class DocumentControllerTests
+    public DocumentControllerTests(DocumentGeneratorApiFixture fixture)
     {
-        private readonly IDocumentGeneratorApiClient webClient;
-        private readonly DocumentGeneratorContext context;
-        private readonly EntitiesGenerator entitiesGenerator;
+        webClient = fixture.WebClient;
+        context = fixture.Context;
+        entitiesGenerator = new(context);
+    }
 
-        /// <summary>
-        /// Конструктор
-        /// </summary>
-        public DocumentControllerTests(DocumentGeneratorApiFixture fixture)
-        {
-            webClient = fixture.WebClient;
-            context = fixture.Context;
-            entitiesGenerator = new(context);
-        }
+    /// <summary>
+    /// Возвращает документ по идентификатору
+    /// </summary>
+    [Fact]
+    public async Task GetByIdShouldReturnValue()
+    {
+        // Arrange
+        var entity = await entitiesGenerator.Document();
 
-        /// <summary>
-        /// Возвращает документ по идентификатору
-        /// </summary>
-        [Fact]
-        public async Task GetByIdShouldReturnValue()
+        // Act
+        var response = await webClient.DocumentGETAsync(entity.Id);
+
+        // Assert
+        response.Should()
+            .BeEquivalentTo(entity, opt => opt
+            .Using<object>(ctx =>
+                ctx.Expectation.Should().Be(
+                    DateOnly.FromDateTime(((DateTimeOffset)ctx.Subject).Date)))
+            .When(expectation => expectation.CompileTimeType == typeof(DateOnly))
+            .ExcludingMissingMembers());
+    }
+
+    /// <summary>
+    /// Возвращает все значения
+    /// </summary>
+    [Fact]
+    public async Task GetAllShouldReturnValue()
+    {
+        // Arrange
+        var entityIds = new List<Guid>();
+        for (int i = 0; i < 3; ++i)
         {
-            // Arrange
             var entity = await entitiesGenerator.Document();
-
-            // Act
-            var response = await webClient.DocumentGETAsync(entity.Id);
-
-            // Assert
-            response.Should()
-                .BeEquivalentTo(entity, opt => opt
-                .Using<object>(ctx =>
-                    ctx.Expectation.Should().Be(
-                        DateOnly.FromDateTime(((DateTimeOffset)ctx.Subject).Date)))
-                .When(expectation => expectation.CompileTimeType == typeof(DateOnly))
-                .ExcludingMissingMembers());
+            entityIds.Add(entity.Id);
         }
+        await entitiesGenerator.Document(DateTimeOffset.Now);
 
-        /// <summary>
-        /// Возвращает все значения
-        /// </summary>
-        [Fact]
-        public async Task GetAllShouldReturnValue()
-        {
-            // Arrange
-            var entityIds = new List<Guid>();
-            for (int i = 0; i < 3; ++i)
-            {
-                var entity = await entitiesGenerator.Document();
-                entityIds.Add(entity.Id);
-            }
-            await entitiesGenerator.Document(DateTimeOffset.Now);
+        // Act
+        var response = await webClient.DocumentAllAsync();
 
-            // Act
-            var response = await webClient.DocumentAllAsync();
+        // Assert
+        response.Should().NotBeEmpty()
+            .And.HaveCountGreaterThanOrEqualTo(3);
+        entityIds.Should().BeSubsetOf(response.Select(x => x.Id));
+    }
 
-            // Assert
-            response.Should().NotBeEmpty()
-                .And.HaveCountGreaterThanOrEqualTo(3);
-            entityIds.Should().BeSubsetOf(response.Select(x => x.Id));
-        }
+    /// <summary>
+    /// Создает документ
+    /// </summary>
+    [Fact]
+    public async Task CreateShouldReturnValue()
+    {
+        // Arrange
+        var request = await entitiesGenerator.DocumentRequestApiModel();
 
-        /// <summary>
-        /// Создает документ
-        /// </summary>
-        [Fact]
-        public async Task CreateShouldReturnValue()
-        {
-            // Arrange
-            var request = await entitiesGenerator.DocumentRequestApiModel();
+        // Act
+        var response = await webClient.DocumentPOSTAsync(request);
 
-            // Act
-            var response = await webClient.DocumentPOSTAsync(request);
+        // Assert
+        response.Should().BeEquivalentTo(request, opt => opt
+            .ExcludingMissingMembers());
+    }
 
-            // Assert
-            response.Should().BeEquivalentTo(request, opt => opt
-                .ExcludingMissingMembers());
-        }
+    /// <summary>
+    /// Редактирует документ
+    /// </summary>
+    [Fact]
+    public async Task EditShouldReturnValue()
+    {
+        // Arrange
+        var entity = await entitiesGenerator.Document();
 
-        /// <summary>
-        /// Редактирует документ
-        /// </summary>
-        [Fact]
-        public async Task EditShouldReturnValue()
-        {
-            // Arrange
-            var entity = await entitiesGenerator.Document();
+        var request = await entitiesGenerator.DocumentRequestApiModel();
 
-            var request = await entitiesGenerator.DocumentRequestApiModel();
+        // Act
+        var response = await webClient.DocumentPUTAsync(entity.Id, request);
 
-            // Act
-            var response = await webClient.DocumentPUTAsync(entity.Id, request);
+        // Assert
+        response.Should().BeEquivalentTo(request, opt => opt
+            .ExcludingMissingMembers());
+    }
 
-            // Assert
-            response.Should().BeEquivalentTo(request, opt => opt
-                .ExcludingMissingMembers());
-        }
+    /// <summary>
+    /// Удаляет документ
+    /// </summary>
+    [Fact]
+    public async Task DeleteShouldReturnValue()
+    {
+        // Arrange
+        var entity = await entitiesGenerator.Document();
 
-        /// <summary>
-        /// Удаляет документ
-        /// </summary>
-        [Fact]
-        public async Task DeleteShouldReturnValue()
-        {
-            // Arrange
-            var entity = await entitiesGenerator.Document();
+        // Act
+        await webClient.DocumentDELETEAsync(entity.Id);
 
-            // Act
-            await webClient.DocumentDELETEAsync(entity.Id);
-
-            // Assert
-            var newValue = context.Set<Document>().Single(x => x.Id == entity.Id && x.DeletedAt != null);
-            newValue.Should().NotBeNull();
-        }
+        // Assert
+        var newValue = context.Set<Document>().Single(x => x.Id == entity.Id && x.DeletedAt != null);
+        newValue.Should().NotBeNull();
     }
 }
 

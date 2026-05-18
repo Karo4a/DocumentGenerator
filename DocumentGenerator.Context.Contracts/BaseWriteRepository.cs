@@ -2,65 +2,64 @@
 using DocumentGenerator.Entities.Contracts;
 using System.Diagnostics.CodeAnalysis;
 
-namespace DocumentGenerator.Context.Contracts
+namespace DocumentGenerator.Context.Contracts;
+
+/// <summary>
+/// Базовый класс репозитория записи данных
+/// </summary>
+public abstract class BaseWriteRepository<T> : IDbWriter<T> where T : class
 {
+    private readonly IWriter writer;
+    private readonly IDateTimeProvider dateTimeProvider;
+
     /// <summary>
-    /// Базовый класс репозитория записи данных
+    /// Конструктор
     /// </summary>
-    public abstract class BaseWriteRepository<T> : IDbWriter<T> where T : class
+    public BaseWriteRepository(IWriter writer, IDateTimeProvider dateTimeProvider)
     {
-        private readonly IWriter writer;
-        private readonly IDateTimeProvider dateTimeProvider;
+        this.writer = writer;
+        this.dateTimeProvider = dateTimeProvider;
+    }
 
-        /// <summary>
-        /// Конструктор
-        /// </summary>
-        public BaseWriteRepository(IWriter writer, IDateTimeProvider dateTimeProvider)
-        {
-            this.writer = writer;
-            this.dateTimeProvider = dateTimeProvider;
-        }
+    void IDbWriter<T>.Add([NotNull] T entity)
+    {
+        AuditCreate(entity);
+        AuditUpdate(entity);
+        writer.Add(entity);
+    }
 
-        void IDbWriter<T>.Add([NotNull] T entity)
+    void IDbWriter<T>.Edit([NotNull] T entity)
+    {
+        AuditUpdate(entity);
+        writer.Edit(entity);
+    }
+
+    void IDbWriter<T>.Delete([NotNull] T entity)
+    {
+        if (entity is IEntityWithSoftDeleted softEntity)
         {
-            AuditCreate(entity);
             AuditUpdate(entity);
-            writer.Add(entity);
-        }
-
-        void IDbWriter<T>.Edit([NotNull] T entity)
+            softEntity.DeletedAt = dateTimeProvider.UtcNow();
+            writer.Edit(softEntity);
+        } else
         {
-            AuditUpdate(entity);
-            writer.Edit(entity);
+            writer.Delete(entity);
         }
+    }
 
-        void IDbWriter<T>.Delete([NotNull] T entity)
+    private void AuditCreate([NotNull] T entity)
+    {
+        if (entity is IEntityWithAudit auditCreated)
         {
-            if (entity is IEntityWithSoftDeleted softEntity)
-            {
-                AuditUpdate(entity);
-                softEntity.DeletedAt = dateTimeProvider.UtcNow();
-                writer.Edit(softEntity);
-            } else
-            {
-                writer.Delete(entity);
-            }
+            auditCreated.CreatedAt = dateTimeProvider.UtcNow();
         }
+    }
 
-        private void AuditCreate([NotNull] T entity)
+    private void AuditUpdate([NotNull] T entity)
+    {
+        if (entity is IEntityWithAudit auditCreated)
         {
-            if (entity is IEntityWithAudit auditCreated)
-            {
-                auditCreated.CreatedAt = dateTimeProvider.UtcNow();
-            }
-        }
-
-        private void AuditUpdate([NotNull] T entity)
-        {
-            if (entity is IEntityWithAudit auditCreated)
-            {
-                auditCreated.UpdatedAt = dateTimeProvider.UtcNow();
-            }
+            auditCreated.UpdatedAt = dateTimeProvider.UtcNow();
         }
     }
 }

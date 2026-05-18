@@ -1,9 +1,8 @@
 ﻿using Xunit;
 
-namespace DocumentGenerator.Web.Tests.Infrastructure
+namespace DocumentGenerator.Api.Tests.Infrastructure;
+
+[CollectionDefinition(nameof(DocumentGeneratorCollection))]
+public class DocumentGeneratorCollection : ICollectionFixture<DocumentGeneratorApiFixture>
 {
-    [CollectionDefinition(nameof(DocumentGeneratorCollection))]
-    public class DocumentGeneratorCollection : ICollectionFixture<DocumentGeneratorApiFixture>
-    {
-    }
 }

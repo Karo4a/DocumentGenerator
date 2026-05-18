@@ -1,49 +1,48 @@
 ﻿using DocumentGenerator.Web.Components;
 using DocumentGenerator.Web.Services.Product;
 
-namespace DocumentGenerator.Web
+namespace DocumentGenerator.Web;
+
+public class Program
 {
-    public class Program
+    public static void Main(string[] args)
     {
-        public static void Main(string[] args)
+        var builder = WebApplication.CreateBuilder(args);
+
+        // Add services to the container.
+        builder.Services.AddRazorComponents()
+            .AddInteractiveServerComponents();
+
+        builder.Services.AddBlazorBootstrap();
+
+        builder.Services.AddHttpClient("Api", client =>
         {
-            var builder = WebApplication.CreateBuilder(args);
+            client.BaseAddress = new Uri("https://localhost:7178/");
+        });
 
-            // Add services to the container.
-            builder.Services.AddRazorComponents()
-                .AddInteractiveServerComponents();
+        builder.Services.AddHttpClient<IProductService, ProductService>(client =>
+        {
+            client.BaseAddress = new Uri("https://localhost:7178/");
+        });
 
-            builder.Services.AddBlazorBootstrap();
+        var app = builder.Build();
 
-            builder.Services.AddHttpClient("Api", client =>
-            {
-                client.BaseAddress = new Uri("https://localhost:7178/");
-            });
-
-            builder.Services.AddHttpClient<IProductService, ProductService>(client =>
-            {
-                client.BaseAddress = new Uri("https://localhost:7178/");
-            });
-
-            var app = builder.Build();
-
-            // Configure the HTTP request pipeline.
-            if (!app.Environment.IsDevelopment())
-            {
-                app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
-
-            app.UseHttpsRedirection();
-
-            app.UseStaticFiles();
-            app.UseAntiforgery();
-
-            app.MapRazorComponents<App>()
-                .AddInteractiveServerRenderMode();
-
-            app.Run();
+        // Configure the HTTP request pipeline.
+        if (!app.Environment.IsDevelopment())
+        {
+            app.UseExceptionHandler("/Error");
+            // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+            app.UseHsts();
         }
+
+        app.UseHttpsRedirection();
+
+        app.UseStaticFiles();
+        app.UseAntiforgery();
+
+        app.MapRazorComponents<App>()
+            .AddInteractiveServerRenderMode();
+
+        app.Run();
     }
 }

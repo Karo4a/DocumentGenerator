@@ -1,13 +1,12 @@
-﻿namespace DocumentGenerator.Context.Contracts
+﻿namespace DocumentGenerator.Context.Contracts;
+
+/// <summary>
+/// Определяет интерфейс для unit of work
+/// </summary>
+public interface IUnitOfWork
 {
     /// <summary>
-    /// Определяет интерфейс для unit of work
+    /// Асинхронно сохраняет все изменения контекста
     /// </summary>
-    public interface IUnitOfWork
-    {
-        /// <summary>
-        /// Асинхронно сохраняет все изменения контекста
-        /// </summary>
-        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
-    }
+    Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

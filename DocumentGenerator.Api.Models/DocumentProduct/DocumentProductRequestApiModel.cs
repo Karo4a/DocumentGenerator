@@ -1,13 +1,12 @@
-﻿namespace DocumentGenerator.Api.Models.DocumentProduct
+﻿namespace DocumentGenerator.Api.Models.DocumentProduct;
+
+/// <summary>
+/// Модель редактирования документа
+/// </summary>
+public class DocumentProductRequestApiModel : DocumentProductBaseApiModel
 {
     /// <summary>
-    /// Модель редактирования документа
+    /// Идентификатор товара
     /// </summary>
-    public class DocumentProductRequestApiModel : DocumentProductBaseApiModel
-    {
-        /// <summary>
-        /// Идентификатор товара
-        /// </summary>
-        public Guid ProductId { get; set; }
-    }
+    public Guid ProductId { get; set; }
 }

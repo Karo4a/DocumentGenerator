@@ -4,62 +4,61 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
-namespace DocumentGenerator.Web.Tests.Infrastructure
+namespace DocumentGenerator.Api.Tests.Infrastructure;
+
+/// <summary>
+/// Фикстура API для интеграционных тестов
+/// </summary>
+public class DocumentGeneratorApiFixture : IAsyncLifetime
 {
+    private readonly TestWebApplicationFactory factory;
+    private DocumentGeneratorContext? context;
+
     /// <summary>
-    /// Фикстура API для интеграционных тестов
+    /// Конструтор
     /// </summary>
-    public class DocumentGeneratorApiFixture : IAsyncLifetime
+    public DocumentGeneratorApiFixture()
     {
-        private readonly TestWebApplicationFactory factory;
-        private DocumentGeneratorContext? context;
+        factory = new TestWebApplicationFactory();
+    }
 
-        /// <summary>
-        /// Конструтор
-        /// </summary>
-        public DocumentGeneratorApiFixture()
+    internal DocumentGeneratorContext Context
+    {
+        get
         {
-            factory = new TestWebApplicationFactory();
-        }
-
-        internal DocumentGeneratorContext Context
-        {
-            get
+            if (context != null)
             {
-                if (context != null)
-                {
-                    return context;
-                }
-
-                var scope = factory.Services.GetRequiredService<IServiceScopeFactory>().CreateScope();
-                context = scope.ServiceProvider.GetRequiredService<DocumentGeneratorContext>();
                 return context;
             }
-        }
 
-        internal IDocumentGeneratorApiClient WebClient
+            var scope = factory.Services.GetRequiredService<IServiceScopeFactory>().CreateScope();
+            context = scope.ServiceProvider.GetRequiredService<DocumentGeneratorContext>();
+            return context;
+        }
+    }
+
+    internal IDocumentGeneratorApiClient WebClient
+    {
+        get
         {
-            get
-            {
-                var client = factory.CreateClient();
-                return new DocumentGeneratorApiClient(string.Empty, client);
-            }
+            var client = factory.CreateClient();
+            return new DocumentGeneratorApiClient(string.Empty, client);
         }
+    }
 
-        /// <summary>
-        /// Асинхронная инициализация
-        /// </summary>
-        public Task InitializeAsync() => Context.Database.MigrateAsync();
+    /// <summary>
+    /// Асинхронная инициализация
+    /// </summary>
+    public Task InitializeAsync() => Context.Database.MigrateAsync();
 
-        /// <summary>
-        /// Асинхронное освобождение
-        /// </summary>
-        public async Task DisposeAsync()
-        {
-            await Context.Database.EnsureDeletedAsync();
-            await Context.Database.CloseConnectionAsync();
-            await Context.DisposeAsync();
-            await factory.DisposeAsync();
-        }
+    /// <summary>
+    /// Асинхронное освобождение
+    /// </summary>
+    public async Task DisposeAsync()
+    {
+        await Context.Database.EnsureDeletedAsync();
+        await Context.Database.CloseConnectionAsync();
+        await Context.DisposeAsync();
+        await factory.DisposeAsync();
     }
 }

@@ -1,23 +1,22 @@
-﻿namespace DocumentGenerator.Api.Models.Document
+﻿namespace DocumentGenerator.Api.Models.Document;
+
+/// <summary>
+/// Базовая модель документа
+/// </summary>
+public class DocumentBaseApiModel
 {
     /// <summary>
-    /// Базовая модель документа
+    /// Номер документа
     /// </summary>
-    public class DocumentBaseApiModel
-    {
-        /// <summary>
-        /// Номер документа
-        /// </summary>
-        public string DocumentNumber { get; set; } = string.Empty;
+    public string DocumentNumber { get; set; } = string.Empty;
 
-        /// <summary>
-        /// Номер основного договора
-        /// </summary>
-        public string ContractNumber { get; set; } = string.Empty;
+    /// <summary>
+    /// Номер основного договора
+    /// </summary>
+    public string ContractNumber { get; set; } = string.Empty;
 
-        /// <summary>
-        /// Дата подписания документа
-        /// </summary>
-        public DateOnly Date { get; set; }
-    }
+    /// <summary>
+    /// Дата подписания документа
+    /// </summary>
+    public DateOnly Date { get; set; }
 }

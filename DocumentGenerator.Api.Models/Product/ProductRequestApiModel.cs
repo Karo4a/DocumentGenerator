@@ -1,18 +1,17 @@
-﻿namespace DocumentGenerator.Api.Models.Product
+﻿namespace DocumentGenerator.Api.Models.Product;
+
+/// <summary>
+/// Модель редактирования товара
+/// </summary>
+public class ProductRequestApiModel
 {
     /// <summary>
-    /// Модель редактирования товара
+    /// Название
     /// </summary>
-    public class ProductRequestApiModel
-    {
-        /// <summary>
-        /// Название
-        /// </summary>
-        public string Name { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
 
-        /// <summary>
-        /// Актуальная цена
-        /// </summary>
-        public decimal Cost { get; set; }
-    }
+    /// <summary>
+    /// Актуальная цена
+    /// </summary>
+    public decimal Cost { get; set; }
 }

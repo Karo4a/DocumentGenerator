@@ -1,18 +1,17 @@
-﻿namespace DocumentGenerator.Services.Contracts.Models.Product
+﻿namespace DocumentGenerator.Services.Contracts.Models.Product;
+
+/// <summary>
+/// Модель создания товара
+/// </summary>
+public class ProductCreateModel
 {
     /// <summary>
-    /// Модель создания товара
+    /// Название
     /// </summary>
-    public class ProductCreateModel
-    {
-        /// <summary>
-        /// Название
-        /// </summary>
-        public string Name { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
 
-        /// <summary>
-        /// Актуальная цена
-        /// </summary>
-        public decimal Cost { get; set; }
-    };
-}
+    /// <summary>
+    /// Актуальная цена
+    /// </summary>
+    public decimal Cost { get; set; }
+};

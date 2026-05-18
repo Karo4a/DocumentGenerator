@@ -1,35 +1,34 @@
 ﻿using DocumentGenerator.Services.Contracts.Models.Document;
 
-namespace DocumentGenerator.Services.Contracts.IServices
+namespace DocumentGenerator.Services.Contracts.IServices;
+
+/// <summary>
+/// Сервис по работе с документами
+/// </summary>
+public interface IDocumentServices
 {
     /// <summary>
-    /// Сервис по работе с документами
+    /// Возвращает <see cref="DocumentModel"/> по идентификатору
     /// </summary>
-    public interface IDocumentServices
-    {
-        /// <summary>
-        /// Возвращает <see cref="DocumentModel"/> по идентификатору
-        /// </summary>
-        Task<DocumentModel> GetById(Guid id, CancellationToken cancellationToken);
+    Task<DocumentModel> GetById(Guid id, CancellationToken cancellationToken);
 
-        /// <summary>
-        /// Возвращает список <see cref="DocumentModel"/>
-        /// </summary>
-        Task<IReadOnlyCollection<DocumentModel>> GetAll(CancellationToken cancellationToken);
+    /// <summary>
+    /// Возвращает список <see cref="DocumentModel"/>
+    /// </summary>
+    Task<IReadOnlyCollection<DocumentModel>> GetAll(CancellationToken cancellationToken);
 
-        /// <summary>
-        /// Добавляет новый <see cref="DocumentModel"/> 
-        /// </summary>
-        Task<DocumentModel> Create(DocumentCreateModel model, CancellationToken cancellationToken);
+    /// <summary>
+    /// Добавляет новый <see cref="DocumentModel"/> 
+    /// </summary>
+    Task<DocumentModel> Create(DocumentCreateModel model, CancellationToken cancellationToken);
 
-        /// <summary>
-        /// Редактирует существующий <see cref="DocumentModel"/>
-        /// </summary>
-        Task<DocumentModel> Edit(Guid id, DocumentCreateModel model, CancellationToken cancellationToken);
+    /// <summary>
+    /// Редактирует существующий <see cref="DocumentModel"/>
+    /// </summary>
+    Task<DocumentModel> Edit(Guid id, DocumentCreateModel model, CancellationToken cancellationToken);
 
-        /// <summary>
-        /// Удаляет существующий <see cref="DocumentModel"/> из базы данных
-        /// </summary>
-        Task Delete(Guid id, CancellationToken cancellationToken);
-    }
+    /// <summary>
+    /// Удаляет существующий <see cref="DocumentModel"/> из базы данных
+    /// </summary>
+    Task Delete(Guid id, CancellationToken cancellationToken);
 }

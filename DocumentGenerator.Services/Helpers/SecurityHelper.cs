@@ -1,45 +1,44 @@
 ﻿using System.Security.Cryptography;
 
-namespace DocumentGenerator.Services.Helpers
+namespace DocumentGenerator.Services.Helpers;
+
+/// <summary>
+/// Хелпер по работе с криптографией
+/// </summary>
+public class SecurityHelper
 {
+    private const byte MaximumBytes = 32;
+    private const byte MaximumIterations = 6;
+
     /// <summary>
-    /// Хелпер по работе с криптографией
+    /// Генерировать соль в 32 байта
     /// </summary>
-    public class SecurityHelper
+    public static string GenerateSalt32() => GenerateSalt(MaximumBytes);
+
+    /// <summary>
+    /// Генерировать соль заданного размера
+    /// </summary>
+    public static string GenerateSalt(int nSalt)
     {
-        private const byte MaximumBytes = 32;
-        private const byte MaximumIterations = 6;
+        using var provider = RandomNumberGenerator.Create();
+        var salt = new byte[nSalt];
+        provider.GetNonZeroBytes(salt);
 
-        /// <summary>
-        /// Генерировать соль в 32 байта
-        /// </summary>
-        public static string GenerateSalt32() => GenerateSalt(MaximumBytes);
+        return Convert.ToBase64String(salt);
+    }
 
-        /// <summary>
-        /// Генерировать соль заданного размера
-        /// </summary>
-        public static string GenerateSalt(int nSalt)
-        {
-            using var provider = RandomNumberGenerator.Create();
-            var salt = new byte[nSalt];
-            provider.GetNonZeroBytes(salt);
+    /// <summary>
+    /// Получить солированный хэш пароля в 32 байта
+    /// </summary>
+    public static string HashPassword32(string password, string salt)
+        => HashPassword(password, salt, MaximumIterations, MaximumBytes);
 
-            return Convert.ToBase64String(salt);
-        }
-
-        /// <summary>
-        /// Получить солированный хэш пароля в 32 байта
-        /// </summary>
-        public static string HashPassword32(string password, string salt)
-            => HashPassword(password, salt, MaximumIterations, MaximumBytes);
-
-        /// <summary>
-        /// Получить солированный хэш пароля
-        /// </summary>
-        public static string HashPassword(string password, string salt, int nIterations, int nHash)
-        {
-            var saltBytes = Convert.FromBase64String(salt);
-            return Convert.ToBase64String(Rfc2898DeriveBytes.Pbkdf2(password, saltBytes, nIterations, HashAlgorithmName.SHA256, nHash));
-        }
+    /// <summary>
+    /// Получить солированный хэш пароля
+    /// </summary>
+    public static string HashPassword(string password, string salt, int nIterations, int nHash)
+    {
+        var saltBytes = Convert.FromBase64String(salt);
+        return Convert.ToBase64String(Rfc2898DeriveBytes.Pbkdf2(password, saltBytes, nIterations, HashAlgorithmName.SHA256, nHash));
     }
 }

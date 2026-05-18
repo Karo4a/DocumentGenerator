@@ -1,13 +1,12 @@
-﻿namespace DocumentGenerator.Entities.ValidationConstants
+﻿namespace DocumentGenerator.Entities.ValidationConstants;
+
+/// <summary>
+/// Класс констант валидации <see cref="UserRole"/>
+/// </summary>
+public class UserRoleValidationConstants
 {
     /// <summary>
-    /// Класс констант валидации <see cref="UserRole"/>
+    /// Максимальная длина <see cref="UserRole.Role"/>
     /// </summary>
-    public class UserRoleValidationConstants
-    {
-        /// <summary>
-        /// Максимальная длина <see cref="UserRole.Role"/>
-        /// </summary>
-        public const int UserRoleMaxLength = 255;
-    }
+    public const int UserRoleMaxLength = 255;
 }

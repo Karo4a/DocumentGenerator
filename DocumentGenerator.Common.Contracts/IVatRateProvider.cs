@@ -1,13 +1,12 @@
-﻿namespace DocumentGenerator.Common.Contracts
+﻿namespace DocumentGenerator.Common.Contracts;
+
+/// <summary>
+/// Интерфейс поставщика ставки НДС
+/// </summary>
+public interface IVatRateProvider
 {
     /// <summary>
-    /// Интерфейс поставщика ставки НДС
+    /// Возвращает ставку НДС
     /// </summary>
-    public interface IVatRateProvider
-    {
-        /// <summary>
-        /// Возвращает ставку НДС
-        /// </summary>
-        public decimal GetVatRate();
-    }
+    public decimal GetVatRate();
 }

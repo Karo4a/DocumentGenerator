@@ -1,13 +1,12 @@
-﻿namespace DocumentGenerator.Entities.Contracts
+﻿namespace DocumentGenerator.Entities.Contracts;
+
+/// <summary>
+/// Интерфейс сущности с удалением
+/// </summary>
+public interface IEntityWithSoftDeleted
 {
     /// <summary>
-    /// Интерфейс сущности с удалением
+    /// Дата удаления записи
     /// </summary>
-    public interface IEntityWithSoftDeleted
-    {
-        /// <summary>
-        /// Дата удаления записи
-        /// </summary>
-        public DateTimeOffset? DeletedAt { get; set; }
-    }
+    public DateTimeOffset? DeletedAt { get; set; }
 }

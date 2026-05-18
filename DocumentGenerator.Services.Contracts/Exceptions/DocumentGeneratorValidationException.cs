@@ -1,21 +1,20 @@
-﻿namespace DocumentGenerator.Services.Contracts.Exceptions
+﻿namespace DocumentGenerator.Services.Contracts.Exceptions;
+
+/// <summary>
+/// Ошибки валидации
+/// </summary>
+public class DocumentGeneratorValidationException : DocumentGeneratorException
 {
     /// <summary>
-    /// Ошибки валидации
+    /// Список ошибок
     /// </summary>
-    public class DocumentGeneratorValidationException : DocumentGeneratorException
-    {
-        /// <summary>
-        /// Список ошибок
-        /// </summary>
-        public IEnumerable<InvalidateItemModel> Errors { get; }
+    public IEnumerable<InvalidateItemModel> Errors { get; }
 
-        /// <summary>
-        /// Конструктор
-        /// </summary>
-        public DocumentGeneratorValidationException(IEnumerable<InvalidateItemModel> errors)
-        {
-            Errors = errors;
-        }
+    /// <summary>
+    /// Конструктор
+    /// </summary>
+    public DocumentGeneratorValidationException(IEnumerable<InvalidateItemModel> errors)
+    {
+        Errors = errors;
     }
 }

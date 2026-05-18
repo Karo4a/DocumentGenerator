@@ -1,7 +1,6 @@
-﻿namespace DocumentGenerator.Repositories
-{
-    /// <summary>
-    /// Маркерный интерфейс регистрации зависимостей
-    /// </summary>
-    public interface IRepositoryAnchor { }
-}
+﻿namespace DocumentGenerator.Repositories;
+
+/// <summary>
+/// Маркерный интерфейс регистрации зависимостей
+/// </summary>
+public interface IRepositoryAnchor { }

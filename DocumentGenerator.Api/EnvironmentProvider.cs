@@ -1,13 +1,12 @@
-﻿namespace DocumentGenerator.Api
+﻿namespace DocumentGenerator.Api;
+
+/// <summary>
+/// Поставщик констант окружений
+/// </summary>
+public static class EnvironmentProvider
 {
     /// <summary>
-    /// Поставщик констант окружений
+    /// Среда для интеграционных тестов
     /// </summary>
-    public static class EnvironmentProvider
-    {
-        /// <summary>
-        /// Среда для интеграционных тестов
-        /// </summary>
-        public static readonly string IntegrationEnviroment = "integration";
-    }
+    public static readonly string IntegrationEnviroment = "integration";
 }

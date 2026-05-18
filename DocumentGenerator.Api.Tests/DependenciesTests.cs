@@ -1,5 +1,5 @@
-﻿using DocumentGenerator.Api;
-using DocumentGenerator.Api.Controllers;
+﻿using DocumentGenerator.Api.Controllers;
+using DocumentGenerator.Web.Tests;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -7,51 +7,50 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using Xunit;
 
-namespace DocumentGenerator.Web.Tests
+namespace DocumentGenerator.Api.Tests;
+
+/// <summary>
+/// Тесты зависимостей
+/// </summary>
+public class DependenciesTests : IClassFixture<WebApplicationFactory<Program>>
 {
+    private readonly WebApplicationFactory<Program> factory;
+
     /// <summary>
-    /// Тесты зависимостей
+    /// Конструктор
     /// </summary>
-    public class DependenciesTests : IClassFixture<WebApplicationFactory<Program>>
+    public DependenciesTests(WebApplicationFactory<Program> factory)
     {
-        private readonly WebApplicationFactory<Program> factory;
-
-        /// <summary>
-        /// Конструктор
-        /// </summary>
-        public DependenciesTests(WebApplicationFactory<Program> factory)
+        this.factory = factory.WithWebHostBuilder(builder =>
         {
-            this.factory = factory.WithWebHostBuilder(builder =>
-            {
-                builder.ConfigureTestAppConfiguration();
-            });
-        }
-
-        /// <summary>
-        /// Проверка резолва зависимостей
-        /// </summary>
-        [Theory]
-        [MemberData(nameof(WebControllerCore))]
-        public void ControllerCoreShouldBeResolved(Type controller)
-        {
-            // Arrange
-            using var scope = factory.Services.CreateScope();
-
-            // Act
-            var instance = scope.ServiceProvider.GetRequiredService(controller);
-
-            // Assert
-            instance.Should().NotBeNull();
-        }
-
-        /// <summary>
-        /// Контроллер товаров
-        /// </summary>
-        public static TheoryData<Type> WebControllerCore => GetControllers<ProductController>();
-
-        private static TheoryData<Type> GetControllers<TControllers>() =>
-            new(Assembly.GetAssembly(typeof(TControllers))?
-                .DefinedTypes
-                .Where(type => typeof(ControllerBase).IsAssignableFrom(type) && !type.IsAbstract));
+            builder.ConfigureTestAppConfiguration();
+        });
     }
+
+    /// <summary>
+    /// Проверка резолва зависимостей
+    /// </summary>
+    [Theory]
+    [MemberData(nameof(WebControllerCore))]
+    public void ControllerCoreShouldBeResolved(Type controller)
+    {
+        // Arrange
+        using var scope = factory.Services.CreateScope();
+
+        // Act
+        var instance = scope.ServiceProvider.GetRequiredService(controller);
+
+        // Assert
+        instance.Should().NotBeNull();
+    }
+
+    /// <summary>
+    /// Контроллер товаров
+    /// </summary>
+    public static TheoryData<Type> WebControllerCore => GetControllers<ProductController>();
+
+    private static TheoryData<Type> GetControllers<TControllers>() =>
+        new(Assembly.GetAssembly(typeof(TControllers))?
+            .DefinedTypes
+            .Where(type => typeof(ControllerBase).IsAssignableFrom(type) && !type.IsAbstract));
 }

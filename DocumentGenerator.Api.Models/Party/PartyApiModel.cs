@@ -1,13 +1,12 @@
-﻿namespace DocumentGenerator.Api.Models.Party
+﻿namespace DocumentGenerator.Api.Models.Party;
+
+/// <summary>
+/// Модель стороны акта
+/// </summary>
+public class PartyApiModel : PartyRequestApiModel
 {
     /// <summary>
-    /// Модель стороны акта
+    /// Идентификатор
     /// </summary>
-    public class PartyApiModel : PartyRequestApiModel
-    {
-        /// <summary>
-        /// Идентификатор
-        /// </summary>
-        public Guid Id { get; set; }
-    }
+    public Guid Id { get; set; }
 }

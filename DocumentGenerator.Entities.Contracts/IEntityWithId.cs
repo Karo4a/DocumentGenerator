@@ -1,13 +1,12 @@
-﻿namespace DocumentGenerator.Entities.Contracts
+﻿namespace DocumentGenerator.Entities.Contracts;
+
+/// <summary>
+/// Интерфейс сущности с идентификатором
+/// </summary>
+public interface IEntityWithId
 {
     /// <summary>
-    /// Интерфейс сущности с идентификатором
+    /// Идентификатор записи
     /// </summary>
-    public interface IEntityWithId
-    {
-        /// <summary>
-        /// Идентификатор записи
-        /// </summary>
-        Guid Id { get; set; }
-    }
+    Guid Id { get; set; }
 }

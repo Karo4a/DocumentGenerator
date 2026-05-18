@@ -1,18 +1,17 @@
-﻿namespace DocumentGenerator.Common.Contracts
+﻿namespace DocumentGenerator.Common.Contracts;
+
+/// <summary>
+/// Интерфейс поставщика времени
+/// </summary>
+public interface IDateTimeProvider
 {
     /// <summary>
-    /// Интерфейс поставщика времени
+    /// Возвращает глобальное время относительно UTC
     /// </summary>
-    public interface IDateTimeProvider
-    {
-        /// <summary>
-        /// Возвращает глобальное время относительно UTC
-        /// </summary>
-        DateTimeOffset UtcNow();
-        
-        /// <summary>
-        /// Возвращает локальное время
-        /// </summary>
-        DateTimeOffset Now();
-    }
+    DateTimeOffset UtcNow();
+    
+    /// <summary>
+    /// Возвращает локальное время
+    /// </summary>
+    DateTimeOffset Now();
 }

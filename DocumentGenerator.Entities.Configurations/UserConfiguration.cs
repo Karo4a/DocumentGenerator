@@ -2,50 +2,49 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace DocumentGenerator.Entities.Configurations
+namespace DocumentGenerator.Entities.Configurations;
+
+/// <summary>
+/// Описывает конфигурацию <see cref="User"/>
+/// </summary>
+public class UserConfiguration : IEntityTypeConfiguration<User>
 {
     /// <summary>
-    /// Описывает конфигурацию <see cref="User"/>
+    /// Конфигурация пользователя
     /// </summary>
-    public class UserConfiguration : IEntityTypeConfiguration<User>
+    public void Configure(EntityTypeBuilder<User> builder)
     {
-        /// <summary>
-        /// Конфигурация пользователя
-        /// </summary>
-        public void Configure(EntityTypeBuilder<User> builder)
-        {
-            builder.ToTable("Users");
-            builder.HasKey(x => x.Id);
+        builder.ToTable("Users");
+        builder.HasKey(x => x.Id);
 
-            builder.Property(x => x.Login)
-                .IsRequired()
-                .HasMaxLength(UserValidationConstants.LoginMaxLength);
+        builder.Property(x => x.Login)
+            .IsRequired()
+            .HasMaxLength(UserValidationConstants.LoginMaxLength);
 
-            builder.Property(x => x.Email)
-                .IsRequired()
-                .HasMaxLength(UserValidationConstants.EmailMaxLength);
+        builder.Property(x => x.Email)
+            .IsRequired()
+            .HasMaxLength(UserValidationConstants.EmailMaxLength);
 
-            builder.Property(x => x.PasswordHash)
-                .IsRequired()
-                .HasMaxLength(UserValidationConstants.PasswordHashMaxLength);
+        builder.Property(x => x.PasswordHash)
+            .IsRequired()
+            .HasMaxLength(UserValidationConstants.PasswordHashMaxLength);
 
-            builder.Property(x => x.PasswordSalt)
-                .IsRequired()
-                .HasMaxLength(UserValidationConstants.PasswordSaltMaxLength);
+        builder.Property(x => x.PasswordSalt)
+            .IsRequired()
+            .HasMaxLength(UserValidationConstants.PasswordSaltMaxLength);
 
-            builder.Property(x => x.UserRoleId)
-                .IsRequired();
+        builder.Property(x => x.UserRoleId)
+            .IsRequired();
 
-            builder.HasOne(x => x.UserRole)
-                .WithMany()
-                .HasForeignKey(x => x.UserRoleId)
-                .OnDelete(DeleteBehavior.Restrict);
+        builder.HasOne(x => x.UserRole)
+            .WithMany()
+            .HasForeignKey(x => x.UserRoleId)
+            .OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasIndex(
-                    x => x.Login,
-                    $"IX_{nameof(User)}_{nameof(User.Login)}")
-                .IsUnique()
-                .HasFilter($"\"{nameof(User.DeletedAt)}\" IS NULL");
-        }
+        builder.HasIndex(
+                x => x.Login,
+                $"IX_{nameof(User)}_{nameof(User.Login)}")
+            .IsUnique()
+            .HasFilter($"\"{nameof(User.DeletedAt)}\" IS NULL");
     }
 }

@@ -1,20 +1,18 @@
-﻿using DocumentGenerator.Api;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 
-namespace DocumentGenerator.Web.Tests
+namespace DocumentGenerator.Api.Tests;
+
+static internal class WebHostBuilderHelper
 {
-    static internal class WebHostBuilderHelper
+    public static void ConfigureTestAppConfiguration(this IWebHostBuilder builder)
     {
-        public static void ConfigureTestAppConfiguration(this IWebHostBuilder builder)
+        builder.ConfigureAppConfiguration((_, config) =>
         {
-            builder.ConfigureAppConfiguration((_, config) =>
-            {
-                var projectDir = Directory.GetCurrentDirectory();
-                var configPath = Path.Combine(projectDir, "appsettings.integration.json");
-                config.AddJsonFile(configPath).AddEnvironmentVariables();
-            });
-            builder.UseEnvironment(EnvironmentProvider.IntegrationEnviroment);
-        }
+            var projectDir = Directory.GetCurrentDirectory();
+            var configPath = Path.Combine(projectDir, "appsettings.integration.json");
+            config.AddJsonFile(configPath).AddEnvironmentVariables();
+        });
+        builder.UseEnvironment(EnvironmentProvider.IntegrationEnviroment);
     }
 }

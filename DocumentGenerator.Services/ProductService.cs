@@ -7,84 +7,83 @@ using DocumentGenerator.Services.Contracts.Exceptions;
 using DocumentGenerator.Services.Contracts.IServices;
 using DocumentGenerator.Services.Contracts.Models.Product;
 
-namespace DocumentGenerator.Services
+namespace DocumentGenerator.Services;
+
+
+/// <inheritdoc cref="IProductServices"/>
+public class ProductService : IProductServices, IServiceAnchor
 {
+    private readonly IProductReadRepository productReadRepository;
+    private readonly IProductWriteRepository productWriteRepository;
+    private readonly IMapper mapper;
+    private readonly IUnitOfWork unitOfWork;
 
-    /// <inheritdoc cref="IProductServices"/>
-    public class ProductService : IProductServices, IServiceAnchor
+    /// <summary>
+    /// Конструктор
+    /// </summary>
+    public ProductService(IProductReadRepository productReadRepository,
+        IProductWriteRepository productWriteRepository,
+        IMapper mapper,
+        IUnitOfWork unitOfWork)
     {
-        private readonly IProductReadRepository productReadRepository;
-        private readonly IProductWriteRepository productWriteRepository;
-        private readonly IMapper mapper;
-        private readonly IUnitOfWork unitOfWork;
+        this.productReadRepository = productReadRepository;
+        this.productWriteRepository = productWriteRepository;
+        this.mapper = mapper;
+        this.unitOfWork = unitOfWork;
+    }
 
-        /// <summary>
-        /// Конструктор
-        /// </summary>
-        public ProductService(IProductReadRepository productReadRepository,
-            IProductWriteRepository productWriteRepository,
-            IMapper mapper,
-            IUnitOfWork unitOfWork)
+    async Task<ProductModel> IProductServices.GetById(Guid id, CancellationToken cancellationToken)
+    {
+        var item = await productReadRepository.GetById(id, cancellationToken)
+            ?? throw new DocumentGeneratorNotFoundException($"Не удалось найти товар с идентификатором {id}");
+        return mapper.Map<ProductModel>(item);
+    }
+
+    async Task<IReadOnlyCollection<ProductModel>> IProductServices.GetAll(CancellationToken cancellationToken)
+    {
+        var items = await productReadRepository.GetAll(cancellationToken);
+        return mapper.Map<IReadOnlyCollection<ProductModel>>(items);
+    }
+
+    async Task<ProductModel> IProductServices.Create(ProductCreateModel model, CancellationToken cancellationToken)
+    {
+        if (await productReadRepository.Any(x => x.Name == model.Name, cancellationToken))
+            throw new DocumentGeneratorDuplicateException($"Товар с именем {model.Name} уже существует.");
+
+        var result = new Product
         {
-            this.productReadRepository = productReadRepository;
-            this.productWriteRepository = productWriteRepository;
-            this.mapper = mapper;
-            this.unitOfWork = unitOfWork;
-        }
+            Id = Guid.NewGuid(),
+            Name = model.Name,
+            Cost = model.Cost,
+        };
+        productWriteRepository.Add(result);
+        await unitOfWork.SaveChangesAsync(cancellationToken);
+        return mapper.Map<ProductModel>(result);
+    }
 
-        async Task<ProductModel> IProductServices.GetById(Guid id, CancellationToken cancellationToken)
-        {
-            var item = await productReadRepository.GetById(id, cancellationToken)
-                ?? throw new DocumentGeneratorNotFoundException($"Не удалось найти товар с идентификатором {id}");
-            return mapper.Map<ProductModel>(item);
-        }
+    async Task<ProductModel> IProductServices.Edit(Guid id, ProductCreateModel model, CancellationToken cancellationToken)
+    {
+        if (await productReadRepository.Any(x => x.Name == model.Name && x.Id != id, cancellationToken))
+            throw new DocumentGeneratorDuplicateException($"Товар с именем {model.Name} уже существует.");
 
-        async Task<IReadOnlyCollection<ProductModel>> IProductServices.GetAll(CancellationToken cancellationToken)
-        {
-            var items = await productReadRepository.GetAll(cancellationToken);
-            return mapper.Map<IReadOnlyCollection<ProductModel>>(items);
-        }
+        var entity = await productReadRepository.GetById(id, cancellationToken)
+            ?? throw new DocumentGeneratorNotFoundException($"Не удалось найти товар с идентификатором {id}");
 
-        async Task<ProductModel> IProductServices.Create(ProductCreateModel model, CancellationToken cancellationToken)
-        {
-            if (await productReadRepository.Any(x => x.Name == model.Name, cancellationToken))
-                throw new DocumentGeneratorDuplicateException($"Товар с именем {model.Name} уже существует.");
+        entity.Name = model.Name;
+        entity.Cost = model.Cost;
+        entity.UpdatedAt = DateTimeOffset.UtcNow;
 
-            var result = new Product
-            {
-                Id = Guid.NewGuid(),
-                Name = model.Name,
-                Cost = model.Cost,
-            };
-            productWriteRepository.Add(result);
-            await unitOfWork.SaveChangesAsync(cancellationToken);
-            return mapper.Map<ProductModel>(result);
-        }
+        productWriteRepository.Edit(entity);
+        await unitOfWork.SaveChangesAsync(cancellationToken);
 
-        async Task<ProductModel> IProductServices.Edit(Guid id, ProductCreateModel model, CancellationToken cancellationToken)
-        {
-            if (await productReadRepository.Any(x => x.Name == model.Name && x.Id != id, cancellationToken))
-                throw new DocumentGeneratorDuplicateException($"Товар с именем {model.Name} уже существует.");
+        return mapper.Map<ProductModel>(entity);
+    }
 
-            var entity = await productReadRepository.GetById(id, cancellationToken)
-                ?? throw new DocumentGeneratorNotFoundException($"Не удалось найти товар с идентификатором {id}");
-
-            entity.Name = model.Name;
-            entity.Cost = model.Cost;
-            entity.UpdatedAt = DateTimeOffset.UtcNow;
-
-            productWriteRepository.Edit(entity);
-            await unitOfWork.SaveChangesAsync(cancellationToken);
-
-            return mapper.Map<ProductModel>(entity);
-        }
-
-        async Task IProductServices.Delete(Guid id, CancellationToken cancellationToken)
-        {
-            var entity = await productReadRepository.GetById(id, cancellationToken)
-                ?? throw new DocumentGeneratorNotFoundException($"Не удалось найти товар с идентификатором {id}");
-            productWriteRepository.Delete(entity);
-            await unitOfWork.SaveChangesAsync(cancellationToken);
-        }
+    async Task IProductServices.Delete(Guid id, CancellationToken cancellationToken)
+    {
+        var entity = await productReadRepository.GetById(id, cancellationToken)
+            ?? throw new DocumentGeneratorNotFoundException($"Не удалось найти товар с идентификатором {id}");
+        productWriteRepository.Delete(entity);
+        await unitOfWork.SaveChangesAsync(cancellationToken);
     }
 }

@@ -3,49 +3,48 @@ using DocumentGenerator.Entities.Configurations;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics.CodeAnalysis;
 
-namespace DocumentGenerator.Context
+namespace DocumentGenerator.Context;
+
+/// <summary>
+/// Контекст базы данных
+/// </summary>
+public class DocumentGeneratorContext : DbContext, IReader, IWriter, IUnitOfWork
 {
     /// <summary>
-    /// Контекст базы данных
+    /// Конструктор
     /// </summary>
-    public class DocumentGeneratorContext : DbContext, IReader, IWriter, IUnitOfWork
+    public DocumentGeneratorContext(DbContextOptions<DocumentGeneratorContext> options)
+        : base(options) { }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        /// <summary>
-        /// Конструктор
-        /// </summary>
-        public DocumentGeneratorContext(DbContextOptions<DocumentGeneratorContext> options)
-            : base(options) { }
+        base.OnModelCreating(modelBuilder);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(IEntityConfiguration).Assembly);
+    }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+    IQueryable<TEntity> IReader.Read<TEntity>()
+        where TEntity : class
+        => base.Set<TEntity>()
+            .AsNoTracking()
+            .AsQueryable();
+
+    void IWriter.Add<TEntity>([NotNull] TEntity entity)
+        => base.Entry(entity).State = EntityState.Added;
+
+    void IWriter.Edit<TEntity>([NotNull] TEntity entity)
+        => base.Entry(entity).State = EntityState.Modified;
+
+    void IWriter.Delete<TEntity>([NotNull] TEntity entity)
+        => base.Entry(entity).State = EntityState.Deleted;
+
+    async Task<int> IUnitOfWork.SaveChangesAsync(CancellationToken cancellationToken)
+    {
+        var count = await base.SaveChangesAsync(cancellationToken);
+        foreach (var entry in base.ChangeTracker.Entries().ToArray())
         {
-            base.OnModelCreating(modelBuilder);
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(IEntityConfiguration).Assembly);
+            entry.State = EntityState.Detached;
         }
 
-        IQueryable<TEntity> IReader.Read<TEntity>()
-            where TEntity : class
-            => base.Set<TEntity>()
-                .AsNoTracking()
-                .AsQueryable();
-
-        void IWriter.Add<TEntity>([NotNull] TEntity entity)
-            => base.Entry(entity).State = EntityState.Added;
-
-        void IWriter.Edit<TEntity>([NotNull] TEntity entity)
-            => base.Entry(entity).State = EntityState.Modified;
-
-        void IWriter.Delete<TEntity>([NotNull] TEntity entity)
-            => base.Entry(entity).State = EntityState.Deleted;
-
-        async Task<int> IUnitOfWork.SaveChangesAsync(CancellationToken cancellationToken)
-        {
-            var count = await base.SaveChangesAsync(cancellationToken);
-            foreach (var entry in base.ChangeTracker.Entries().ToArray())
-            {
-                entry.State = EntityState.Detached;
-            }
-
-            return count;
-        }
+        return count;
     }
 }

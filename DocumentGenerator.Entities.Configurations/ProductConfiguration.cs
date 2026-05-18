@@ -2,32 +2,31 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace DocumentGenerator.Entities.Configurations
+namespace DocumentGenerator.Entities.Configurations;
+
+/// <summary>
+/// Описывает конфигурацию <see cref="Product"/>
+/// </summary>
+public class ProductConfiguration : IEntityTypeConfiguration<Product>
 {
     /// <summary>
-    /// Описывает конфигурацию <see cref="Product"/>
+    /// Конфигурация товара
     /// </summary>
-    public class ProductConfiguration : IEntityTypeConfiguration<Product>
+    public void Configure(EntityTypeBuilder<Product> builder)
     {
-        /// <summary>
-        /// Конфигурация товара
-        /// </summary>
-        public void Configure(EntityTypeBuilder<Product> builder)
-        {
-            builder.ToTable("Products");
-            builder.HasKey(x => x.Id);
+        builder.ToTable("Products");
+        builder.HasKey(x => x.Id);
 
-            builder.Property(x => x.Name)
-                .IsRequired()
-                .HasMaxLength(PartyValidationConstants.NameMaxLength);
+        builder.Property(x => x.Name)
+            .IsRequired()
+            .HasMaxLength(PartyValidationConstants.NameMaxLength);
 
-            builder.Property(x => x.Cost)
-                .HasPrecision(18, 2)
-                .IsRequired();
+        builder.Property(x => x.Cost)
+            .HasPrecision(18, 2)
+            .IsRequired();
 
-            builder.HasIndex(x => x.Name, $"IX_{nameof(Product)}_{nameof(Product.Name)}")
-                .IsUnique()
-                .HasFilter($"\"{nameof(Product.DeletedAt)}\" IS NULL");
-        }
+        builder.HasIndex(x => x.Name, $"IX_{nameof(Product)}_{nameof(Product.Name)}")
+            .IsUnique()
+            .HasFilter($"\"{nameof(Product.DeletedAt)}\" IS NULL");
     }
 }

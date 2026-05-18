@@ -5,145 +5,144 @@ using DocumentGenerator.Services.Validators;
 using FluentValidation.TestHelper;
 using Xunit;
 
-namespace DocumentGenerator.Services.Tests.Validators
+namespace DocumentGenerator.Services.Tests.Validators;
+
+/// <summary>
+/// Тесты для <see cref="PartyCreateModelValidator"/>
+/// </summary>
+public class PartyCreateModelValidatorTests
 {
+    private readonly PartyCreateModelValidator validator;
+
     /// <summary>
-    /// Тесты для <see cref="PartyCreateModelValidator"/>
+    /// Конструктор
     /// </summary>
-    public class PartyCreateModelValidatorTests
+    public PartyCreateModelValidatorTests()
     {
-        private readonly PartyCreateModelValidator validator;
+        validator = new PartyCreateModelValidator();
+    }
 
-        /// <summary>
-        /// Конструктор
-        /// </summary>
-        public PartyCreateModelValidatorTests()
+    /// <summary>
+    /// Валидация падает с ошибкой пустого имени
+    /// </summary>
+    [Fact]
+    public async Task ShouldHaveEmptyNameErrorMessage()
+    {
+        // Arrange
+        var model = new PartyCreateModel();
+
+        // Act
+        var result = await validator.TestValidateAsync(model);
+
+        // Assert
+        result.ShouldHaveValidationErrorFor(x => x.Name);
+    }
+
+    /// <summary>
+    /// Валидация падает с ошибкой слишком короткого имени
+    /// </summary>
+    [Fact]
+    public async Task ShouldHaveShortNameErrorMessage()
+    {
+        // Arrange
+        var model = TestEntityProvider.Shared.Create<PartyCreateModel>(x =>
         {
-            validator = new PartyCreateModelValidator();
-        }
+            x.Name = "1";
+        });
 
-        /// <summary>
-        /// Валидация падает с ошибкой пустого имени
-        /// </summary>
-        [Fact]
-        public async Task ShouldHaveEmptyNameErrorMessage()
+        // Act
+        var result = await validator.TestValidateAsync(model);
+
+        // Assert
+        result.ShouldHaveValidationErrorFor(x => x.Name);
+    }
+
+    /// <summary>
+    /// Валидация падает с ошибкой слишком длинного имени
+    /// </summary>
+    [Fact]
+    public async Task ShouldHaveLongNameErrorMessage()
+    {
+        // Arrange
+        var model = TestEntityProvider.Shared.Create<PartyCreateModel>(x =>
         {
-            // Arrange
-            var model = new PartyCreateModel();
+            x.Name = new string('1', PartyValidationConstants.NameMaxLength+1);
+        });
 
-            // Act
-            var result = await validator.TestValidateAsync(model);
+        // Act
+        var result = await validator.TestValidateAsync(model);
 
-            // Assert
-            result.ShouldHaveValidationErrorFor(x => x.Name);
-        }
+        // Assert
+        result.ShouldHaveValidationErrorFor(x => x.Name);
+    }
 
-        /// <summary>
-        /// Валидация падает с ошибкой слишком короткого имени
-        /// </summary>
-        [Fact]
-        public async Task ShouldHaveShortNameErrorMessage()
+    /// <summary>
+    /// Валидация падает с ошибкой пустой работы
+    /// </summary>
+    [Fact]
+    public async Task ShouldHaveEmptyJobErrorMessage()
+    {
+        // Arrange
+        var model = new PartyCreateModel();
+
+        // Act
+        var result = await validator.TestValidateAsync(model);
+
+        // Assert
+        result.ShouldHaveValidationErrorFor(x => x.Job);
+    }
+
+    /// <summary>
+    /// Валидация падает с ошибкой пустого ИНН
+    /// </summary>
+    [Fact]
+    public async Task ShouldHaveEmptyTaxIdMessage()
+    {
+        // Arrange
+        var model = new PartyCreateModel();
+
+        // Act
+        var result = await validator.TestValidateAsync(model);
+
+        // Assert
+        result.ShouldHaveValidationErrorFor(x => x.TaxId);
+    }
+
+    /// <summary>
+    /// Валидация падает с ошибкой неправильной длины ИНН
+    /// </summary>
+    [Fact]
+    public async Task ShouldHaveWrongLengthTaxIdErrorMessage()
+    {
+        // Arrange
+        var model = TestEntityProvider.Shared.Create<PartyCreateModel>(x =>
         {
-            // Arrange
-            var model = TestEntityProvider.Shared.Create<PartyCreateModel>(x =>
-            {
-                x.Name = "1";
-            });
+            x.TaxId = new string('0', 11);
+        });
 
-            // Act
-            var result = await validator.TestValidateAsync(model);
+        // Act
+        var result = await validator.TestValidateAsync(model);
 
-            // Assert
-            result.ShouldHaveValidationErrorFor(x => x.Name);
-        }
+        // Assert
+        result.ShouldHaveValidationErrorFor(x => x.TaxId);
+    }
 
-        /// <summary>
-        /// Валидация падает с ошибкой слишком длинного имени
-        /// </summary>
-        [Fact]
-        public async Task ShouldHaveLongNameErrorMessage()
+    /// <summary>
+    /// Валидация проходит без ошибок
+    /// </summary>
+    [Fact]
+    public async Task ShouldNotHaveErrorMessage()
+    {
+        // Arrange
+        var model = TestEntityProvider.Shared.Create<PartyCreateModel>(x =>
         {
-            // Arrange
-            var model = TestEntityProvider.Shared.Create<PartyCreateModel>(x =>
-            {
-                x.Name = new string('1', PartyValidationConstants.NameMaxLength+1);
-            });
+            x.TaxId = new string('0', PartyValidationConstants.IndividualTaxIdLength);
+        });
 
-            // Act
-            var result = await validator.TestValidateAsync(model);
+        // Act
+        var result = await validator.TestValidateAsync(model);
 
-            // Assert
-            result.ShouldHaveValidationErrorFor(x => x.Name);
-        }
-
-        /// <summary>
-        /// Валидация падает с ошибкой пустой работы
-        /// </summary>
-        [Fact]
-        public async Task ShouldHaveEmptyJobErrorMessage()
-        {
-            // Arrange
-            var model = new PartyCreateModel();
-
-            // Act
-            var result = await validator.TestValidateAsync(model);
-
-            // Assert
-            result.ShouldHaveValidationErrorFor(x => x.Job);
-        }
-
-        /// <summary>
-        /// Валидация падает с ошибкой пустого ИНН
-        /// </summary>
-        [Fact]
-        public async Task ShouldHaveEmptyTaxIdMessage()
-        {
-            // Arrange
-            var model = new PartyCreateModel();
-
-            // Act
-            var result = await validator.TestValidateAsync(model);
-
-            // Assert
-            result.ShouldHaveValidationErrorFor(x => x.TaxId);
-        }
-
-        /// <summary>
-        /// Валидация падает с ошибкой неправильной длины ИНН
-        /// </summary>
-        [Fact]
-        public async Task ShouldHaveWrongLengthTaxIdErrorMessage()
-        {
-            // Arrange
-            var model = TestEntityProvider.Shared.Create<PartyCreateModel>(x =>
-            {
-                x.TaxId = new string('0', 11);
-            });
-
-            // Act
-            var result = await validator.TestValidateAsync(model);
-
-            // Assert
-            result.ShouldHaveValidationErrorFor(x => x.TaxId);
-        }
-
-        /// <summary>
-        /// Валидация проходит без ошибок
-        /// </summary>
-        [Fact]
-        public async Task ShouldNotHaveErrorMessage()
-        {
-            // Arrange
-            var model = TestEntityProvider.Shared.Create<PartyCreateModel>(x =>
-            {
-                x.TaxId = new string('0', PartyValidationConstants.IndividualTaxIdLength);
-            });
-
-            // Act
-            var result = await validator.TestValidateAsync(model);
-
-            // Assert
-            result.ShouldNotHaveAnyValidationErrors();
-        }
+        // Assert
+        result.ShouldNotHaveAnyValidationErrors();
     }
 }

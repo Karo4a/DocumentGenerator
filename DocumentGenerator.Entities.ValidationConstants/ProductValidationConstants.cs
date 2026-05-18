@@ -1,18 +1,17 @@
-﻿namespace DocumentGenerator.Entities.ValidationConstants
+﻿namespace DocumentGenerator.Entities.ValidationConstants;
+
+/// <summary>
+/// Класс констант валидации <see cref="Product"/>
+/// </summary>
+public class ProductValidationConstants
 {
     /// <summary>
-    /// Класс констант валидации <see cref="Product"/>
+    /// Максимальная длина <see cref="Product.Name"/>
     /// </summary>
-    public class ProductValidationConstants
-    {
-        /// <summary>
-        /// Максимальная длина <see cref="Product.Name"/>
-        /// </summary>
-        public const int NameMaxLength = 255;
+    public const int NameMaxLength = 255;
 
-        /// <summary>
-        /// Минимальная длина <see cref="Product.Name"/>
-        /// </summary>
-        public const int NameMinLength = 3;
-    }
+    /// <summary>
+    /// Минимальная длина <see cref="Product.Name"/>
+    /// </summary>
+    public const int NameMinLength = 3;
 }

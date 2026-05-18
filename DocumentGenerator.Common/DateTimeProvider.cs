@@ -1,14 +1,13 @@
 ﻿using DocumentGenerator.Common.Contracts;
 
-namespace DocumentGenerator.Common
-{
-    /// <inheritdoc cref="IDateTimeProvider"/>
-    public class DateTimeProvider : IDateTimeProvider
-    {
-        DateTimeOffset IDateTimeProvider.Now()
-            => DateTimeOffset.Now;
+namespace DocumentGenerator.Common;
 
-        DateTimeOffset IDateTimeProvider.UtcNow()
-            => DateTimeOffset.UtcNow;
-    }
+/// <inheritdoc cref="IDateTimeProvider"/>
+public class DateTimeProvider : IDateTimeProvider
+{
+    DateTimeOffset IDateTimeProvider.Now()
+        => DateTimeOffset.Now;
+
+    DateTimeOffset IDateTimeProvider.UtcNow()
+        => DateTimeOffset.UtcNow;
 }

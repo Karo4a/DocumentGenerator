@@ -1,16 +1,15 @@
 ﻿using DocumentGenerator.Entities.Contracts;
 using DocumentGenerator.Entities.Enums;
 
-namespace DocumentGenerator.Entities
+namespace DocumentGenerator.Entities;
+
+/// <summary>
+/// Сущность роли пользователя
+/// </summary>
+public class UserRole : DbBaseEntity
 {
     /// <summary>
-    /// Сущность роли пользователя
+    /// Название роли
     /// </summary>
-    public class UserRole : DbBaseEntity
-    {
-        /// <summary>
-        /// Название роли
-        /// </summary>
-        public Role Role { get; set; }
-    }
+    public Role Role { get; set; }
 }

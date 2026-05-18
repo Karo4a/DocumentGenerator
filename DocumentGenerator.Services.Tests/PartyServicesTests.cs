@@ -12,222 +12,221 @@ using FluentAssertions;
 using Moq;
 using Xunit;
 
-namespace DocumentGenerator.Services.Tests
+namespace DocumentGenerator.Services.Tests;
+
+/// <summary>
+/// Тесты на <see cref="PartyService"/>
+/// </summary>
+public class PartyServicesTests : DocumentGeneratorContextInMemory
 {
+    private readonly IPartyServices service;
+    private readonly IMapper mapper;
+
     /// <summary>
-    /// Тесты на <see cref="PartyService"/>
+    /// Конструктор
     /// </summary>
-    public class PartyServicesTests : DocumentGeneratorContextInMemory
+    public PartyServicesTests()
     {
-        private readonly IPartyServices service;
-        private readonly IMapper mapper;
+        mapper = new MapperConfiguration(opts => opts.AddProfile<TestsMapperProfile>()).CreateMapper();
 
-        /// <summary>
-        /// Конструктор
-        /// </summary>
-        public PartyServicesTests()
+        var config = new MapperConfiguration(opts =>
         {
-            mapper = new MapperConfiguration(opts => opts.AddProfile<TestsMapperProfile>()).CreateMapper();
+            opts.AddProfile<ServiceProfile>();
+        });
+        var serviceMapper = config.CreateMapper();
 
-            var config = new MapperConfiguration(opts =>
-            {
-                opts.AddProfile<ServiceProfile>();
-            });
-            var serviceMapper = config.CreateMapper();
+        service = new PartyService(new PartyReadRepository(Context),
+            new PartyWriteRepository(Context, Mock.Of<IDateTimeProvider>()),
+            serviceMapper,
+            UnitOfWork
+            );
+    }
 
-            service = new PartyService(new PartyReadRepository(Context),
-                new PartyWriteRepository(Context, Mock.Of<IDateTimeProvider>()),
-                serviceMapper,
-                UnitOfWork
-                );
-        }
+    /// <summary>
+    /// Падает с ошибкой не найденной стороны акта
+    /// </summary>
+    [Fact]
+    public async Task GetByIdShouldThrowNotFoundException()
+    {
+        // Arrange
+        var id = Guid.NewGuid();
 
-        /// <summary>
-        /// Падает с ошибкой не найденной стороны акта
-        /// </summary>
-        [Fact]
-        public async Task GetByIdShouldThrowNotFoundException()
+        // Act 
+        var result = () => service.GetById(id, CancellationToken.None);
+
+        // Assert
+        await result.Should().ThrowAsync<DocumentGeneratorNotFoundException>().WithMessage($"*{id}*");
+
+    }
+
+    /// <summary>
+    /// Возвращает модель стороны акта
+    /// </summary>
+    [Fact]
+    public async Task GetByIdShouldReturnValue()
+    {
+        // Arrange
+        var entity = await PrepareParty();
+
+        // Act 
+        var result = await service.GetById(entity.Id, CancellationToken.None);
+
+        // Assert
+        result.Should().BeEquivalentTo(entity, opt => opt
+            .ExcludingMissingMembers());
+    }
+
+    /// <summary>
+    /// Возвращает пустой список
+    /// </summary>
+    [Fact]
+    public async Task GetAllShouldBeEmpty()
+    {
+        // Act
+        var result = await service.GetAll(CancellationToken.None);
+
+        // Assert
+        result.Should().BeEmpty();
+    }
+
+    /// <summary>
+    /// Возвращает список сторон актов
+    /// </summary>
+    [Fact]
+    public async Task GetAllShouldReturnValues()
+    {
+        // Arrange
+        for (int i = 0; i < 3; ++i)
         {
-            // Arrange
-            var id = Guid.NewGuid();
-
-            // Act 
-            var result = () => service.GetById(id, CancellationToken.None);
-
-            // Assert
-            await result.Should().ThrowAsync<DocumentGeneratorNotFoundException>().WithMessage($"*{id}*");
-
+            await PrepareParty();
         }
+        await PrepareParty(DateTimeOffset.UtcNow);
 
-        /// <summary>
-        /// Возвращает модель стороны акта
-        /// </summary>
-        [Fact]
-        public async Task GetByIdShouldReturnValue()
-        {
-            // Arrange
-            var entity = await PrepareParty();
+        // Act
+        var result = await service.GetAll(CancellationToken.None);
 
-            // Act 
-            var result = await service.GetById(entity.Id, CancellationToken.None);
+        // Assert
+        result.Should().NotBeEmpty()
+            .And.HaveCount(3);
+    }
 
-            // Assert
-            result.Should().BeEquivalentTo(entity, opt => opt
-                .ExcludingMissingMembers());
-        }
+    /// <summary>
+    /// Создание падает с ошибкой одинаковых ИНН сторон акта
+    /// </summary>
+    [Fact]
+    public async Task CreateShouldThrowTaxIdDuplicateException()
+    {
+        // Arrange
+        var entity = await PrepareParty();
+        var request = mapper.Map<PartyCreateModel>(entity);
 
-        /// <summary>
-        /// Возвращает пустой список
-        /// </summary>
-        [Fact]
-        public async Task GetAllShouldBeEmpty()
-        {
-            // Act
-            var result = await service.GetAll(CancellationToken.None);
+        // Act
+        var result = () => service.Create(request, CancellationToken.None);
 
-            // Assert
-            result.Should().BeEmpty();
-        }
+        // Assert
+        await result.Should().ThrowAsync<DocumentGeneratorDuplicateException>().WithMessage($"*{entity.TaxId}*");
+    }
 
-        /// <summary>
-        /// Возвращает список сторон актов
-        /// </summary>
-        [Fact]
-        public async Task GetAllShouldReturnValues()
-        {
-            // Arrange
-            for (int i = 0; i < 3; ++i)
-            {
-                await PrepareParty();
-            }
-            await PrepareParty(DateTimeOffset.UtcNow);
+    /// <summary>
+    /// Сторона акта успешно создается
+    /// </summary>
+    [Fact]
+    public async Task CreateShouldWork()
+    {
+        // Arrange
+        var request = mapper.Map<PartyCreateModel>(await PrepareParty(save: false));
 
-            // Act
-            var result = await service.GetAll(CancellationToken.None);
+        // Act
+        var result = await service.Create(request, CancellationToken.None);
 
-            // Assert
-            result.Should().NotBeEmpty()
-                .And.HaveCount(3);
-        }
+        // Assert
+        result.Should().NotBeNull()
+            .And.BeEquivalentTo(request);
+    }
 
-        /// <summary>
-        /// Создание падает с ошибкой одинаковых ИНН сторон акта
-        /// </summary>
-        [Fact]
-        public async Task CreateShouldThrowTaxIdDuplicateException()
-        {
-            // Arrange
-            var entity = await PrepareParty();
-            var request = mapper.Map<PartyCreateModel>(entity);
+    /// <summary>
+    /// Редактирование падает с ошибкой не найденной стороны акта
+    /// </summary>
+    [Fact]
+    public async Task EditShouldThrowNotFoundException()
+    {
+        // Arrange
+        var entity = await PrepareParty(save: false);
+        var request = mapper.Map<PartyCreateModel>(entity);
 
-            // Act
-            var result = () => service.Create(request, CancellationToken.None);
+        // Act 
+        var result = () => service.Edit(entity.Id, request, CancellationToken.None);
 
-            // Assert
-            await result.Should().ThrowAsync<DocumentGeneratorDuplicateException>().WithMessage($"*{entity.TaxId}*");
-        }
+        // Assert
+        await result.Should().ThrowAsync<DocumentGeneratorNotFoundException>().WithMessage($"*{entity.Id}*");
+    }
 
-        /// <summary>
-        /// Сторона акта успешно создается
-        /// </summary>
-        [Fact]
-        public async Task CreateShouldWork()
-        {
-            // Arrange
-            var request = mapper.Map<PartyCreateModel>(await PrepareParty(save: false));
+    /// <summary>
+    /// Редактирование падает с ошибкой одинаковых ИНН сторон акта
+    /// </summary>
+    [Fact]
+    public async Task EditShouldThrowTaxIdDuplicateException()
+    {
+        // Arrange
+        var entity = await PrepareParty();
+        var request = mapper.Map<PartyCreateModel>(entity);
+        var id = Guid.NewGuid();
 
-            // Act
-            var result = await service.Create(request, CancellationToken.None);
+        // Act
+        var result = () => service.Edit(id, request, CancellationToken.None);
 
-            // Assert
-            result.Should().NotBeNull()
-                .And.BeEquivalentTo(request);
-        }
+        // Assert
+        await result.Should().ThrowAsync<DocumentGeneratorDuplicateException>().WithMessage($"*{entity.TaxId}*");
+    }
 
-        /// <summary>
-        /// Редактирование падает с ошибкой не найденной стороны акта
-        /// </summary>
-        [Fact]
-        public async Task EditShouldThrowNotFoundException()
-        {
-            // Arrange
-            var entity = await PrepareParty(save: false);
-            var request = mapper.Map<PartyCreateModel>(entity);
+    /// <summary>
+    /// Сторона акта успешно редактируется
+    /// </summary>
+    [Fact]
+    public async Task EditShouldWork()
+    {
+        // Arrange
+        var entity = await PrepareParty();
+        var request = mapper.Map<PartyCreateModel>(entity);
 
-            // Act 
-            var result = () => service.Edit(entity.Id, request, CancellationToken.None);
+        // Act 
+        var result = await service.Edit(entity.Id, request, CancellationToken.None);
 
-            // Assert
-            await result.Should().ThrowAsync<DocumentGeneratorNotFoundException>().WithMessage($"*{entity.Id}*");
-        }
+        // Assert
+        result.Should().NotBeNull()
+            .And.BeEquivalentTo(request);
+    }
 
-        /// <summary>
-        /// Редактирование падает с ошибкой одинаковых ИНН сторон акта
-        /// </summary>
-        [Fact]
-        public async Task EditShouldThrowTaxIdDuplicateException()
-        {
-            // Arrange
-            var entity = await PrepareParty();
-            var request = mapper.Map<PartyCreateModel>(entity);
-            var id = Guid.NewGuid();
+    /// <summary>
+    /// Удаление падает с ошибкой не найденной стороны акта
+    /// </summary>
+    [Fact]
+    public async Task DeleteShouldThrowNotFoundException()
+    {
+        // Arrange
+        var id = Guid.NewGuid();
 
-            // Act
-            var result = () => service.Edit(id, request, CancellationToken.None);
+        // Act
+        var result = () => service.Delete(id, CancellationToken.None);
 
-            // Assert
-            await result.Should().ThrowAsync<DocumentGeneratorDuplicateException>().WithMessage($"*{entity.TaxId}*");
-        }
+        // Assert
+        await result.Should().ThrowAsync<DocumentGeneratorNotFoundException>().WithMessage($"*{id}*");
+    }
 
-        /// <summary>
-        /// Сторона акта успешно редактируется
-        /// </summary>
-        [Fact]
-        public async Task EditShouldWork()
-        {
-            // Arrange
-            var entity = await PrepareParty();
-            var request = mapper.Map<PartyCreateModel>(entity);
+    /// <summary>
+    /// Сторона акта успешно удаляется
+    /// </summary>
+    [Fact]
+    public async Task DeleteShouldWork()
+    {
+        // Arrange
+        var entity = await PrepareParty();
 
-            // Act 
-            var result = await service.Edit(entity.Id, request, CancellationToken.None);
+        // Act
+        await service.Delete(entity.Id, CancellationToken.None);
 
-            // Assert
-            result.Should().NotBeNull()
-                .And.BeEquivalentTo(request);
-        }
-
-        /// <summary>
-        /// Удаление падает с ошибкой не найденной стороны акта
-        /// </summary>
-        [Fact]
-        public async Task DeleteShouldThrowNotFoundException()
-        {
-            // Arrange
-            var id = Guid.NewGuid();
-
-            // Act
-            var result = () => service.Delete(id, CancellationToken.None);
-
-            // Assert
-            await result.Should().ThrowAsync<DocumentGeneratorNotFoundException>().WithMessage($"*{id}*");
-        }
-
-        /// <summary>
-        /// Сторона акта успешно удаляется
-        /// </summary>
-        [Fact]
-        public async Task DeleteShouldWork()
-        {
-            // Arrange
-            var entity = await PrepareParty();
-
-            // Act
-            await service.Delete(entity.Id, CancellationToken.None);
-
-            // Assert
-            var newValue = Context.Set<Party>().Single(x => x.Id == entity.Id && x.DeletedAt != null);
-            newValue.Should().NotBeNull();
-        }
+        // Assert
+        var newValue = Context.Set<Party>().Single(x => x.Id == entity.Id && x.DeletedAt != null);
+        newValue.Should().NotBeNull();
     }
 }

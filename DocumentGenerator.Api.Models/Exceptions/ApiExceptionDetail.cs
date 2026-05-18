@@ -1,21 +1,20 @@
-﻿namespace DocumentGenerator.Api.Models.Exceptions
+﻿namespace DocumentGenerator.Api.Models.Exceptions;
+
+/// <summary>
+/// Информация об ошибке работы API
+/// </summary>
+public class ApiExceptionDetail
 {
     /// <summary>
-    /// Информация об ошибке работы API
+    /// Конструктор
     /// </summary>
-    public class ApiExceptionDetail
+    public ApiExceptionDetail(string message)
     {
-        /// <summary>
-        /// Конструктор
-        /// </summary>
-        public ApiExceptionDetail(string message)
-        {
-            Message = message;
-        }
-
-        /// <summary>
-        /// Сообщение ошибки
-        /// </summary>
-        public string Message { get; }
+        Message = message;
     }
+
+    /// <summary>
+    /// Сообщение ошибки
+    /// </summary>
+    public string Message { get; }
 }

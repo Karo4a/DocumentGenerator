@@ -1,18 +1,17 @@
-﻿namespace DocumentGenerator.Entities.Contracts
+﻿namespace DocumentGenerator.Entities.Contracts;
+
+/// <summary>
+/// Интерфейс сущности с аудитом
+/// </summary>
+public interface IEntityWithAudit
 {
     /// <summary>
-    /// Интерфейс сущности с аудитом
+    /// Дата создания записи
     /// </summary>
-    public interface IEntityWithAudit
-    {
-        /// <summary>
-        /// Дата создания записи
-        /// </summary>
-        public DateTimeOffset CreatedAt { get; set; }
+    public DateTimeOffset CreatedAt { get; set; }
 
-        /// <summary>
-        /// Дата обновления записи
-        /// </summary>
-        public DateTimeOffset UpdatedAt { get; set; }
-    }
+    /// <summary>
+    /// Дата обновления записи
+    /// </summary>
+    public DateTimeOffset UpdatedAt { get; set; }
 }
