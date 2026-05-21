@@ -46,6 +46,8 @@ public class Program
             c.IncludeXmlComments(Path.Combine(baseDirectory, "DocumentGenerator.Entities.xml"));
         });
 
+        builder.Services.AddAuth(builder.Configuration);
+
         var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
         builder.Services.AddDbContext<DocumentGeneratorContext>(options =>
@@ -92,13 +94,14 @@ public class Program
             app.UseSwagger();
             app.UseSwaggerUI();
         }
-
+        
         app.UseHttpsRedirection();
 
         app.UseRouting();
 
         app.UseCors("AllowBlazorClient");
 
+        app.UseAuthentication();
         app.UseAuthorization();
 
         app.MapControllers();
