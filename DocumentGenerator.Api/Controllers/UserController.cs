@@ -34,6 +34,7 @@ public class UserController : ControllerBase
     /// </summary>
     [HttpGet("{id:guid}")]
     [ProducesResponseType(typeof(UserApiModel), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetById([FromRoute] Guid id, CancellationToken cancellationToken)
     {
@@ -46,6 +47,7 @@ public class UserController : ControllerBase
     /// </summary>
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<UserApiModel>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
     {
         var items = await userService.GetAll(cancellationToken);
@@ -57,8 +59,9 @@ public class UserController : ControllerBase
     /// </summary>
     [HttpPost]
     [ProducesResponseType(typeof(UserApiModel), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status422UnprocessableEntity)]
+    [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status409Conflict)]
+    [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status422UnprocessableEntity)]
     public async Task<IActionResult> Create([FromBody] UserRequestApiModel request, CancellationToken cancellationToken)
     {
         var requestModel = mapper.Map<UserCreateModel>(request);
@@ -69,8 +72,9 @@ public class UserController : ControllerBase
     /// <summary>
     /// Изменяет роль пользователя
     /// </summary>
-    [HttpPut("{id:guid}/role")]
+    [HttpPut("{id:guid}/change-role")]
     [ProducesResponseType(typeof(UserApiModel), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> ChangeRole([FromRoute] Guid id, [FromBody] UserRoleRequestApiModel request, CancellationToken cancellationToken)
     {
@@ -83,6 +87,7 @@ public class UserController : ControllerBase
     /// </summary>
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete([FromRoute] Guid id, CancellationToken cancellationToken)
     {

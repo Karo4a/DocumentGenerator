@@ -38,6 +38,7 @@ public class ProductController : ControllerBase
     [Authorize(Roles = "Viewer,Editor,Admin")]
     [HttpGet("{id:guid}")]
     [ProducesResponseType(typeof(ProductApiModel), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetById([FromRoute] Guid id, CancellationToken cancellationToken)
     {
@@ -51,6 +52,7 @@ public class ProductController : ControllerBase
     [Authorize(Roles = "Viewer,Editor,Admin")]
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<ProductApiModel>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult> GetAll(CancellationToken cancellationToken)
     {
         var items = await service.GetAll(cancellationToken);
@@ -63,8 +65,9 @@ public class ProductController : ControllerBase
     [Authorize(Roles = "Editor,Admin")]
     [HttpPost]
     [ProducesResponseType(typeof(ProductApiModel), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status422UnprocessableEntity)]
+    [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status409Conflict)]
+    [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status422UnprocessableEntity)]
     public async Task<ActionResult> Create([FromBody] ProductRequestApiModel request, CancellationToken cancellationToken)
     {
         var requestModel = mapper.Map<ProductCreateModel>(request);
@@ -80,9 +83,10 @@ public class ProductController : ControllerBase
     [Authorize(Roles = "Editor,Admin")]
     [HttpPut("{id:guid}")]
     [ProducesResponseType(typeof(ProductApiModel), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status422UnprocessableEntity)]
+    [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status409Conflict)]
+    [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status422UnprocessableEntity)]
     public async Task<IActionResult> Edit([FromRoute] Guid id, [FromBody] ProductRequestApiModel request, CancellationToken cancellationToken)
     {
         var requestModel = mapper.Map<ProductCreateModel>(request);
@@ -98,6 +102,7 @@ public class ProductController : ControllerBase
     [Authorize(Roles = "Admin")]
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete([FromRoute] Guid id, CancellationToken cancellationToken)
     {

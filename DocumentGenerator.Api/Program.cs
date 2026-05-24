@@ -10,6 +10,7 @@ using DocumentGenerator.Repositories;
 using DocumentGenerator.Services;
 using DocumentGenerator.Services.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 namespace DocumentGenerator.Api;
 
@@ -45,6 +46,30 @@ public class Program
             var baseDirectory = AppContext.BaseDirectory;
             c.IncludeXmlComments(Path.Combine(baseDirectory, "DocumentGenerator.Api.xml"));
             c.IncludeXmlComments(Path.Combine(baseDirectory, "DocumentGenerator.Entities.xml"));
+            c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
+                Name = "Authorization",
+                Type = SecuritySchemeType.Http,
+                Scheme = "bearer",
+                BearerFormat = "JWT",
+                In = ParameterLocation.Header,
+                Description = "Введите ваш JWT токен"
+            });
+
+            c.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    Array.Empty<string>()
+                }
+            });
         });
 
         builder.Services.AddAuth(builder.Configuration);
@@ -53,7 +78,6 @@ public class Program
 
         var jwtSettings = builder.Configuration.GetSection(JwtSettingsModel.Key).Get<JwtSettingsModel>()!;
         builder.Services.AddSingleton(jwtSettings);
-        builder.Services.AddScoped<TokenService>();
 
         var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
