@@ -6,6 +6,7 @@ using DocumentGenerator.Services.Contracts.Models.Enums;
 using DocumentGenerator.Services.Contracts.Models.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace DocumentGenerator.Api.Controllers;
 
@@ -14,7 +15,6 @@ namespace DocumentGenerator.Api.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(Roles = "Admin")]
 public class UserController : ControllerBase
 {
     private readonly IUserService userService;
@@ -32,6 +32,7 @@ public class UserController : ControllerBase
     /// <summary>
     /// Получает пользователя по идентификатору
     /// </summary>
+    [Authorize(Roles = "Admin")]
     [HttpGet("{id:guid}")]
     [ProducesResponseType(typeof(UserApiModel), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status401Unauthorized)]
@@ -45,6 +46,7 @@ public class UserController : ControllerBase
     /// <summary>
     /// Получает всех пользователей
     /// </summary>
+    [Authorize(Roles = "Admin")]
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<UserApiModel>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status401Unauthorized)]
@@ -57,11 +59,13 @@ public class UserController : ControllerBase
     /// <summary>
     /// Создаёт нового пользователя
     /// </summary>
-    [HttpPost]
+    [AllowAnonymous]
+    [HttpPost("register")]
     [ProducesResponseType(typeof(UserApiModel), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status409Conflict)]
     [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status422UnprocessableEntity)]
+        [SwaggerOperation(OperationId = "UserChangeRole")]
     public async Task<IActionResult> Create([FromBody] UserRequestApiModel request, CancellationToken cancellationToken)
     {
         var requestModel = mapper.Map<UserCreateModel>(request);
@@ -72,10 +76,12 @@ public class UserController : ControllerBase
     /// <summary>
     /// Изменяет роль пользователя
     /// </summary>
+    [Authorize(Roles = "Admin")]
     [HttpPut("{id:guid}/change-role")]
     [ProducesResponseType(typeof(UserApiModel), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]
+    [SwaggerOperation(OperationId = "UserChangeRole")]
     public async Task<IActionResult> ChangeRole([FromRoute] Guid id, [FromBody] UserRoleRequestApiModel request, CancellationToken cancellationToken)
     {
         var result = await userService.ChangeRole(id, mapper.Map<UserRole>(request.Role), cancellationToken);
@@ -85,6 +91,7 @@ public class UserController : ControllerBase
     /// <summary>
     /// Удаляет пользователя
     /// </summary>
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status401Unauthorized)]
@@ -93,5 +100,29 @@ public class UserController : ControllerBase
     {
         await userService.Delete(id, cancellationToken);
         return Ok();
+    }
+
+    /// <summary>
+    /// Возвращает информацию о текущем авторизованном пользователе
+    /// </summary>
+    [Authorize]
+    [HttpGet("me")]
+    [ProducesResponseType(typeof(UserInfoApiResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status401Unauthorized)]
+    [SwaggerOperation(OperationId = "UserGetCurrentInfo")]
+    public IActionResult GetCurrentUserInfo()
+    {
+        var id = Guid.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value);
+        var login = User.FindFirst(System.Security.Claims.ClaimTypes.Name)!.Value;
+        var email = User.FindFirst(System.Security.Claims.ClaimTypes.Email)!.Value;
+        var role = User.FindFirst(System.Security.Claims.ClaimTypes.Role)!.Value;
+
+        return Ok(new UserInfoApiResponse
+        {
+            Id = id,
+            Login = login,
+            Email = email,
+            Role = Enum.Parse<Models.Models.UserRoleApi>(role)
+        });
     }
 }

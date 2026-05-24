@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DocumentGenerator.Api.Models\DocumentGenerator.Api.Models.csproj" />
+    <ProjectReference Include="..\DocumentGenerator.Api.Client\DocumentGenerator.Api.Client.csproj" />
   </ItemGroup>
 
 </Project>

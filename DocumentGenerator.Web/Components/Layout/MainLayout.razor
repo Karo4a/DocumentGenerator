@@ -1,4 +1,6 @@
 ﻿@inherits LayoutComponentBase
+@using DocumentGenerator.Web.Services
+@inject UserStateInitializer UserStateInitializer
 
 <NavMenu />
 
@@ -9,6 +11,13 @@
 </main>
 
 <Toasts class="p-3" AutoHide="true" Delay="3000" Placement="ToastsPlacement.TopRight" />
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await UserStateInitializer.InitializeAsync();
+    }
+}
 
 <div id="blazor-error-ui">
     An unhandled error has occurred.

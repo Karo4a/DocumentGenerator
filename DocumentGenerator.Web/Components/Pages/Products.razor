@@ -1,10 +1,7 @@
 ﻿@page "/products"
 @using DocumentGenerator.Api.Models.Product
-@using DocumentGenerator.Web.Models
-@using DocumentGenerator.Web.Services.Product
 
 @inject IJSRuntime JS
-@inject IProductService ProductService
 @inject ToastService ToastService
 
 <PageTitle>Товары</PageTitle>
@@ -43,11 +40,11 @@ else
                             <Dropdown Color="DropdownColor.Secondary">
                                 <DropdownToggleButton>Действия</DropdownToggleButton>
                                 <DropdownMenu>
-                                    <DropdownItem @onclick="() => ShowEditModal(product)">
-                                        <Button Size="ButtonSize.Small" Color="ButtonColor.Primary" @onclick="() => ShowEditModal(product)">Редактировать</Button>
+                                    <DropdownItem @onclick="() => { }">
+                                        <Button Size="ButtonSize.Small" Color="ButtonColor.Primary" @onclick="() => { }">Редактировать</Button>
                                     </DropdownItem>
-                                    <DropdownItem @onclick="() => DeleteProduct(product.Id)">
-                                        <Button Size="ButtonSize.Small" Color="ButtonColor.Danger" @onclick="() => DeleteProduct(product.Id)">Удалить</Button>
+                                    <DropdownItem @onclick="() => { }">
+                                        <Button Size="ButtonSize.Small" Color="ButtonColor.Danger" @onclick="() => { }">Удалить</Button>
                                     </DropdownItem>
                                 </DropdownMenu>
                             </Dropdown>
@@ -72,7 +69,7 @@ else
     </BodyTemplate>
     <FooterTemplate>
         <Button Color="ButtonColor.Secondary" @onclick="HideModal">Отмена</Button>
-        <Button Color="ButtonColor.Primary" @onclick="SaveProduct">Сохранить</Button>
+        <Button Color="ButtonColor.Primary" @onclick="() => { }">Сохранить</Button>
     </FooterTemplate>
 </Modal>
 
@@ -86,27 +83,6 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        await LoadProducts();
-    }
-
-    private async Task LoadProducts()
-    {
-        isLoading = true;
-        StateHasChanged();
-
-        var result = await ProductService.GetAllAsync();
-
-        if (result.IsSuccess)
-        {
-            products = result.Value;
-        }
-        else
-        {
-            ToastService.Notify(new(ToastType.Danger, "Ошибка загрузки", result.ErrorMessage ?? "Неизвестная ошибка"));
-        }
-
-        isLoading = false;
-        StateHasChanged();
     }
 
     private async Task ShowCreateModal()
@@ -114,60 +90,6 @@ else
         isEditMode = false;
         currentModel = new();
         await modal.ShowAsync();
-    }
-
-    private async Task ShowEditModal(ProductApiModel product)
-    {
-        isEditMode = true;
-        editingId = product.Id;
-        currentModel = new ProductRequestApiModel
-        {
-            Name = product.Name,
-            Cost = product.Cost
-        };
-        await modal.ShowAsync();
-    }
-
-    private async Task SaveProduct()
-    {
-        Result<ProductApiModel> saveResult;
-
-        if (isEditMode)
-        {
-            saveResult = await ProductService.UpdateAsync(editingId, currentModel);
-        }
-        else
-        {
-            saveResult = await ProductService.CreateAsync(currentModel);
-        }
-
-        if (saveResult.IsSuccess)
-        {
-            await LoadProducts();
-            await modal.HideAsync();
-        }
-        else
-        {
-            var toastType = saveResult.StatusCode == 409 ? ToastType.Warning : ToastType.Danger;
-            ToastService.Notify(new(toastType, "Ошибка сохранения", saveResult.ErrorMessage ?? "Неизвестная ошибка"));
-        }
-    }
-
-    private async Task DeleteProduct(Guid id)
-    {
-        var confirmed = await JS.InvokeAsync<bool>("confirm", "Удалить товар?");
-        if (!confirmed) return;
-
-        var result = await ProductService.DeleteAsync(id);
-
-        if (result.IsSuccess)
-        {
-            await LoadProducts();
-        }
-        else
-        {
-            ToastService.Notify(new(ToastType.Danger, "Ошибка удаления", result.ErrorMessage ?? "Неизвестная ошибка"));
-        }
     }
 
     private async Task HideModal() => await modal.HideAsync();

@@ -43,9 +43,6 @@ public class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen(c =>
         {
-            var baseDirectory = AppContext.BaseDirectory;
-            c.IncludeXmlComments(Path.Combine(baseDirectory, "DocumentGenerator.Api.xml"));
-            c.IncludeXmlComments(Path.Combine(baseDirectory, "DocumentGenerator.Entities.xml"));
             c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
                 Name = "Authorization",
@@ -70,6 +67,10 @@ public class Program
                     Array.Empty<string>()
                 }
             });
+            var baseDirectory = AppContext.BaseDirectory;
+            c.IncludeXmlComments(Path.Combine(baseDirectory, "DocumentGenerator.Api.xml"));
+            c.IncludeXmlComments(Path.Combine(baseDirectory, "DocumentGenerator.Entities.xml"));
+            c.EnableAnnotations();
         });
 
         builder.Services.AddAuth(builder.Configuration);
