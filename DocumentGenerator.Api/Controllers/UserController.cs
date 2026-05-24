@@ -1,4 +1,5 @@
 using AutoMapper;
+using DocumentGenerator.Api.Models.Enums;
 using DocumentGenerator.Api.Models.Exceptions;
 using DocumentGenerator.Api.Models.User;
 using DocumentGenerator.Services.Contracts.IServices;
@@ -65,7 +66,7 @@ public class UserController : ControllerBase
     [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status409Conflict)]
     [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status422UnprocessableEntity)]
-        [SwaggerOperation(OperationId = "UserChangeRole")]
+    [SwaggerOperation(OperationId = "UserCreate")]
     public async Task<IActionResult> Create([FromBody] UserRequestApiModel request, CancellationToken cancellationToken)
     {
         var requestModel = mapper.Map<UserCreateModel>(request);
@@ -122,7 +123,7 @@ public class UserController : ControllerBase
             Id = id,
             Login = login,
             Email = email,
-            Role = Enum.Parse<Models.Models.UserRoleApi>(role)
+            Role = Enum.Parse<UserRoleApi>(role)
         });
     }
 }

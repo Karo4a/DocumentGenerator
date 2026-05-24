@@ -1,4 +1,4 @@
-﻿using DocumentGenerator.Api.Models.Models;
+﻿using DocumentGenerator.Api.Models.Enums;
 
 namespace DocumentGenerator.Api.Models.User;
 

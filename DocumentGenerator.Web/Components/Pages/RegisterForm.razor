@@ -1,0 +1,60 @@
+@using DocumentGenerator.Api.Client
+@inject IDocumentGeneratorApiClient ApiClient
+
+<div class="mb-3">
+    <InputText @bind-Value="login" class="form-control" placeholder="Логин" />
+</div>
+<div class="mb-3">
+    <InputText @bind-Value="email" class="form-control" placeholder="Email" />
+</div>
+<div class="mb-3">
+    <InputText @bind-Value="password" type="password" class="form-control" placeholder="Пароль" />
+</div>
+@if (!string.IsNullOrEmpty(message))
+{
+    <div class="alert alert-@(isSuccess ? "success" : "danger") py-2">@message</div>
+}
+<button class="btn btn-primary w-100" @onclick="RegisterAsync" disabled="@loading">
+    @if (loading) { <span>Регистрация...</span> } else { <span>Зарегистрироваться</span> }
+</button>
+
+@code {
+    private string login = "";
+    private string email = "";
+    private string password = "";
+    private string message = "";
+    private bool isSuccess;
+    private bool loading;
+
+    [Parameter]
+    public EventCallback OnRegisterSucceeded { get; set; }
+
+    private async Task RegisterAsync()
+    {
+        loading = true;
+        message = "";
+        StateHasChanged();
+        try
+        {
+            await ApiClient.UserCreateAsync(new DocumentGenerator.Api.Client.UserRequestApiModel
+            {
+                Login = login,
+                Email = email,
+                Password = password
+            });
+
+            isSuccess = true;
+            message = "Регистрация успешна. Теперь вы можете войти.";
+            await OnRegisterSucceeded.InvokeAsync();
+        }
+        catch
+        {
+            isSuccess = false;
+            message = "Ошибка регистрации. Попробуйте другой логин.";
+        }
+        finally
+        {
+            loading = false;
+        }
+    }
+}

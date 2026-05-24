@@ -1,17 +1,71 @@
-﻿<nav class="navbar navbar-dark bg-dark">
-    <div class="container-fluid justify-content-start">
-        <a class="navbar-brand" href="">DocumentGenerator.Web</a>
-        <ul class="navbar-nav flex-row">
-            <li class="nav-item py-2">
-                <NavLink class="nav-link px-3" href="" Match="NavLinkMatch.All">
-                    Главная
-                </NavLink>
-            </li>
-            <li class="nav-item py-2">
-                <NavLink class="nav-link px-3" href="products">
-                    Товары
-                </NavLink>
-            </li>
-        </ul>
+﻿@using DocumentGenerator.Web.Services
+@using DocumentGenerator.Api.Client
+@using DocumentGenerator.Api.Models.Auth
+@inject UserState UserState
+@inject IClientTokenStore TokenStore
+@inject IDocumentGeneratorApiClient ApiClient
+@inject NavigationManager Navigation
+
+<nav class="navbar navbar-dark bg-dark">
+    <div class="container-fluid">
+        <div class="d-flex align-items-center">
+            <a class="navbar-brand" href="">DocumentGenerator.Web</a>
+            <ul class="navbar-nav flex-row">
+                <li class="nav-item py-2">
+                    <NavLink class="nav-link px-3" href="" Match="NavLinkMatch.All">
+                        Главная
+                    </NavLink>
+                </li>
+                @if (UserState.IsAuthenticated)
+                {
+                    <li class="nav-item py-2">
+                        <NavLink class="nav-link px-3" href="products">
+                            Товары
+                        </NavLink>
+                    </li>
+                    @if (UserState.IsAdmin)
+                    {
+                        <li class="nav-item py-2">
+                            <NavLink class="nav-link px-3" href="users">
+                                Пользователи
+                            </NavLink>
+                        </li>
+                    }
+                }
+            </ul>
+        </div>
+        @if (UserState.IsAuthenticated)
+        {
+            <div class="dropdown">
+                <button class="btn btn-outline-light btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    @UserState.Login
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                        <a class="dropdown-item" href="profile">Профиль</a>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <button class="dropdown-item text-danger" @onclick="LogoutAsync">Выйти</button>
+                    </li>
+                </ul>
+            </div>
+        }
     </div>
 </nav>
+
+@code {
+    private async Task LogoutAsync()
+    {
+        try
+        {
+            await ApiClient.LogoutAsync();
+        }
+        catch
+        {
+        }
+        await TokenStore.ClearAsync();
+        UserState.Clear();
+        Navigation.NavigateTo("/", forceLoad: false);
+    }
+}

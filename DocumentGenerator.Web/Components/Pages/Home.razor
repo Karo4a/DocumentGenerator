@@ -1,52 +1,103 @@
 ﻿@page "/"
 @using DocumentGenerator.Api.Models.Product
+@using DocumentGenerator.Web.Services
+@inject UserState UserState
 
 <PageTitle>Главная</PageTitle>
 
 <div class="p-4">
-    <div class="row mb-4">
-        <div class="col-lg-12 text-center">
-            <h1 class="display-4 fw-bold">Добро пожаловать в DocumentGenerator</h1>
-            <p class="lead">Веб-приложение для автоматического формирования актов приёма-передачи товаров.</p>
+    @if (UserState.IsAuthenticated)
+    {
+        <div class="row mb-4">
+            <div class="col-lg-12 text-center">
+                <h1 class="display-4 fw-bold">Добро пожаловать в DocumentGenerator</h1>
+                <p class="lead">Веб-приложение для автоматического формирования актов приёма-передачи товаров.</p>
+            </div>
         </div>
-    </div>
 
-    <div class="row">
-        <div class="col-md-6 mb-4">
-            <div class="card h-100 shadow-sm border-primary">
-                <div class="card-body d-flex flex-column">
-                    <h5 class="card-title text-primary">Товары</h5>
-                    <p class="card-text flex-grow-1">Управляйте каталогом товаров: создавайте, редактируйте и удаляйте наименования и цены.</p>
-                    <a href="/products" class="btn btn-outline-primary mt-auto">Перейти к товарам</a>
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card h-100 shadow-sm border-primary">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-primary">Товары</h5>
+                        <p class="card-text flex-grow-1">Управляйте каталогом товаров: создавайте, редактируйте и удаляйте наименования и цены.</p>
+                        <a href="/products" class="btn btn-outline-primary mt-auto">Перейти к товарам</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card h-100 shadow-sm border-success">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-success">Стороны акта</h5>
+                        <p class="card-text flex-grow-1">Добавляйте и редактируйте информацию о продавцах и покупателях.</p>
+                        <a href="#" class="btn btn-outline-success mt-auto disabled">Скоро...</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card h-100 shadow-sm border-info">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-info">Документы</h5>
+                        <p class="card-text flex-grow-1">Создавайте акты приёма-передачи, используя справочники товаров и сторон.</p>
+                        <a href="#" class="btn btn-outline-info mt-auto disabled">Скоро...</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card h-100 shadow-sm border-secondary">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-secondary">Отчёты</h5>
+                        <p class="card-text flex-grow-1">Экспортируйте документы в формат Microsoft Excel для дальнейшей работы.</p>
+                        <a href="#" class="btn btn-outline-secondary mt-auto disabled">Скоро...</a>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-6 mb-4">
-            <div class="card h-100 shadow-sm border-success">
-                <div class="card-body d-flex flex-column">
-                    <h5 class="card-title text-success">Стороны акта</h5>
-                    <p class="card-text flex-grow-1">Добавляйте и редактируйте информацию о продавцах и покупателях.</p>
-                    <a href="#" class="btn btn-outline-success mt-auto disabled">Скоро...</a>
+    }
+    else
+    {
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-4">
+                <div class="text-center mb-4">
+                    <h1 class="display-6 fw-bold">Добро пожаловать</h1>
+                    <p class="text-muted">Войдите или зарегистрируйтесь</p>
+                </div>
+
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link @(activeTab == "login" ? "active" : "")" @onclick='() => SetActiveTab("login")' href="#">Вход</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(activeTab == "register" ? "active" : "")" @onclick='() => SetActiveTab("register")' href="#">Регистрация</a>
+                    </li>
+                </ul>
+
+                <div class="p-3 border border-top-0 rounded-bottom">
+                    @if (activeTab == "login")
+                    {
+                        <LoginForm OnLoginSucceeded="OnAuthSucceeded" />
+                    }
+                    else
+                    {
+                        <RegisterForm OnRegisterSucceeded='() => activeTab = "login"' />
+                    }
                 </div>
             </div>
         </div>
-        <div class="col-md-6 mb-4">
-            <div class="card h-100 shadow-sm border-info">
-                <div class="card-body d-flex flex-column">
-                    <h5 class="card-title text-info">Документы</h5>
-                    <p class="card-text flex-grow-1">Создавайте акты приёма-передачи, используя справочники товаров и сторон.</p>
-                    <a href="#" class="btn btn-outline-info mt-auto disabled">Скоро...</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6 mb-4">
-            <div class="card h-100 shadow-sm border-secondary">
-                <div class="card-body d-flex flex-column">
-                    <h5 class="card-title text-secondary">Отчёты</h5>
-                    <p class="card-text flex-grow-1">Экспортируйте документы в формат Microsoft Excel для дальнейшей работы.</p>
-                    <a href="#" class="btn btn-outline-secondary mt-auto disabled">Скоро...</a>
-                </div>
-            </div>
-        </div>
-    </div>
+    }
 </div>
+
+@code {
+    private string activeTab = "login";
+
+    private void SetActiveTab(string tab)
+    {
+        activeTab = tab;
+    }
+
+    private void OnAuthSucceeded()
+    {
+        activeTab = "login";
+        StateHasChanged();
+    }
+}

@@ -1,0 +1,55 @@
+@page "/profile"
+@using DocumentGenerator.Web.Services
+@using DocumentGenerator.Api.Client
+@inject UserState UserState
+@inject IClientTokenStore TokenStore
+@inject IDocumentGeneratorApiClient ApiClient
+@inject NavigationManager Navigation
+
+<PageTitle>Профиль</PageTitle>
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <i class="bi bi-person-circle" style="font-size: 4rem;"></i>
+                    </div>
+                    <h3>@UserState.Login</h3>
+                    <hr>
+                    <div class="text-start mb-3">
+                        <p><strong>Логин:</strong> @UserState.Login</p>
+                        <p><strong>Email:</strong> @UserState.Email</p>
+                        <p><strong>Роль:</strong> @UserState.Role</p>
+                    </div>
+                    <button class="btn btn-danger w-100" @onclick="LogoutAsync">Выйти</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    protected override void OnInitialized()
+    {
+        if (!UserState.IsAuthenticated)
+        {
+            Navigation.NavigateTo("/");
+        }
+    }
+
+    private async Task LogoutAsync()
+    {
+        try
+        {
+            await ApiClient.LogoutAsync();
+        }
+        catch
+        {
+        }
+        await TokenStore.ClearAsync();
+        UserState.Clear();
+        Navigation.NavigateTo("/");
+    }
+}

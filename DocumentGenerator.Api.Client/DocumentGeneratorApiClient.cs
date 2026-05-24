@@ -362,7 +362,7 @@ namespace DocumentGenerator.Api.Client
         /// </summary>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<UserApiModel> UserRegisterAsync(UserRequestApiModel body);
+        System.Threading.Tasks.Task<UserApiModel> UserCreateAsync(UserRequestApiModel body);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
@@ -370,7 +370,7 @@ namespace DocumentGenerator.Api.Client
         /// </summary>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<UserApiModel> UserRegisterAsync(UserRequestApiModel body, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<UserApiModel> UserCreateAsync(UserRequestApiModel body, System.Threading.CancellationToken cancellationToken);
 
         /// <summary>
         /// Изменяет роль пользователя
@@ -2812,9 +2812,9 @@ namespace DocumentGenerator.Api.Client
         /// </summary>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<UserApiModel> UserRegisterAsync(UserRequestApiModel body)
+        public virtual System.Threading.Tasks.Task<UserApiModel> UserCreateAsync(UserRequestApiModel body)
         {
-            return UserRegisterAsync(body, System.Threading.CancellationToken.None);
+            return UserCreateAsync(body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -2823,7 +2823,7 @@ namespace DocumentGenerator.Api.Client
         /// </summary>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<UserApiModel> UserRegisterAsync(UserRequestApiModel body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<UserApiModel> UserCreateAsync(UserRequestApiModel body, System.Threading.CancellationToken cancellationToken)
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -3525,11 +3525,11 @@ namespace DocumentGenerator.Api.Client
     public enum UserRoleApi
     {
 
-        _0 = 0,
+        Viewer = 0,
 
-        _1 = 1,
+        Editor = 1,
 
-        _2 = 2,
+        Admin = 2,
 
     }
 

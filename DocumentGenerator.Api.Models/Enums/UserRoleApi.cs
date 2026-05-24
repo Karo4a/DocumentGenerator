@@ -1,4 +1,4 @@
-﻿namespace DocumentGenerator.Api.Models.Models;
+﻿namespace DocumentGenerator.Api.Models.Enums;
 
 /// <summary>
 /// Роли пользователя

@@ -29,22 +29,29 @@ public class Program
                 sp.GetRequiredService<IHttpClientFactory>(),
                 apiBaseUrl));
 
-        builder.Services.AddHttpClient<IDocumentGeneratorApiClient, WebDocumentGeneratorApiClient>(
-            client => new WebDocumentGeneratorApiClient(apiBaseUrl, client))
-            .AddHttpMessageHandler<AuthDelegatingHandler>();
+        builder.Services.AddHttpClient("DocumentGeneratorApi", client =>
+        {
+            client.BaseAddress = new Uri(apiBaseUrl);
+        });
 
-        //builder.Services.AddHttpClient("DocumentGeneratorApi", client =>
-        //{
-        //    client.BaseAddress = new Uri(apiBaseUrl);
-        //})
-        //    .AddHttpMessageHandler<AuthDelegatingHandler>();
+        builder.Services.AddScoped<IDocumentGeneratorApiClient>(sp =>
+        {
+            var tokenStore = sp.GetRequiredService<IClientTokenStore>();
 
-        //builder.Services.AddScoped<IDocumentGeneratorApiClient>(sp =>
-        //{
-        //    var clientFactory = sp.GetRequiredService<IHttpClientFactory>();
-        //    var httpClient = clientFactory.CreateClient("DocumentGeneratorApi");
-        //    return new WebDocumentGeneratorApiClient(apiBaseUrl, httpClient);
-        //});
+            var authHandler = new AuthDelegatingHandler(
+                tokenStore,
+                sp.GetRequiredService<IHttpClientFactory>(),
+                apiBaseUrl)
+            {
+                InnerHandler = new SocketsHttpHandler
+                {
+                    PooledConnectionLifetime = TimeSpan.FromMinutes(2)
+                }
+            };
+
+            var httpClient = new HttpClient(authHandler, disposeHandler: false);
+            return new WebDocumentGeneratorApiClient(apiBaseUrl, httpClient);
+        });
 
         var app = builder.Build();
 

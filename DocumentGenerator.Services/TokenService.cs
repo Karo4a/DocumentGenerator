@@ -44,7 +44,7 @@ public class TokenService : ITokenService, IServiceAnchor
             Issuer = authSetting.Issuer,
             Audience = authSetting.Audience,
             Subject = new ClaimsIdentity(authClaims),
-            Expires = DateTimeOffset.UtcNow.AddSeconds(authSetting.LifeTimeSec).DateTime,
+            Expires = DateTime.UtcNow.AddSeconds(authSetting.LifeTimeSec),
             SigningCredentials = new SigningCredentials(signKey, SecurityAlgorithms.HmacSha256),
             EncryptingCredentials = new EncryptingCredentials(
                 encKey, SecurityAlgorithms.Aes256KW, SecurityAlgorithms.Aes256CbcHmacSha512)

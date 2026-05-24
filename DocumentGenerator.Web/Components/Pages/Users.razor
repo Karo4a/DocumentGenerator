@@ -1,0 +1,21 @@
+@page "/users"
+@using DocumentGenerator.Web.Services
+@inject UserState UserState
+@inject NavigationManager Navigation
+
+<PageTitle>Пользователи</PageTitle>
+
+<div class="container py-4">
+    <h3>Управление пользователями</h3>
+    <p class="text-muted">Раздел в разработке</p>
+</div>
+
+@code {
+    protected override void OnInitialized()
+    {
+        if (!UserState.IsAuthenticated || !UserState.IsAdmin)
+        {
+            Navigation.NavigateTo("/");
+        }
+    }
+}

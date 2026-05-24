@@ -1,0 +1,60 @@
+@using DocumentGenerator.Api.Client
+@using DocumentGenerator.Web.Services
+@inject IDocumentGeneratorApiClient ApiClient
+@inject IClientTokenStore TokenStore
+@inject UserState UserState
+
+<div class="mb-3">
+    <InputText @bind-Value="login" class="form-control" placeholder="Логин" />
+</div>
+<div class="mb-3">
+    <InputText @bind-Value="password" type="password" class="form-control" placeholder="Пароль" />
+</div>
+@if (!string.IsNullOrEmpty(error))
+{
+    <div class="alert alert-danger py-2">@error</div>
+}
+<button class="btn btn-primary w-100" @onclick="LoginAsync" disabled="@loading">
+    @if (loading) { <span>Вход...</span> } else { <span>Войти</span> }
+</button>
+
+@code {
+    private string login = "";
+    private string password = "";
+    private string error = "";
+    private bool loading;
+
+    [Parameter]
+    public EventCallback OnLoginSucceeded { get; set; }
+
+    private async Task LoginAsync()
+    {
+        loading = true;
+        error = "";
+        StateHasChanged();
+        try
+        {
+            var state = UserState;
+            var loginResponse = await ApiClient.LoginAsync(new LoginRequestApiModel
+            {
+                Login = login,
+                Password = password
+            });
+
+            await TokenStore.SetTokensAsync(loginResponse.Token, loginResponse.RefreshToken);
+
+            var userInfo = await ApiClient.UserGetCurrentInfoAsync();
+            UserState.SetFrom(userInfo.Id, userInfo.Login, userInfo.Email, userInfo.Role.ToString());
+
+            await OnLoginSucceeded.InvokeAsync();
+        }
+        catch
+        {
+            error = "Неверный логин или пароль";
+        }
+        finally
+        {
+            loading = false;
+        }
+    }
+}

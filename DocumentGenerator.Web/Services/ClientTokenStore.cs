@@ -21,28 +21,56 @@ public class ClientTokenStore : IClientTokenStore
     /// <inheritdoc />
     public async Task<string?> GetAccessTokenAsync()
     {
-        var result = await storage.GetAsync<string>(AccessTokenKey);
-        return result.Success ? result.Value : null;
+        try
+        {
+            var result = await storage.GetAsync<string>(AccessTokenKey);
+            return result.Success ? result.Value : null;
+        }
+        catch (InvalidOperationException)
+        {
+            return null;
+        }
     }
 
     /// <inheritdoc />
     public async Task<string?> GetRefreshTokenAsync()
     {
-        var result = await storage.GetAsync<string>(RefreshTokenKey);
-        return result.Success ? result.Value : null;
+        try
+        {
+            var result = await storage.GetAsync<string>(RefreshTokenKey);
+            return result.Success ? result.Value : null;
+        }
+        catch (InvalidOperationException)
+        {
+            return null;
+        }
     }
 
     /// <inheritdoc />
     public async Task SetTokensAsync(string accessToken, string refreshToken)
     {
-        await storage.SetAsync(AccessTokenKey, accessToken);
-        await storage.SetAsync(RefreshTokenKey, refreshToken);
+        try
+        {
+            await storage.SetAsync(AccessTokenKey, accessToken);
+            await storage.SetAsync(RefreshTokenKey, refreshToken);
+        }
+        catch (InvalidOperationException)
+        {
+
+        }
     }
 
     /// <inheritdoc />
     public async Task ClearAsync()
     {
-        await storage.DeleteAsync(AccessTokenKey);
-        await storage.DeleteAsync(RefreshTokenKey);
+        try
+        {
+            await storage.DeleteAsync(AccessTokenKey);
+            await storage.DeleteAsync(RefreshTokenKey);
+        }
+        catch (InvalidOperationException)
+        {
+
+        }
     }
 }

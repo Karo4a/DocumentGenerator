@@ -70,6 +70,7 @@ public class Program
             var baseDirectory = AppContext.BaseDirectory;
             c.IncludeXmlComments(Path.Combine(baseDirectory, "DocumentGenerator.Api.xml"));
             c.IncludeXmlComments(Path.Combine(baseDirectory, "DocumentGenerator.Entities.xml"));
+            c.SchemaFilter<EnumNameSchemaFilter>();
             c.EnableAnnotations();
         });
 
