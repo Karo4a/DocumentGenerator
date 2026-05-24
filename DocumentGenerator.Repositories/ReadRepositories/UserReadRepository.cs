@@ -36,9 +36,26 @@ public class UserReadRepository : IUserReadRepository, IRepositoryAnchor
                 Email = x.Email,
                 PasswordHash = x.PasswordHash,
                 PasswordSalt = x.PasswordSalt,
+                SecurityStamp = x.SecurityStamp,
                 UserRole = x.UserRole,
             })
             .FirstOrDefaultAsync(cancellationToken);
+
+    Task<UserDbModel?> IUserReadRepository.GetByLogin(string login, CancellationToken cancellationToken)
+    => reader.Read<User>()
+        .NotDeletedAt()
+        .Where(x => x.Login == login)
+        .Select(x => new UserDbModel
+        {
+            Id = x.Id,
+            Login = x.Login,
+            Email = x.Email,
+            PasswordHash = x.PasswordHash,
+            PasswordSalt = x.PasswordSalt,
+            SecurityStamp = x.SecurityStamp,
+            UserRole = x.UserRole,
+        })
+        .FirstOrDefaultAsync(cancellationToken);
 
     Task<IReadOnlyCollection<UserDbModel>> IUserReadRepository.GetAll(CancellationToken cancellationToken)
         => reader.Read<User>()
@@ -50,6 +67,7 @@ public class UserReadRepository : IUserReadRepository, IRepositoryAnchor
                 Email = x.Email,
                 PasswordHash = x.PasswordHash,
                 PasswordSalt = x.PasswordSalt,
+                SecurityStamp = x.SecurityStamp,
                 UserRole = x.UserRole,
             })
             .OrderBy(x => x.Login)

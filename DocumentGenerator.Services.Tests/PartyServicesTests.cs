@@ -19,7 +19,7 @@ namespace DocumentGenerator.Services.Tests;
 /// </summary>
 public class PartyServicesTests : DocumentGeneratorContextInMemory
 {
-    private readonly IPartyServices service;
+    private readonly IPartyService service;
     private readonly IMapper mapper;
 
     /// <summary>

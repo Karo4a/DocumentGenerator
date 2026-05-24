@@ -10,8 +10,8 @@ using DocumentGenerator.Services.Contracts.IServices;
 namespace DocumentGenerator.Services;
 
 
-/// <inheritdoc cref="IPartyServices"/>
-public class PartyService : IPartyServices, IServiceAnchor
+/// <inheritdoc cref="IPartyService"/>
+public class PartyService : IPartyService, IServiceAnchor
 {
     private readonly IPartyReadRepository partyReadRepository;
     private readonly IPartyWriteRepository partyWriteRepository;
@@ -32,20 +32,20 @@ public class PartyService : IPartyServices, IServiceAnchor
         this.unitOfWork = unitOfWork;
     }
 
-    async Task<PartyModel> IPartyServices.GetById(Guid id, CancellationToken cancellationToken)
+    async Task<PartyModel> IPartyService.GetById(Guid id, CancellationToken cancellationToken)
     {
         var item = await partyReadRepository.GetById(id, cancellationToken)
             ?? throw new DocumentGeneratorNotFoundException($"Не удалось найти сторону акта с идентификатором {id}");
         return mapper.Map<PartyModel>(item);
     }
 
-    async Task<IReadOnlyCollection<PartyModel>> IPartyServices.GetAll(CancellationToken cancellationToken)
+    async Task<IReadOnlyCollection<PartyModel>> IPartyService.GetAll(CancellationToken cancellationToken)
     {
         var items = await partyReadRepository.GetAll(cancellationToken);
         return mapper.Map<IReadOnlyCollection<PartyModel>>(items);
     }
 
-    async Task<PartyModel> IPartyServices.Create(PartyCreateModel model, CancellationToken cancellationToken)
+    async Task<PartyModel> IPartyService.Create(PartyCreateModel model, CancellationToken cancellationToken)
     {
         if (await partyReadRepository.Any(x => x.TaxId == model.TaxId, cancellationToken))
             throw new DocumentGeneratorDuplicateException($"Сторона акта с ИНН {model.TaxId} уже существует");
@@ -62,7 +62,7 @@ public class PartyService : IPartyServices, IServiceAnchor
         return mapper.Map<PartyModel>(result);
     }
 
-    async Task<PartyModel> IPartyServices.Edit(Guid id, PartyCreateModel model, CancellationToken cancellationToken)
+    async Task<PartyModel> IPartyService.Edit(Guid id, PartyCreateModel model, CancellationToken cancellationToken)
     {
         if (await partyReadRepository.Any(x => x.TaxId == model.TaxId && x.Id != id, cancellationToken))
             throw new DocumentGeneratorDuplicateException($"Сторона акта с ИНН {model.TaxId} уже существует");
@@ -81,7 +81,7 @@ public class PartyService : IPartyServices, IServiceAnchor
         return mapper.Map<PartyModel>(entity);
     }
 
-    async Task IPartyServices.Delete(Guid id, CancellationToken cancellationToken)
+    async Task IPartyService.Delete(Guid id, CancellationToken cancellationToken)
     {
         var entity = await partyReadRepository.GetById(id, cancellationToken)
             ?? throw new DocumentGeneratorNotFoundException($"Не удалось найти сторону акта с идентификатором {id}");

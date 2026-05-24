@@ -33,6 +33,11 @@ public class User : DbBaseEntity
     public Guid UserRoleId { get; set; }
 
     /// <summary>
+    /// Отметка безопасности для валидации токенов
+    /// </summary>
+    public Guid SecurityStamp { get; set; }
+
+    /// <summary>
     /// Навигационное свойство <see cref="UserRole"/>
     /// </summary>
     public UserRole UserRole { get; set; } = null!;

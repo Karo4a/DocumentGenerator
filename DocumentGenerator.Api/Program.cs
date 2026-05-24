@@ -3,6 +3,7 @@ using DocumentGenerator.Api.Infrastructure;
 using DocumentGenerator.Common;
 using DocumentGenerator.Common.Contracts;
 using DocumentGenerator.Common.Mvc.Extensions;
+using DocumentGenerator.Common.Mvc.Models;
 using DocumentGenerator.Context;
 using DocumentGenerator.Context.Contracts;
 using DocumentGenerator.Repositories;
@@ -47,6 +48,12 @@ public class Program
         });
 
         builder.Services.AddAuth(builder.Configuration);
+        builder.Services.AddAuthorization();
+        builder.Services.AddDataProtection();
+
+        var jwtSettings = builder.Configuration.GetSection(JwtSettingsModel.Key).Get<JwtSettingsModel>()!;
+        builder.Services.AddSingleton(jwtSettings);
+        builder.Services.AddScoped<TokenService>();
 
         var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 

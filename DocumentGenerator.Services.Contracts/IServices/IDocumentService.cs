@@ -5,7 +5,7 @@ namespace DocumentGenerator.Services.Contracts.IServices;
 /// <summary>
 /// Сервис по работе с документами
 /// </summary>
-public interface IDocumentServices
+public interface IDocumentService
 {
     /// <summary>
     /// Возвращает <see cref="DocumentModel"/> по идентификатору

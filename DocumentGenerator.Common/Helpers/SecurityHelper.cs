@@ -1,6 +1,6 @@
 ﻿using System.Security.Cryptography;
 
-namespace DocumentGenerator.Services.Helpers;
+namespace DocumentGenerator.Common.Helpers;
 
 /// <summary>
 /// Хелпер по работе с криптографией

@@ -19,7 +19,7 @@ namespace DocumentGenerator.Services.Tests;
 /// </summary>
 public class DocumentServicesTests : DocumentGeneratorContextInMemory
 {
-    private readonly IDocumentServices service;
+    private readonly IDocumentService service;
     private readonly IMapper mapper;
 
     /// <summary>

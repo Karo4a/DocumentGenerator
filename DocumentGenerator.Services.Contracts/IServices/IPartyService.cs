@@ -5,7 +5,7 @@ namespace DocumentGenerator.Services.Contracts.IServices;
 /// <summary>
 /// Сервис по работе со сторонами актов
 /// </summary>
-public interface IPartyServices
+public interface IPartyService
 {
     /// <summary>
     /// Возвращает <see cref="PartyModel"/> по идентификатору

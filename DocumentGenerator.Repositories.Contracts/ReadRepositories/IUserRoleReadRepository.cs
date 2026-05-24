@@ -1,4 +1,5 @@
 ﻿using DocumentGenerator.Entities;
+using DocumentGenerator.Entities.Enums;
 
 namespace DocumentGenerator.Repositories.Contracts.ReadRepositories;
 
@@ -16,4 +17,9 @@ public interface IUserRoleReadRepository
     /// Получает коллекцию <see cref="UserRole"/>
     /// </summary>
     Task<IReadOnlyCollection<UserRole>> GetAll(CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Получает <see cref="UserRole"/> по значению роли
+    /// </summary>
+    Task<UserRole?> GetByRole(Role role, CancellationToken cancellationToken);
 }

@@ -1,5 +1,6 @@
 ﻿using DocumentGenerator.Context.Contracts;
 using DocumentGenerator.Entities;
+using DocumentGenerator.Entities.Enums;
 using DocumentGenerator.Repositories.Contracts.ReadRepositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,4 +30,9 @@ public class UserRoleReadRepository : IUserRoleReadRepository, IRepositoryAnchor
             .NotDeletedAt()
             .OrderBy(x => x.Role)
             .ToReadOnlyCollectionAsync(cancellationToken);
+
+    Task<UserRole?> IUserRoleReadRepository.GetByRole(Role role, CancellationToken cancellationToken)
+        => reader.Read<UserRole>()
+            .NotDeletedAt()
+            .FirstOrDefaultAsync(x => x.Role == role, cancellationToken);
 }

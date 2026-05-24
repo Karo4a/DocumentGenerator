@@ -3,16 +3,16 @@
 /// <summary>
 /// Базовый класс исключений
 /// </summary>
-public abstract class DocumentGeneratorException : Exception
+public class DocumentGeneratorException : Exception
 {
     /// <summary>
     /// Конструктор без параметров
     /// </summary>
-    protected DocumentGeneratorException() { }
+    public DocumentGeneratorException() { }
 
     /// <summary>
     /// Конструктор c указанием сообщения об ошибке
     /// </summary>
-    protected DocumentGeneratorException(string message)
+    public DocumentGeneratorException(string message)
         : base(message) { }
 }

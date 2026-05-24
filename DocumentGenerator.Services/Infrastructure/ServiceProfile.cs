@@ -5,6 +5,7 @@ using DocumentGenerator.Services.Contracts.Models.Product;
 using DocumentGenerator.Services.Contracts.Models.DocumentProduct;
 using DocumentGenerator.Services.Contracts.Models.Document;
 using DocumentGenerator.Repositories.Contracts.Models;
+using DocumentGenerator.Services.Contracts.Models.User;
 
 namespace DocumentGenerator.Services.Infrastructure;
 
@@ -29,5 +30,11 @@ public class ServiceProfile : Profile
         CreateMap<DocumentDbModel, Document>(MemberList.Destination)
             .ForMember(x => x.SellerId, opt => opt.MapFrom(y => y.Seller.Id))
             .ForMember(x => x.BuyerId, opt => opt.MapFrom(y => y.Buyer.Id));
+
+        CreateMap<User, UserModel>(MemberList.Destination)
+            .ForMember(x => x.Role, opt => opt.MapFrom(y => y.UserRole.Role));
+        CreateMap<UserDbModel, UserModel>(MemberList.Destination);
+        CreateMap<UserDbModel, User>(MemberList.Destination)
+            .ForMember(x => x.UserRoleId, opt => opt.MapFrom(y => y.UserRole.Id));
     }
 }

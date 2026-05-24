@@ -178,6 +178,37 @@ namespace DocumentGenerator.Context.Migrations
                     b.ToTable("Products", (string)null);
                 });
 
+            modelBuilder.Entity("DocumentGenerator.Entities.RefreshToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset?>("DeletedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset>("Expires")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("SecurityStamp")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex(new[] { "UserId" }, "IX_RefreshToken_UserId")
+                        .IsUnique()
+                        .HasFilter("\"DeletedAt\" IS NULL");
+
+                    b.ToTable("RefreshTokens", (string)null);
+                });
+
             modelBuilder.Entity("DocumentGenerator.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -210,6 +241,9 @@ namespace DocumentGenerator.Context.Migrations
                         .HasMaxLength(44)
                         .HasColumnType("nvarchar(44)");
 
+                    b.Property<Guid>("SecurityStamp")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTimeOffset>("UpdatedAt")
                         .HasColumnType("datetimeoffset");
 
@@ -225,6 +259,20 @@ namespace DocumentGenerator.Context.Migrations
                         .HasFilter("\"DeletedAt\" IS NULL");
 
                     b.ToTable("Users", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("8abf3cb5-eccd-4799-89d2-3927b19e2f43"),
+                            CreatedAt = new DateTimeOffset(new DateTime(2026, 5, 24, 15, 12, 3, 180, DateTimeKind.Unspecified).AddTicks(6620), new TimeSpan(0, 0, 0, 0, 0)),
+                            Email = "",
+                            Login = "admin",
+                            PasswordHash = "7aAiD3rh2J6gFQ2WM4emvTr4vf6UHgwXB2SjM4cok9Y=",
+                            PasswordSalt = "LWhMP2F1cW2mC7D5SJI18+YFUKDSzoBLWnhOlNWEdGE=",
+                            SecurityStamp = new Guid("9756a2bc-0c7d-47c2-bd9c-e4f5e853a8fc"),
+                            UpdatedAt = new DateTimeOffset(new DateTime(2026, 5, 24, 15, 12, 3, 180, DateTimeKind.Unspecified).AddTicks(6636), new TimeSpan(0, 0, 0, 0, 0)),
+                            UserRoleId = new Guid("9af703f7-8fd7-49a7-b87d-a2c4215cfdb5")
+                        });
                 });
 
             modelBuilder.Entity("DocumentGenerator.Entities.UserRole", b =>
@@ -255,23 +303,23 @@ namespace DocumentGenerator.Context.Migrations
                         new
                         {
                             Id = new Guid("59d20b7b-420d-4dba-b8b5-be625764be5b"),
-                            CreatedAt = new DateTimeOffset(new DateTime(2026, 5, 18, 18, 5, 58, 14, DateTimeKind.Unspecified).AddTicks(4509), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2026, 5, 24, 15, 12, 2, 951, DateTimeKind.Unspecified).AddTicks(6451), new TimeSpan(0, 0, 0, 0, 0)),
                             Role = "Viewer",
-                            UpdatedAt = new DateTimeOffset(new DateTime(2026, 5, 18, 18, 5, 58, 14, DateTimeKind.Unspecified).AddTicks(4521), new TimeSpan(0, 0, 0, 0, 0))
+                            UpdatedAt = new DateTimeOffset(new DateTime(2026, 5, 24, 15, 12, 2, 951, DateTimeKind.Unspecified).AddTicks(6454), new TimeSpan(0, 0, 0, 0, 0))
                         },
                         new
                         {
                             Id = new Guid("213064b1-4ee0-40ea-bacf-d60dd358fedc"),
-                            CreatedAt = new DateTimeOffset(new DateTime(2026, 5, 18, 18, 5, 58, 14, DateTimeKind.Unspecified).AddTicks(4529), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2026, 5, 24, 15, 12, 2, 951, DateTimeKind.Unspecified).AddTicks(6471), new TimeSpan(0, 0, 0, 0, 0)),
                             Role = "Editor",
-                            UpdatedAt = new DateTimeOffset(new DateTime(2026, 5, 18, 18, 5, 58, 14, DateTimeKind.Unspecified).AddTicks(4529), new TimeSpan(0, 0, 0, 0, 0))
+                            UpdatedAt = new DateTimeOffset(new DateTime(2026, 5, 24, 15, 12, 2, 951, DateTimeKind.Unspecified).AddTicks(6472), new TimeSpan(0, 0, 0, 0, 0))
                         },
                         new
                         {
                             Id = new Guid("9af703f7-8fd7-49a7-b87d-a2c4215cfdb5"),
-                            CreatedAt = new DateTimeOffset(new DateTime(2026, 5, 18, 18, 5, 58, 14, DateTimeKind.Unspecified).AddTicks(4532), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2026, 5, 24, 15, 12, 2, 951, DateTimeKind.Unspecified).AddTicks(6519), new TimeSpan(0, 0, 0, 0, 0)),
                             Role = "Admin",
-                            UpdatedAt = new DateTimeOffset(new DateTime(2026, 5, 18, 18, 5, 58, 14, DateTimeKind.Unspecified).AddTicks(4533), new TimeSpan(0, 0, 0, 0, 0))
+                            UpdatedAt = new DateTimeOffset(new DateTime(2026, 5, 24, 15, 12, 2, 951, DateTimeKind.Unspecified).AddTicks(6520), new TimeSpan(0, 0, 0, 0, 0))
                         });
                 });
 

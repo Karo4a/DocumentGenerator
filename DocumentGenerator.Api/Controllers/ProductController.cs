@@ -4,6 +4,7 @@ using DocumentGenerator.Api.Models.Product;
 using DocumentGenerator.Services.Contracts;
 using DocumentGenerator.Services.Contracts.IServices;
 using DocumentGenerator.Services.Contracts.Models.Product;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DocumentGenerator.Api.Controllers;
@@ -15,14 +16,14 @@ namespace DocumentGenerator.Api.Controllers;
 [Route("api/[controller]")]
 public class ProductController : ControllerBase
 {
-    private readonly IProductServices service;
+    private readonly IProductService service;
     private readonly IMapper mapper;
     private readonly IValidateService validateService;
 
     /// <summary>
     /// Конструктор
     /// </summary>
-    public ProductController(IProductServices service,
+    public ProductController(IProductService service,
         IMapper mapper,
         IValidateService validateService)
     {
@@ -34,6 +35,7 @@ public class ProductController : ControllerBase
     /// <summary>
     /// Получает товар по идентификатору
     /// </summary>
+    [Authorize(Roles = "Viewer,Editor,Admin")]
     [HttpGet("{id:guid}")]
     [ProducesResponseType(typeof(ProductApiModel), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]
@@ -46,6 +48,7 @@ public class ProductController : ControllerBase
     /// <summary>
     /// Получает список всех товаров
     /// </summary>
+    [Authorize(Roles = "Viewer,Editor,Admin")]
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<ProductApiModel>), StatusCodes.Status200OK)]
     public async Task<ActionResult> GetAll(CancellationToken cancellationToken)
@@ -57,6 +60,7 @@ public class ProductController : ControllerBase
     /// <summary>
     /// Добавляет новый товар
     /// </summary>
+    [Authorize(Roles = "Editor,Admin")]
     [HttpPost]
     [ProducesResponseType(typeof(ProductApiModel), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status422UnprocessableEntity)]
@@ -73,12 +77,13 @@ public class ProductController : ControllerBase
     /// <summary>
     /// Редактирует товар
     /// </summary>
+    [Authorize(Roles = "Editor,Admin")]
     [HttpPut("{id:guid}")]
     [ProducesResponseType(typeof(ProductApiModel), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status422UnprocessableEntity)]
     [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status409Conflict)]
-    public async Task<IActionResult> Edit([FromRoute] Guid id, [FromBody] ProductRequestApiModel  request, CancellationToken cancellationToken)
+    public async Task<IActionResult> Edit([FromRoute] Guid id, [FromBody] ProductRequestApiModel request, CancellationToken cancellationToken)
     {
         var requestModel = mapper.Map<ProductCreateModel>(request);
         await validateService.Validate(requestModel, cancellationToken);
@@ -90,6 +95,7 @@ public class ProductController : ControllerBase
     /// <summary>
     /// Удаляет товар
     /// </summary>
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]

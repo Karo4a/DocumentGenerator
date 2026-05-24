@@ -20,6 +20,11 @@ public interface IUserReadRepository
     Task<UserDbModel?> GetById(Guid id, CancellationToken cancellationToken);
 
     /// <summary>
+    /// Получает <see cref="User"/> по логину
+    /// </summary>
+    Task<UserDbModel?> GetByLogin(string login, CancellationToken cancellationToken);
+
+    /// <summary>
     /// Получает коллекцию <see cref="User"/>
     /// </summary>
     Task<IReadOnlyCollection<UserDbModel>> GetAll(CancellationToken cancellationToken);

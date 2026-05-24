@@ -10,8 +10,8 @@ using DocumentGenerator.Services.Contracts.Models.Document;
 namespace DocumentGenerator.Services;
 
 
-/// <inheritdoc cref="IDocumentServices"/>
-public class DocumentService : IDocumentServices, IServiceAnchor
+/// <inheritdoc cref="IDocumentService"/>
+public class DocumentService : IDocumentService, IServiceAnchor
 {
     private readonly IDocumentReadRepository documentReadRepository;
     private readonly IDocumentWriteRepository documentWriteRepository;
@@ -41,20 +41,20 @@ public class DocumentService : IDocumentServices, IServiceAnchor
         this.unitOfWork = unitOfWork;
     }
 
-    async Task<DocumentModel> IDocumentServices.GetById(Guid id, CancellationToken cancellationToken)
+    async Task<DocumentModel> IDocumentService.GetById(Guid id, CancellationToken cancellationToken)
     {
         var entity = await documentReadRepository.GetById(id, cancellationToken)
             ?? throw new DocumentGeneratorNotFoundException($"Не удалось найти документ с идентификатором {id}");
         return mapper.Map<DocumentModel>(entity);
     }
 
-    async Task<IReadOnlyCollection<DocumentModel>> IDocumentServices.GetAll(CancellationToken cancellationToken)
+    async Task<IReadOnlyCollection<DocumentModel>> IDocumentService.GetAll(CancellationToken cancellationToken)
     {
         var items = await documentReadRepository.GetAll(cancellationToken);
         return mapper.Map<IReadOnlyCollection<DocumentModel>>(items);
     }
 
-    async Task<DocumentModel> IDocumentServices.Create(DocumentCreateModel model, CancellationToken cancellationToken)
+    async Task<DocumentModel> IDocumentService.Create(DocumentCreateModel model, CancellationToken cancellationToken)
     {
         if (await documentReadRepository.Any(x => x.DocumentNumber == model.DocumentNumber && x.ContractNumber == model.ContractNumber, cancellationToken))
         {
@@ -110,24 +110,18 @@ public class DocumentService : IDocumentServices, IServiceAnchor
         return mapper.Map<DocumentModel>(createdEntity);
     }
 
-    async Task<DocumentModel> IDocumentServices.Edit(Guid id, DocumentCreateModel model, CancellationToken cancellationToken)
+    async Task<DocumentModel> IDocumentService.Edit(Guid id, DocumentCreateModel model, CancellationToken cancellationToken)
     {
         if (await documentReadRepository.Any(x => x.DocumentNumber == model.DocumentNumber && x.ContractNumber == model.ContractNumber && x.Id != id, cancellationToken))
         {
             throw new DocumentGeneratorDuplicateException($"Документ с номером {model.DocumentNumber} при договоре с номером {model.ContractNumber} уже существует");
         }
 
-        var seller = await partyReadRepository.GetById(model.SellerId, cancellationToken);
-        if (seller == null)
-        {
-            throw new DocumentGeneratorNotFoundException($"Не удалось найти продавца с идентификатором {model.SellerId}");
-        }
+        var seller = await partyReadRepository.GetById(model.SellerId, cancellationToken)
+            ?? throw new DocumentGeneratorNotFoundException($"Не удалось найти продавца с идентификатором {model.SellerId}");
 
-        var buyer = await partyReadRepository.GetById(model.BuyerId, cancellationToken);
-        if (buyer == null)
-        {
-            throw new DocumentGeneratorNotFoundException($"Не удалось найти покупателя с идентификатором {model.BuyerId}");
-        }
+        var buyer = await partyReadRepository.GetById(model.BuyerId, cancellationToken)
+            ?? throw new DocumentGeneratorNotFoundException($"Не удалось найти покупателя с идентификатором {model.BuyerId}");
 
         var modelProductsIds = model.Products.Select(x => x.ProductId).ToList();
         var existingProducts = await productReadRepository.GetByIds(modelProductsIds, cancellationToken);
@@ -184,7 +178,7 @@ public class DocumentService : IDocumentServices, IServiceAnchor
         return mapper.Map<DocumentModel>(editedEntity);
     }
 
-    async Task IDocumentServices.Delete(Guid id, CancellationToken cancellationToken)
+    async Task IDocumentService.Delete(Guid id, CancellationToken cancellationToken)
     {
         var entityDbModel = await documentReadRepository.GetById(id, cancellationToken)
             ?? throw new DocumentGeneratorNotFoundException($"Не удалось найти документ с идентификатором {id}");

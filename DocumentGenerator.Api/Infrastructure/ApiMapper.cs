@@ -1,12 +1,16 @@
 ﻿using AutoMapper;
+using DocumentGenerator.Services.Contracts.Models.Auth;
 using DocumentGenerator.Services.Contracts.Models.Party;
 using DocumentGenerator.Services.Contracts.Models.Product;
 using DocumentGenerator.Services.Contracts.Models.DocumentProduct;
 using DocumentGenerator.Services.Contracts.Models.Document;
+using DocumentGenerator.Services.Contracts.Models.User;
+using DocumentGenerator.Api.Models.Auth;
 using DocumentGenerator.Api.Models.DocumentProduct;
 using DocumentGenerator.Api.Models.Product;
 using DocumentGenerator.Api.Models.Party;
 using DocumentGenerator.Api.Models.Document;
+using DocumentGenerator.Api.Models.User;
 
 namespace DocumentGenerator.Api.Infrastructure;
 
@@ -40,5 +44,12 @@ public class ApiMapper : Profile
         CreateMap<DocumentRequestApiModel, DocumentModel>(MemberList.Destination)
             .ForMember(x => x.Seller, opt => opt.MapFrom(y => new PartyModel { Id = y.SellerId }))
             .ForMember(x => x.Buyer, opt => opt.MapFrom(y => new PartyModel { Id = y.BuyerId }));
+
+        CreateMap<LoginRequestApiModel, LoginModel>(MemberList.Destination);
+        CreateMap<LoginResponseModel, LoginApiResponse>(MemberList.Destination);
+        CreateMap<RefreshTokenRequestApiModel, RefreshTokenCreateModel>(MemberList.Destination);
+
+        CreateMap<UserModel, UserApiModel>(MemberList.Destination).ReverseMap();
+        CreateMap<UserRequestApiModel, UserCreateModel>(MemberList.Destination);
     }
 }

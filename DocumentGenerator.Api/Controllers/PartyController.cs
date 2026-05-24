@@ -4,6 +4,7 @@ using DocumentGenerator.Api.Models.Party;
 using DocumentGenerator.Services.Contracts;
 using DocumentGenerator.Services.Contracts.IServices;
 using DocumentGenerator.Services.Contracts.Models.Party;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DocumentGenerator.Api.Controllers;
@@ -15,14 +16,14 @@ namespace DocumentGenerator.Api.Controllers;
 [Route("api/[controller]")]
 public class PartyController : ControllerBase
 {
-    private readonly IPartyServices service;
+    private readonly IPartyService service;
     private readonly IMapper mapper;
     private readonly IValidateService validateService;
 
     /// <summary>
     /// Конструктор
     /// </summary>
-    public PartyController(IPartyServices service,
+    public PartyController(IPartyService service,
         IMapper mapper,
         IValidateService validateService)
     {
@@ -34,6 +35,7 @@ public class PartyController : ControllerBase
     /// <summary>
     /// Получает сторону акта по идентификатору
     /// </summary>
+    [Authorize(Roles = "Viewer,Editor,Admin")]
     [HttpGet("{id:guid}")]
     [ProducesResponseType(typeof(PartyApiModel), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]
@@ -46,6 +48,7 @@ public class PartyController : ControllerBase
     /// <summary>
     /// Получает список всех сторон актов
     /// </summary>
+    [Authorize(Roles = "Viewer,Editor,Admin")]
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<PartyApiModel>), StatusCodes.Status200OK)]
     public async Task<ActionResult> GetAll(CancellationToken cancellationToken)
@@ -57,6 +60,7 @@ public class PartyController : ControllerBase
     /// <summary>
     /// Добавляет новую сторону акта
     /// </summary>
+    [Authorize(Roles = "Editor,Admin")]
     [HttpPost]
     [ProducesResponseType(typeof(PartyApiModel), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status422UnprocessableEntity)]
@@ -73,6 +77,7 @@ public class PartyController : ControllerBase
     /// <summary>
     /// Редактирует сторону акта
     /// </summary>
+    [Authorize(Roles = "Editor,Admin")]
     [HttpPut("{id:guid}")]
     [ProducesResponseType(typeof(PartyApiModel), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status422UnprocessableEntity)]
@@ -90,6 +95,7 @@ public class PartyController : ControllerBase
     /// <summary>
     /// Удаляет сторону акта
     /// </summary>
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]

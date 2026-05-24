@@ -1,4 +1,4 @@
-﻿using DocumentGenerator.Entities.Enums;
+﻿using DocumentGenerator.Entities.Default;
 using DocumentGenerator.Entities.ValidationConstants;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -23,13 +23,6 @@ public class UserRoleConfiguration : IEntityTypeConfiguration<UserRole>
             .HasConversion<string>()
             .HasMaxLength(UserRoleValidationConstants.UserRoleMaxLength);
 
-        builder.HasData(Enum.GetValues<Role>().Select(
-            x => new UserRole()
-            {
-                Id = Guid.NewGuid(),
-                Role = x,
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
-            }));
+        builder.HasData(UserRolesDefault.Entities);
     }
 }

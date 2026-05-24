@@ -5,7 +5,7 @@ namespace DocumentGenerator.Services.Contracts.IServices;
 /// <summary>
 /// Сервис экспорта для Excel
 /// </summary>
-public interface IExcelServices
+public interface IExcelService
 {
     /// <summary>
     /// Экспортирует <see cref="DocumentModel"/> в Excel

@@ -9,8 +9,8 @@ using System.Globalization;
 
 namespace DocumentGenerator.Services;
 
-/// <inheritdoc cref="IExcelServices" />
-public class ExcelService : IExcelServices, IServiceAnchor
+/// <inheritdoc cref="IExcelService" />
+public class ExcelService : IExcelService, IServiceAnchor
 {
     private readonly IVatRateProvider vatRateProvider;
 
@@ -22,7 +22,7 @@ public class ExcelService : IExcelServices, IServiceAnchor
         this.vatRateProvider = vatRateProvider;
     }
 
-    MemoryStream IExcelServices.Export(DocumentModel documentModel, CancellationToken cancellationToken)
+    MemoryStream IExcelService.Export(DocumentModel documentModel, CancellationToken cancellationToken)
     {
         using var stream = new MemoryStream();
         using (SpreadsheetDocument excelDocument = SpreadsheetDocument.Create(stream, SpreadsheetDocumentType.Workbook, false))

@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DocumentGenerator.Common.Contracts\DocumentGenerator.Common.Contracts.csproj" />
+    <ProjectReference Include="..\DocumentGenerator.Entities\DocumentGenerator.Entities.csproj" />
   </ItemGroup>
 
 </Project>

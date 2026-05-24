@@ -5,7 +5,7 @@ namespace DocumentGenerator.Services.Contracts.IServices;
 /// <summary>
 /// Сервис по работе с товарами
 /// </summary>
-public interface IProductServices
+public interface IProductService
 {
     /// <summary>
     /// Возвращает <see cref="ProductModel"/> по идентификатору

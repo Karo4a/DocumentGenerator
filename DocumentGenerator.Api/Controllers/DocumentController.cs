@@ -4,6 +4,7 @@ using DocumentGenerator.Api.Models.Exceptions;
 using DocumentGenerator.Services.Contracts;
 using DocumentGenerator.Services.Contracts.IServices;
 using DocumentGenerator.Services.Contracts.Models.Document;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DocumentGenerator.Api.Controllers;
@@ -15,16 +16,16 @@ namespace DocumentGenerator.Api.Controllers;
 [Route("api/[controller]")]
 public class DocumentController : ControllerBase
 {
-    private readonly IDocumentServices service;
-    private readonly IExcelServices exportServices;
+    private readonly IDocumentService service;
+    private readonly IExcelService exportServices;
     private readonly IMapper mapper;
     private readonly IValidateService validateService;
 
     /// <summary>
     /// Конструктор
     /// </summary>
-    public DocumentController(IDocumentServices service,
-        IExcelServices exportServices,
+    public DocumentController(IDocumentService service,
+        IExcelService exportServices,
         IMapper mapper,
         IValidateService validateService)
     {
@@ -37,6 +38,7 @@ public class DocumentController : ControllerBase
     /// <summary>
     /// Экспортирует документ в формате Excel
     /// </summary>
+    [Authorize(Roles = "Viewer,Editor,Admin")]
     [HttpGet("{id:guid}/export")]
     [ProducesResponseType(typeof(FileContentResult), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]
@@ -52,6 +54,7 @@ public class DocumentController : ControllerBase
     /// <summary>
     /// Получает документ по идентификатору
     /// </summary>
+    [Authorize(Roles = "Viewer,Editor,Admin")]
     [HttpGet("{id:guid}")]
     [ProducesResponseType(typeof(DocumentApiModel), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]
@@ -64,6 +67,7 @@ public class DocumentController : ControllerBase
     /// <summary>
     /// Получает список всех документов
     /// </summary>
+    [Authorize(Roles = "Viewer,Editor,Admin")]
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<DocumentApiModel>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
@@ -75,6 +79,7 @@ public class DocumentController : ControllerBase
     /// <summary>
     /// Добавляет новый документ
     /// </summary>
+    [Authorize(Roles = "Editor,Admin")]
     [HttpPost]
     [ProducesResponseType(typeof(DocumentApiModel), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status422UnprocessableEntity)]
@@ -91,6 +96,7 @@ public class DocumentController : ControllerBase
     /// <summary>
     /// Редактирует документ
     /// </summary>
+    [Authorize(Roles = "Editor,Admin")]
     [HttpPut("{id:guid}")]
     [ProducesResponseType(typeof(DocumentApiModel), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status422UnprocessableEntity)]
@@ -108,6 +114,7 @@ public class DocumentController : ControllerBase
     /// <summary>
     /// Удаляет документ
     /// </summary>
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]

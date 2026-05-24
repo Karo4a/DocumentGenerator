@@ -1,4 +1,5 @@
-﻿using DocumentGenerator.Entities.ValidationConstants;
+﻿using DocumentGenerator.Entities.Default;
+using DocumentGenerator.Entities.ValidationConstants;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -33,6 +34,9 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .IsRequired()
             .HasMaxLength(UserValidationConstants.PasswordSaltMaxLength);
 
+        builder.Property(x => x.SecurityStamp)
+            .IsRequired();
+
         builder.Property(x => x.UserRoleId)
             .IsRequired();
 
@@ -46,5 +50,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
                 $"IX_{nameof(User)}_{nameof(User.Login)}")
             .IsUnique()
             .HasFilter($"\"{nameof(User.DeletedAt)}\" IS NULL");
+
+        builder.HasData(UsersDefault.Admin);
     }
 }

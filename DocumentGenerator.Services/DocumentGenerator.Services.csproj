@@ -14,6 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DocumentGenerator.Common.Mvc\DocumentGenerator.Common.Mvc.csproj" />
+    <ProjectReference Include="..\DocumentGenerator.Common\DocumentGenerator.Common.csproj" />
     <ProjectReference Include="..\DocumentGenerator.Entities.ValidationConstants\DocumentGenerator.Entities.ValidationConstants.csproj" />
     <ProjectReference Include="..\DocumentGenerator.Repositories.Contracts\DocumentGenerator.Repositories.Contracts.csproj" />
     <ProjectReference Include="..\DocumentGenerator.Services.Contracts\DocumentGenerator.Services.Contracts.csproj" />

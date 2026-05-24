@@ -33,6 +33,11 @@ public class UserDbModel
     public string PasswordSalt { get; set; } = string.Empty;
 
     /// <summary>
+    /// Отметка безопасности
+    /// </summary>
+    public Guid SecurityStamp { get; set; }
+
+    /// <summary>
     /// Навигационное свойство <see cref="UserRole"/>
     /// </summary>
     public UserRole UserRole { get; set; } = null!;

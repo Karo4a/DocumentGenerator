@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DocumentGenerator.Entities.Default\DocumentGenerator.Entities.Default.csproj" />
     <ProjectReference Include="..\DocumentGenerator.Entities.ValidationConstants\DocumentGenerator.Entities.ValidationConstants.csproj" />
     <ProjectReference Include="..\DocumentGenerator.Entities\DocumentGenerator.Entities.csproj" />
   </ItemGroup>
