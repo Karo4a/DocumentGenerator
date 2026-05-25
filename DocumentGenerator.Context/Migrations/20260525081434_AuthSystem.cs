@@ -38,26 +38,26 @@ namespace DocumentGenerator.Context.Migrations
                 keyColumn: "Id",
                 keyValue: new Guid("213064b1-4ee0-40ea-bacf-d60dd358fedc"),
                 columns: new[] { "CreatedAt", "UpdatedAt" },
-                values: new object[] { new DateTimeOffset(new DateTime(2026, 5, 24, 15, 12, 2, 951, DateTimeKind.Unspecified).AddTicks(6471), new TimeSpan(0, 0, 0, 0, 0)), new DateTimeOffset(new DateTime(2026, 5, 24, 15, 12, 2, 951, DateTimeKind.Unspecified).AddTicks(6472), new TimeSpan(0, 0, 0, 0, 0)) });
+                values: new object[] { new DateTimeOffset(new DateTime(2026, 5, 25, 8, 14, 33, 846, DateTimeKind.Unspecified).AddTicks(6815), new TimeSpan(0, 0, 0, 0, 0)), new DateTimeOffset(new DateTime(2026, 5, 25, 8, 14, 33, 846, DateTimeKind.Unspecified).AddTicks(6816), new TimeSpan(0, 0, 0, 0, 0)) });
 
             migrationBuilder.UpdateData(
                 table: "Roles",
                 keyColumn: "Id",
                 keyValue: new Guid("59d20b7b-420d-4dba-b8b5-be625764be5b"),
                 columns: new[] { "CreatedAt", "UpdatedAt" },
-                values: new object[] { new DateTimeOffset(new DateTime(2026, 5, 24, 15, 12, 2, 951, DateTimeKind.Unspecified).AddTicks(6451), new TimeSpan(0, 0, 0, 0, 0)), new DateTimeOffset(new DateTime(2026, 5, 24, 15, 12, 2, 951, DateTimeKind.Unspecified).AddTicks(6454), new TimeSpan(0, 0, 0, 0, 0)) });
+                values: new object[] { new DateTimeOffset(new DateTime(2026, 5, 25, 8, 14, 33, 846, DateTimeKind.Unspecified).AddTicks(6786), new TimeSpan(0, 0, 0, 0, 0)), new DateTimeOffset(new DateTime(2026, 5, 25, 8, 14, 33, 846, DateTimeKind.Unspecified).AddTicks(6796), new TimeSpan(0, 0, 0, 0, 0)) });
 
             migrationBuilder.UpdateData(
                 table: "Roles",
                 keyColumn: "Id",
                 keyValue: new Guid("9af703f7-8fd7-49a7-b87d-a2c4215cfdb5"),
                 columns: new[] { "CreatedAt", "UpdatedAt" },
-                values: new object[] { new DateTimeOffset(new DateTime(2026, 5, 24, 15, 12, 2, 951, DateTimeKind.Unspecified).AddTicks(6519), new TimeSpan(0, 0, 0, 0, 0)), new DateTimeOffset(new DateTime(2026, 5, 24, 15, 12, 2, 951, DateTimeKind.Unspecified).AddTicks(6520), new TimeSpan(0, 0, 0, 0, 0)) });
+                values: new object[] { new DateTimeOffset(new DateTime(2026, 5, 25, 8, 14, 33, 846, DateTimeKind.Unspecified).AddTicks(6847), new TimeSpan(0, 0, 0, 0, 0)), new DateTimeOffset(new DateTime(2026, 5, 25, 8, 14, 33, 846, DateTimeKind.Unspecified).AddTicks(6848), new TimeSpan(0, 0, 0, 0, 0)) });
 
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "CreatedAt", "DeletedAt", "Email", "Login", "PasswordHash", "PasswordSalt", "SecurityStamp", "UpdatedAt", "UserRoleId" },
-                values: new object[] { new Guid("8abf3cb5-eccd-4799-89d2-3927b19e2f43"), new DateTimeOffset(new DateTime(2026, 5, 24, 15, 12, 3, 180, DateTimeKind.Unspecified).AddTicks(6620), new TimeSpan(0, 0, 0, 0, 0)), null, "", "admin", "7aAiD3rh2J6gFQ2WM4emvTr4vf6UHgwXB2SjM4cok9Y=", "LWhMP2F1cW2mC7D5SJI18+YFUKDSzoBLWnhOlNWEdGE=", new Guid("9756a2bc-0c7d-47c2-bd9c-e4f5e853a8fc"), new DateTimeOffset(new DateTime(2026, 5, 24, 15, 12, 3, 180, DateTimeKind.Unspecified).AddTicks(6636), new TimeSpan(0, 0, 0, 0, 0)), new Guid("9af703f7-8fd7-49a7-b87d-a2c4215cfdb5") });
+                values: new object[] { new Guid("8abf3cb5-eccd-4799-89d2-3927b19e2f43"), new DateTimeOffset(new DateTime(2026, 5, 25, 8, 14, 34, 119, DateTimeKind.Unspecified).AddTicks(1555), new TimeSpan(0, 0, 0, 0, 0)), null, "", "admin", "uazoiFxmoox9osCYUVxtL/+6+B0UIiUTgC7WCtELKYI=", "SYBZDs4NU+AUGKkcHi+FSA7JkfA+oQLTaa/ppyadW0s=", new Guid("9756a2bc-0c7d-47c2-bd9c-e4f5e853a8fc"), new DateTimeOffset(new DateTime(2026, 5, 25, 8, 14, 34, 119, DateTimeKind.Unspecified).AddTicks(1568), new TimeSpan(0, 0, 0, 0, 0)), new Guid("9af703f7-8fd7-49a7-b87d-a2c4215cfdb5") });
 
             migrationBuilder.CreateIndex(
                 name: "IX_RefreshToken_UserId",

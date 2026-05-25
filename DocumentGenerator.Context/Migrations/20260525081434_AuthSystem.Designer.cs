@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DocumentGenerator.Context.Migrations
 {
     [DbContext(typeof(DocumentGeneratorContext))]
-    [Migration("20260524151203_AuthSystem")]
+    [Migration("20260525081434_AuthSystem")]
     partial class AuthSystem
     {
         /// <inheritdoc />
@@ -267,13 +267,13 @@ namespace DocumentGenerator.Context.Migrations
                         new
                         {
                             Id = new Guid("8abf3cb5-eccd-4799-89d2-3927b19e2f43"),
-                            CreatedAt = new DateTimeOffset(new DateTime(2026, 5, 24, 15, 12, 3, 180, DateTimeKind.Unspecified).AddTicks(6620), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2026, 5, 25, 8, 14, 34, 119, DateTimeKind.Unspecified).AddTicks(1555), new TimeSpan(0, 0, 0, 0, 0)),
                             Email = "",
                             Login = "admin",
-                            PasswordHash = "7aAiD3rh2J6gFQ2WM4emvTr4vf6UHgwXB2SjM4cok9Y=",
-                            PasswordSalt = "LWhMP2F1cW2mC7D5SJI18+YFUKDSzoBLWnhOlNWEdGE=",
+                            PasswordHash = "uazoiFxmoox9osCYUVxtL/+6+B0UIiUTgC7WCtELKYI=",
+                            PasswordSalt = "SYBZDs4NU+AUGKkcHi+FSA7JkfA+oQLTaa/ppyadW0s=",
                             SecurityStamp = new Guid("9756a2bc-0c7d-47c2-bd9c-e4f5e853a8fc"),
-                            UpdatedAt = new DateTimeOffset(new DateTime(2026, 5, 24, 15, 12, 3, 180, DateTimeKind.Unspecified).AddTicks(6636), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedAt = new DateTimeOffset(new DateTime(2026, 5, 25, 8, 14, 34, 119, DateTimeKind.Unspecified).AddTicks(1568), new TimeSpan(0, 0, 0, 0, 0)),
                             UserRoleId = new Guid("9af703f7-8fd7-49a7-b87d-a2c4215cfdb5")
                         });
                 });
@@ -306,23 +306,23 @@ namespace DocumentGenerator.Context.Migrations
                         new
                         {
                             Id = new Guid("59d20b7b-420d-4dba-b8b5-be625764be5b"),
-                            CreatedAt = new DateTimeOffset(new DateTime(2026, 5, 24, 15, 12, 2, 951, DateTimeKind.Unspecified).AddTicks(6451), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2026, 5, 25, 8, 14, 33, 846, DateTimeKind.Unspecified).AddTicks(6786), new TimeSpan(0, 0, 0, 0, 0)),
                             Role = "Viewer",
-                            UpdatedAt = new DateTimeOffset(new DateTime(2026, 5, 24, 15, 12, 2, 951, DateTimeKind.Unspecified).AddTicks(6454), new TimeSpan(0, 0, 0, 0, 0))
+                            UpdatedAt = new DateTimeOffset(new DateTime(2026, 5, 25, 8, 14, 33, 846, DateTimeKind.Unspecified).AddTicks(6796), new TimeSpan(0, 0, 0, 0, 0))
                         },
                         new
                         {
                             Id = new Guid("213064b1-4ee0-40ea-bacf-d60dd358fedc"),
-                            CreatedAt = new DateTimeOffset(new DateTime(2026, 5, 24, 15, 12, 2, 951, DateTimeKind.Unspecified).AddTicks(6471), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2026, 5, 25, 8, 14, 33, 846, DateTimeKind.Unspecified).AddTicks(6815), new TimeSpan(0, 0, 0, 0, 0)),
                             Role = "Editor",
-                            UpdatedAt = new DateTimeOffset(new DateTime(2026, 5, 24, 15, 12, 2, 951, DateTimeKind.Unspecified).AddTicks(6472), new TimeSpan(0, 0, 0, 0, 0))
+                            UpdatedAt = new DateTimeOffset(new DateTime(2026, 5, 25, 8, 14, 33, 846, DateTimeKind.Unspecified).AddTicks(6816), new TimeSpan(0, 0, 0, 0, 0))
                         },
                         new
                         {
                             Id = new Guid("9af703f7-8fd7-49a7-b87d-a2c4215cfdb5"),
-                            CreatedAt = new DateTimeOffset(new DateTime(2026, 5, 24, 15, 12, 2, 951, DateTimeKind.Unspecified).AddTicks(6519), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2026, 5, 25, 8, 14, 33, 846, DateTimeKind.Unspecified).AddTicks(6847), new TimeSpan(0, 0, 0, 0, 0)),
                             Role = "Admin",
-                            UpdatedAt = new DateTimeOffset(new DateTime(2026, 5, 24, 15, 12, 2, 951, DateTimeKind.Unspecified).AddTicks(6520), new TimeSpan(0, 0, 0, 0, 0))
+                            UpdatedAt = new DateTimeOffset(new DateTime(2026, 5, 25, 8, 14, 33, 846, DateTimeKind.Unspecified).AddTicks(6848), new TimeSpan(0, 0, 0, 0, 0))
                         });
                 });
 
