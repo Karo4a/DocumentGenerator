@@ -4,8 +4,6 @@
 
 **ASP.NET Core 8 Web API** for managing goods transfer-acceptance certificates (акт приёма-передачи товаров) with a Blazor Interactive Server frontend.
 
-[![Stars](https://img.shields.io/github/stars/Karo4a/DocumentGenerator?style=for-the-badge)](https://github.com/Karo4a/DocumentGenerator/stargazers)
-[![GitHub Release](https://img.shields.io/github/v/release/Karo4a/DocumentGenerator?style=for-the-badge)](https://github.com/Karo4a/DocumentGenerator/releases)
 [![.NET](https://img.shields.io/badge/.NET-8.0-512BD4?style=for-the-badge&logo=dotnet)](https://dotnet.microsoft.com/)
 
 </div>
@@ -46,7 +44,9 @@ git clone https://github.com/Karo4a/DocumentGenerator.git
 cd DocumentGenerator
 
 # Configure the database connection
-# Edit appsettings.json in DocumentGenerator.Api/ to set your SQL Server connection string
+# Connection string is in DocumentGenerator.Api/appsettings.json (key: "DefaultConnection").
+# For EF Core migrations, the same string is hardcoded in
+# DocumentGenerator.Context/DocumentGeneratorDesignTimeDbContextFactory.cs.
 
 # Run the API
 dotnet run --project DocumentGenerator.Api
@@ -55,7 +55,7 @@ dotnet run --project DocumentGenerator.Api
 dotnet run --project DocumentGenerator.Web
 ```
 
-The API will be available at `http://localhost:5000` with Swagger UI at `/swagger`. The Blazor UI will be available at `http://localhost:5234`.
+The API will be available with Swagger UI at `/swagger`. Blazor frontend URL is configured in the API's `ApiSettings:BaseUrl` (`DocumentGenerator.Web/appsettings.json`). Ports are defined in `Properties/launchSettings.json` of each project.
 
 ## Project Structure
 
@@ -201,9 +201,21 @@ DocumentGenerator/
 }
 ```
 
-## Database Schema
+## Excel Export Example
+
+Each document can be exported as a formatted `.xlsx` file.
+
+```http
+GET /api/Document/{id}/export
+```
+
+Requires `Viewer`, `Editor`, or `Admin` role. Returns an Excel file named `Акт приёма передачи товара №{DocumentNumber}.xlsx` with content type `application/vnd.openxmlformats-officedocument.spreadsheetml.sheet`.
+
+The generated document includes a title block, a table of products (№, name, quantity, unit price with VAT, total with VAT), summary totals, and buyer/seller signature blocks:
 
 ![Document template](document.jpg)
+
+## Database Schema
 
 ```mermaid
 erDiagram
@@ -273,13 +285,7 @@ dotnet test
 
 Five test projects cover the API controllers, services, repositories, database context, and data access layer — all using xUnit, Moq, and FluentAssertions.
 
-## Contributing
-
-Contributions are welcome! Feel free to open an issue or submit a pull request.
-
-<a href="https://github.com/Karo4a/DocumentGenerator/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=Karo4a/DocumentGenerator" />
-</a>
+> **Note:** Tests are not yet fully adapted to the current authorization system and recent changes.
 
 ## License
 
