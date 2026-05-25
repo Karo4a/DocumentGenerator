@@ -346,6 +346,10 @@ else
         {
             ToastService.Notify(new(ToastType.Danger, "Ошибка", "Не удалось загрузить документы"));
         }
+        finally
+        {
+            isLoading = false;
+        }
     }
 
     private async Task ViewDocument(DocumentApiModel doc)
