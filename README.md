@@ -8,6 +8,20 @@
 
 </div>
 
+## Contents
+
+- [What is this?](#what-is-this)
+- [Architecture](#architecture)
+- [Quick Start](#quick-start)
+- [Project Structure](#project-structure)
+- [API Endpoints](#api-endpoints)
+- [Excel Export Example](#excel-export-example)
+- [Database Schema](#database-schema)
+- [Documentation](#documentation)
+- [Tech Stack](#tech-stack)
+- [Testing](#testing)
+- [License](#license)
+
 ## What is this?
 
 A full-stack document management system for creating, managing, and exporting goods transfer-acceptance certificates. The system provides a RESTful API with JWT-authenticated role-based access (Viewer, Editor, Admin) and a Blazor web UI, backed by SQL Server and Entity Framework Core.
@@ -224,19 +238,28 @@ erDiagram
     String Name
     String Job
     String TaxId
-   }
+    DateTimeOffset CreatedAt
+    DateTimeOffset UpdatedAt
+    DateTimeOffset DeletedAt
+  }
   Product {
     Guid Id
     String Name
     Decimal Cost
-   }
+    DateTimeOffset CreatedAt
+    DateTimeOffset UpdatedAt
+    DateTimeOffset DeletedAt
+  }
   DocumentProduct {
     Guid Id
     Guid ProductId
     Guid DocumentId
     Int Quantity
     Decimal Cost
-   }
+    DateTimeOffset CreatedAt
+    DateTimeOffset UpdatedAt
+    DateTimeOffset DeletedAt
+  }
   Document {
     Guid Id
     String DocumentNumber
@@ -244,10 +267,41 @@ erDiagram
     DateOnly Date
     Guid SellerId
     Guid BuyerId
-   }
-  Document ||--o{ Party : "signs by"
-  DocumentProduct }o--|| Product : "references to"
-  Document ||--o{  DocumentProduct : "contains"
+    DateTimeOffset CreatedAt
+    DateTimeOffset UpdatedAt
+    DateTimeOffset DeletedAt
+  }
+  User {
+    Guid Id
+    String Login
+    String Email
+    Guid UserRoleId
+    Guid SecurityStamp
+    DateTimeOffset CreatedAt
+    DateTimeOffset UpdatedAt
+    DateTimeOffset DeletedAt
+  }
+  UserRole {
+    Guid Id
+    Int Role
+    DateTimeOffset CreatedAt
+    DateTimeOffset UpdatedAt
+    DateTimeOffset DeletedAt
+  }
+  RefreshToken {
+    Guid Id
+    Guid UserId
+    DateTimeOffset Expires
+    String SecurityStamp
+    DateTimeOffset CreatedAt
+    DateTimeOffset DeletedAt
+  }
+  Document }o--|| Party : "seller"
+  Document }o--|| Party : "buyer"
+  DocumentProduct }o--|| Product : "references"
+  Document ||--o{ DocumentProduct : "contains"
+  User }o--|| UserRole : "has role"
+  RefreshToken }o--|| User : "belongs to"
 ```
 
 ## Documentation
@@ -289,12 +343,6 @@ Five test projects cover the API controllers, services, repositories, database c
 
 ## License
 
-Copyright &copy; 2025 Karo4a. All rights reserved.
+[MIT](LICENSE) — Copyright &copy; 2025 Karo4a.
 
----
 
-<div align="center">
-
-[![Star History Chart](https://api.star-history.com/svg?repos=Karo4a/DocumentGenerator&type=Date)](https://star-history.com/#Karo4a/DocumentGenerator&Date)
-
-</div>

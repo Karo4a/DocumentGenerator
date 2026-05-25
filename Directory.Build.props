@@ -1,9 +1,9 @@
 <Project>
 	<PropertyGroup>
-		<Copyright>2025 Karo4a</Copyright>
+		<Copyright>Copyright (c) 2025 Karo4a</Copyright>
 		<Authors>Karo4a</Authors>
 		<Company></Company>
-		<Copyright>Karo4a</Copyright>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	</PropertyGroup>
 
 	<ItemGroup Condition=" $(MSBuildProjectName.EndsWith('.Tests')) ">
