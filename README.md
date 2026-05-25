@@ -1,12 +1,210 @@
+<div align="center">
+
 # DocumentGenerator
-- ФИО: Иванов Тимофей Михайлович @Karo4a
-- Группа: ИП-23-3
-- Задание AspNetCore WEB API "Акт приема передачи товаров"
 
-## Акт приёма передачи товаров
-![Акт приёма передачи товаров](document.jpg "Документ")
+**ASP.NET Core 8 Web API** for managing goods transfer-acceptance certificates (акт приёма-передачи товаров) with a Blazor Interactive Server frontend.
 
-## Схема базы данных
+[![Stars](https://img.shields.io/github/stars/Karo4a/DocumentGenerator?style=for-the-badge)](https://github.com/Karo4a/DocumentGenerator/stargazers)
+[![GitHub Release](https://img.shields.io/github/v/release/Karo4a/DocumentGenerator?style=for-the-badge)](https://github.com/Karo4a/DocumentGenerator/releases)
+[![.NET](https://img.shields.io/badge/.NET-8.0-512BD4?style=for-the-badge&logo=dotnet)](https://dotnet.microsoft.com/)
+
+</div>
+
+## What is this?
+
+A full-stack document management system for creating, managing, and exporting goods transfer-acceptance certificates. The system provides a RESTful API with JWT-authenticated role-based access (Viewer, Editor, Admin) and a Blazor web UI, backed by SQL Server and Entity Framework Core.
+
+**Features:**
+- **Products** — CRUD for catalog items with name and cost
+- **Parties** — CRUD for seller/buyer entities (name, job title, tax ID)
+- **Documents** — CRUD for transfer-acceptance certificates linking products with parties
+- **Excel Export** — each document can be exported as a formatted `.xlsx` file
+- **Authentication** — JWT-based login with refresh token rotation
+- **Role-Based Access** — Viewer (read), Editor (create/edit), Admin (delete/manage users)
+- **Blazor UI** — Interactive Server frontend consuming the API
+- **Comprehensive Tests** — xUnit + Moq + FluentAssertions across 5 test projects
+
+## Architecture
+
+```mermaid
+graph TD
+    Client[Blazor Web UI] --> API[ASP.NET Core API]
+    API --> Auth[JWT Authentication]
+    API --> Services[Business Logic Layer]
+    Services --> Repos[Repository Layer]
+    Repos --> Context[EF Core DbContext]
+    Context --> DB[(SQL Server)]
+    Services --> Excel[Excel Export Engine]
+    API --> Swagger[Swagger / OpenAPI]
+```
+
+## Quick Start
+
+```bash
+# Clone the repository
+git clone https://github.com/Karo4a/DocumentGenerator.git
+cd DocumentGenerator
+
+# Configure the database connection
+# Edit appsettings.json in DocumentGenerator.Api/ to set your SQL Server connection string
+
+# Run the API
+dotnet run --project DocumentGenerator.Api
+
+# Run the Blazor frontend (in another terminal)
+dotnet run --project DocumentGenerator.Web
+```
+
+The API will be available at `http://localhost:5000` with Swagger UI at `/swagger`. The Blazor UI will be available at `http://localhost:5234`.
+
+## Project Structure
+
+```
+DocumentGenerator/
+├── DocumentGenerator.Api/                  # ASP.NET Core Web API
+│   ├── Controllers/                        # Auth, Document, Party, Product, User
+│   ├── Infrastructure/                     # AutoMapper profile, exception filter
+│   └── Program.cs
+├── DocumentGenerator.Api.Client/           # NSwag-generated HTTP client
+├── DocumentGenerator.Api.Models/           # API request/response DTOs
+│   ├── Auth/
+│   ├── Document/
+│   ├── DocumentProduct/
+│   ├── Enums/
+│   ├── Exceptions/
+│   ├── Party/
+│   ├── Product/
+│   └── User/
+├── DocumentGenerator.Api.Tests/            # API integration tests
+│   ├── Client/
+│   ├── ControllersTests/
+│   └── Infrastructure/
+├── DocumentGenerator.Common/               # Shared utilities
+├── DocumentGenerator.Common.Contracts/     # Shared interfaces
+├── DocumentGenerator.Common.Mvc/           # JWT auth & DI extensions
+├── DocumentGenerator.Context/              # EF Core DbContext & migrations
+│   └── Migrations/
+├── DocumentGenerator.Context.Contracts/    # Context interfaces
+├── DocumentGenerator.Entities/             # EF Core entity classes
+│   └── Enums/
+├── DocumentGenerator.Entities.Configurations/  # Fluent API configurations
+├── DocumentGenerator.Entities.Contracts/   # Base entity interfaces
+├── DocumentGenerator.Entities.Default/     # Seed data
+├── DocumentGenerator.Entities.ValidationConstants/  # Validation rules
+├── DocumentGenerator.Repositories/         # Read/Write repository implementations
+├── DocumentGenerator.Repositories.Contracts/  # Repository interfaces
+├── DocumentGenerator.Services/             # Business logic layer
+│   ├── Infrastructure/
+│   └── Validators/
+├── DocumentGenerator.Services.Contracts/   # Service interfaces & models
+├── DocumentGenerator.Web/                  # Blazor Interactive Server UI
+│   ├── Components/
+│   ├── Infrastructure/
+│   ├── Services/
+│   └── wwwroot/
+├── DocumentGenerator.Web.Tests/
+├── DocumentGenerator.Context.Tests/
+├── DocumentGenerator.Database.Tests/
+├── DocumentGenerator.Repositories.Tests/
+├── DocumentGenerator.Services.Tests/
+└── DocumentGenerator.sln
+```
+
+## API Endpoints
+
+### Authentication
+
+| Method | Route | Auth | Description |
+|--------|-------|------|-------------|
+| POST | `api/Auth/login` | Anonymous | Login — returns JWT + refresh token |
+| POST | `api/Auth/refresh` | Anonymous | Refresh access token |
+| POST | `api/Auth/logout` | Authorized | Revoke refresh token |
+
+### Users
+
+| Method | Route | Role | Description |
+|--------|-------|------|-------------|
+| GET | `api/User/me` | Authorized | Get current user info |
+| GET | `api/User/{id}` | Admin | Get user by ID |
+| GET | `api/User/` | Admin | Get all users |
+| POST | `api/User/register` | Anonymous | Register new user |
+| PUT | `api/User/{id}/change-role` | Admin | Change user role |
+| DELETE | `api/User/{id}` | Admin | Delete user |
+
+### Products
+
+| Method | Route | Role | Description |
+|--------|-------|------|-------------|
+| GET | `api/Product/{id}` | Viewer+ | Get product by ID |
+| GET | `api/Product/` | Viewer+ | Get all products |
+| POST | `api/Product/` | Editor+ | Create product |
+| PUT | `api/Product/{id}` | Editor+ | Update product |
+| DELETE | `api/Product/{id}` | Admin | Delete product |
+
+```json
+// ProductApiModel
+{
+  "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "name": "Товар 1",
+  "cost": 1
+}
+```
+
+### Parties
+
+| Method | Route | Role | Description |
+|--------|-------|------|-------------|
+| GET | `api/Party/{id}` | Viewer+ | Get party by ID |
+| GET | `api/Party/` | Viewer+ | Get all parties |
+| POST | `api/Party/` | Editor+ | Create party |
+| PUT | `api/Party/{id}` | Editor+ | Update party |
+| DELETE | `api/Party/{id}` | Admin | Delete party |
+
+```json
+// PartyApiModel
+{
+  "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "name": "ФИО стороны акта",
+  "job": "Работа стороны акта",
+  "taxId": "1234567891"
+}
+```
+
+### Documents
+
+| Method | Route | Role | Description |
+|--------|-------|------|-------------|
+| GET | `api/Document/{id}/export` | Viewer+ | Export document as Excel (.xlsx) |
+| GET | `api/Document/{id}` | Viewer+ | Get document by ID |
+| GET | `api/Document/` | Viewer+ | Get all documents |
+| POST | `api/Document/` | Editor+ | Create document |
+| PUT | `api/Document/{id}` | Editor+ | Update document |
+| DELETE | `api/Document/{id}` | Admin | Delete document |
+
+```json
+// DocumentApiModel
+{
+  "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "documentNumber": "1",
+  "contractNumber": "1",
+  "date": "2025-09-11",
+  "seller": { "id": "...", "name": "ФИО продавца", "job": "Работа продавца", "taxId": "1234567891" },
+  "buyer": { "id": "...", "name": "ФИО покупателя", "job": "Работа покупателя", "taxId": "1234567891" },
+  "products": [
+    {
+      "id": "...",
+      "product": { "id": "...", "name": "Товар 1", "cost": 1 },
+      "quantity": 1,
+      "cost": 1
+    }
+  ]
+}
+```
+
+## Database Schema
+
+![Document template](document.jpg)
+
 ```mermaid
 erDiagram
   Party {
@@ -40,134 +238,57 @@ erDiagram
   Document ||--o{  DocumentProduct : "contains"
 ```
 
-## Реализация API
-### CRUD товаров
-|verb|url|description|request|response|codes|
-|-|-|-|-|-|-|
-|GET|api/Product/|Получает список всех товаров| |`ProductApiModel[]`|200 OK|
-|GET|api/Product/{id}|Получает товар с идентификатором id| fromRoute: id|`ProductApiModel`|200 OK<br/>404 Not Found|
-|POST|api/Product/|Добавляет новый товар|fromBody: `ProductRequestApiModel`|`ProductApiModel`|200 OK<br/>409 Conflict<br/>422 Unprocessable Entity|
-|PUT|api/Product/{id}|Редактирует товар с идентификатором id| fromRoute: id <br/>fromBody: `ProductRequestApiModel`|`ProductApiModel`|200 OK<br/>404 Not Found<br/>409 Conflict<br/>422 Unprocessable Entity|
-|DELETE|api/Product/{id}|Удаляет товар с идентификатором id| fromRoute: id| |200 OK<br/>404 Not Found|
-```javascript
-// ProductApiModel
-{
-  id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-  name: "Товар 1",
-  cost: 1
-}
-```
-```javascript
-// ProductRequestApiModel
-{
-  name: "Товар 1",
-  cost: 1
-}
+## Documentation
+
+| Resource | Description |
+|----------|-------------|
+| [AuthController](DocumentGenerator.Api/Controllers/AuthController.cs) | Login, refresh, logout |
+| [ProductController](DocumentGenerator.Api/Controllers/ProductController.cs) | Product CRUD |
+| [PartyController](DocumentGenerator.Api/Controllers/PartyController.cs) | Party CRUD |
+| [DocumentController](DocumentGenerator.Api/Controllers/DocumentController.cs) | Document CRUD + Excel export |
+| [UserController](DocumentGenerator.Api/Controllers/UserController.cs) | User management |
+| [Services](DocumentGenerator.Services/) | Business logic layer |
+| [Repositories](DocumentGenerator.Repositories/) | Data access layer |
+
+## Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Runtime | .NET 8 |
+| API | ASP.NET Core, Swashbuckle (Swagger) |
+| ORM | Entity Framework Core 8 (SQL Server) |
+| Auth | JWT Bearer (HMAC-SHA256 + AES-256-CBC) |
+| Frontend | Blazor Interactive Server + Blazor.Bootstrap |
+| Excel | DocumentFormat.OpenXml |
+| Mapping | AutoMapper |
+| Validation | FluentValidation |
+| Testing | xUnit, Moq, FluentAssertions |
+| Client | NSwag-generated HTTP client |
+
+## Testing
+
+```bash
+dotnet test
 ```
 
-### CRUD стороны акта
-|verb|url|description|request|response|codes|
-|-|-|-|-|-|-|
-|GET|api/Party/|Получает список всех сторон актов| |`PartyApiModel[]`|200 OK|
-|GET|api/Party/{id}|Получает сторону акта с идентификатором id| fromRoute: id|`PartyApiModel`|200 OK<br/>404 Not Found|
-|POST|api/Party/|Добавляет новую сторону акта| fromBody: `PartyRequestApiModel`|`PartyApiModel`|200 OK<br/>409 Conflict<br/>422 Unprocessable Entity|
-|PUT|api/Party/{id}|Редактирует сторону акта с идентификатором id| fromRoute: id <br/>fromBody: `PartyRequestApiModel`|`PartyApiModel`|200 OK<br/>404 Not Found<br/>409 Conflict<br/>422 Unprocessable Entity|
-|DELETE|api/Party/{id}|Удаляет сторону акта с идентификатором id| fromRoute: id| |200 OK<br/>404 Not Found|
-```javascript
-// PartyApiModel
-{
-  id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-  name: "ФИО стороны акта",
-  job: "Работа стороны акта",
-  taxId: "1234567891"
-}
-```
-```javascript
-// PartyRequestApiModel
-{
-  name: "ФИО стороны акта",
-  job: "Работа стороны акта",
-  taxId: "1234567891"
-}
-```
+Five test projects cover the API controllers, services, repositories, database context, and data access layer — all using xUnit, Moq, and FluentAssertions.
 
-### CRUD документа
-|verb|url|description|request|response|codes|
-|-|-|-|-|-|-|
-|GET|api/Document/{id}/export|Экспортирует документ в формате Excel с идентификатором id|fromRoute: id|`file.xlsx`|200 OK<br/>404 Not Found|
-|GET|api/Document/|Получает список всех документов| |`DocumentApiModel[]`|200 OK|
-|GET|api/Document/{id}|Получает документ с идентификатором id| fromRoute: id|`DocumentApiModel`|200 OK<br/>404 Not Found|
-|POST|api/Document/|Добавляет новый документ| fromBody: `DocumentRequestApiModel`|`DocumentApiModel`|200 OK<br/>404 Not Found<br/>409 Conflict|
-|PUT|api/Document/{id}|Редактирует документ с идентификатором id| fromRoute: id <br/>fromBody: `DocumentRequestApiModel`|`DocumentApiModel`|200 OK<br/>404 Not Found<br/>409 Conflict<br/>422 Unprocessable Entity|
-|DELETE|api/Document/{id}|Удаляет документ с идентификатором id| fromRoute: id| |200 OK<br/>404 Not Found|
-```javascript
-// DocumentProductApiModel
-{
-  id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-  product: {
-    id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-    name: "Товар 1",
-    cost: 1
-  },
-  quantity: 1,
-  cost: 1
-}
-```
-```javascript
-// DocumentProductRequestApiModel
-{
-  productId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-  quantity: 1,
-  cost: 1
-}
-```
-```javascript
-// DocumentApiModel
-{
-  id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-  documentNumber: "1",
-  contractNumber: "1",
-  date: "2025-09-11",
-  seller: {
-    id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-    name: "ФИО продавца",
-    job: "Работа продавца",
-    taxId: "1234567891"
-  },
-  buyer: {
-    id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-    name: "ФИО покупателя",
-    job: "Работа покупателя",
-    taxId: "1234567891"
-  },
-  products: [
-    {
-      id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      product: {
-        id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        name: "Товар 1",
-        cost: 1
-      },
-      quantity: 1,
-      cost: 1
-    }
-  ]
-}
-```
-```javascript
-// DocumentRequestApiModel
-{
-  documentNumber: "1",
-  contractNumber: "1",
-  date: "2025-09-11",
-  sellerId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-  buyerId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-  products: [
-    {
-      productId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      quantity: 1,
-      cost: 1
-    }
-  ]
-}
-```
+## Contributing
+
+Contributions are welcome! Feel free to open an issue or submit a pull request.
+
+<a href="https://github.com/Karo4a/DocumentGenerator/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=Karo4a/DocumentGenerator" />
+</a>
+
+## License
+
+Copyright &copy; 2025 Karo4a. All rights reserved.
+
+---
+
+<div align="center">
+
+[![Star History Chart](https://api.star-history.com/svg?repos=Karo4a/DocumentGenerator&type=Date)](https://star-history.com/#Karo4a/DocumentGenerator&Date)
+
+</div>
