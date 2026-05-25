@@ -1,0 +1,215 @@
+@page "/parties"
+@using DocumentGenerator.Api.Client
+@using DocumentGenerator.Web.Services
+
+@inject IDocumentGeneratorApiClient ApiClient
+@inject UserState UserState
+@inject NavigationManager Navigation
+@inject IJSRuntime JS
+@inject ToastService ToastService
+
+<PageTitle>Стороны акта</PageTitle>
+
+<h3>Стороны акта</h3>
+
+@if (isLoading)
+{
+    <Spinner />
+}
+else
+{
+    @if (UserState.IsEditor)
+    {
+        <Button Color="ButtonColor.Success" @onclick="ShowCreateModal">+ Добавить сторону</Button>
+    }
+
+    @if (parties is null || parties.Length == 0)
+    {
+        <p class="mt-3">Нет сторон</p>
+    }
+    else
+    {
+        <table class="table table-hover mt-3">
+            <thead>
+                <tr>
+                    <th>Полное имя</th>
+                    <th>Должность</th>
+                    <th>ИНН</th>
+                    @if (UserState.IsEditor)
+                    {
+                        <th style="width: 140px;">Действия</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var party in parties)
+                {
+                    <tr>
+                        <td>@party.Name</td>
+                        <td>@party.Job</td>
+                        <td>@party.TaxId</td>
+                        @if (UserState.IsEditor)
+                        {
+                            <td>
+                                <Dropdown Color="DropdownColor.Secondary">
+                                    <DropdownToggleButton>Действия</DropdownToggleButton>
+                                    <DropdownMenu>
+                                        <DropdownItem @onclick="() => EditParty(party)">
+                                            Редактировать
+                                        </DropdownItem>
+                                        @if (UserState.IsAdmin)
+                                        {
+                                            <DropdownItem @onclick="() => DeleteParty(party)">
+                                                <span class="text-danger">Удалить</span>
+                                            </DropdownItem>
+                                        }
+                                    </DropdownMenu>
+                                </Dropdown>
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+}
+
+<Modal @ref="modal" Title="@(isEditMode ? "Редактировать сторону" : "Добавить сторону")">
+    <BodyTemplate>
+        <div class="mb-3">
+            <label class="form-label">Полное имя</label>
+            <TextInput @bind-Value="currentModel.Name" Placeholder="Введите полное имя" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Должность</label>
+            <TextInput @bind-Value="currentModel.Job" Placeholder="Введите должность" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">ИНН</label>
+            <TextInput @bind-Value="currentModel.TaxId" Placeholder="Введите ИНН" />
+        </div>
+    </BodyTemplate>
+    <FooterTemplate>
+        <Button Color="ButtonColor.Secondary" @onclick="HideModal">Отмена</Button>
+        <Button Color="ButtonColor.Primary" @onclick="SavePartyAsync">Сохранить</Button>
+    </FooterTemplate>
+</Modal>
+
+@code {
+    private PartyApiModel[]? parties;
+    private bool isLoading = true;
+    private Modal modal = new();
+    private bool isEditMode;
+    private PartyRequestApiModel currentModel = new();
+    private Guid editingId;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!UserState.IsAuthenticated)
+        {
+            Navigation.NavigateTo("/");
+            return;
+        }
+
+        try
+        {
+            var list = await ApiClient.PartyAllAsync();
+            parties = list is not null ? [.. list] : null;
+        }
+        catch
+        {
+            ToastService.Notify(new(ToastType.Danger, "Ошибка", "Не удалось загрузить стороны"));
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private async Task ShowCreateModal()
+    {
+        isEditMode = false;
+        editingId = Guid.Empty;
+        currentModel = new();
+        await modal.ShowAsync();
+    }
+
+    private async Task EditParty(PartyApiModel party)
+    {
+        isEditMode = true;
+        editingId = party.Id;
+        currentModel = new PartyRequestApiModel
+        {
+            Name = party.Name,
+            Job = party.Job,
+            TaxId = party.TaxId
+        };
+        await modal.ShowAsync();
+    }
+
+    private async Task SavePartyAsync()
+    {
+        try
+        {
+            if (isEditMode)
+            {
+                await ApiClient.PartyPUTAsync(editingId, currentModel);
+                ToastService.Notify(new(ToastType.Success, "Успех", "Сторона обновлена"));
+            }
+            else
+            {
+                await ApiClient.PartyPOSTAsync(currentModel);
+                ToastService.Notify(new(ToastType.Success, "Успех", "Сторона создана"));
+            }
+
+            await modal.HideAsync();
+            isLoading = true;
+            StateHasChanged();
+            await ReloadPartiesAsync();
+        }
+        catch (ApiException ex) when (ex.StatusCode == 409)
+        {
+            ToastService.Notify(new(ToastType.Danger, "Ошибка", "Сторона с таким ИНН уже существует"));
+        }
+        catch
+        {
+            ToastService.Notify(new(ToastType.Danger, "Ошибка", "Не удалось сохранить сторону"));
+        }
+    }
+
+    private async Task DeleteParty(PartyApiModel party)
+    {
+        var confirmed = await JS.InvokeAsync<bool>("confirm", $"Удалить сторону \"{party.Name}\"?");
+        if (!confirmed) return;
+
+        try
+        {
+            await ApiClient.PartyDELETEAsync(party.Id);
+            ToastService.Notify(new(ToastType.Success, "Успех", "Сторона удалена"));
+            await ReloadPartiesAsync();
+        }
+        catch
+        {
+            ToastService.Notify(new(ToastType.Danger, "Ошибка", "Не удалось удалить сторону"));
+        }
+    }
+
+    private async Task HideModal() => await modal.HideAsync();
+
+    private async Task ReloadPartiesAsync()
+    {
+        try
+        {
+            var list = await ApiClient.PartyAllAsync();
+            parties = list is not null ? [.. list] : null;
+        }
+        catch
+        {
+            ToastService.Notify(new(ToastType.Danger, "Ошибка", "Не удалось загрузить стороны"));
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+}

@@ -33,7 +33,8 @@ public class ServiceProfile : Profile
 
         CreateMap<User, UserModel>(MemberList.Destination)
             .ForMember(x => x.Role, opt => opt.MapFrom(y => y.UserRole.Role));
-        CreateMap<UserDbModel, UserModel>(MemberList.Destination);
+        CreateMap<UserDbModel, UserModel>(MemberList.Destination)
+            .ForMember(x => x.Role, opt => opt.MapFrom(y => y.UserRole.Role));
         CreateMap<UserDbModel, User>(MemberList.Destination)
             .ForMember(x => x.UserRoleId, opt => opt.MapFrom(y => y.UserRole.Id));
     }

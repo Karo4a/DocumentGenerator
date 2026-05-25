@@ -1,6 +1,7 @@
 ﻿@page "/"
 @using DocumentGenerator.Api.Models.Product
 @using DocumentGenerator.Web.Services
+@implements IDisposable
 @inject UserState UserState
 
 <PageTitle>Главная</PageTitle>
@@ -15,8 +16,8 @@
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-md-6 mb-4">
+        <div class="row justify-content-center" style="max-width: 600px; margin: 0 auto;">
+            <div class="col-12 mb-3">
                 <div class="card h-100 shadow-sm border-primary">
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title text-primary">Товары</h5>
@@ -25,30 +26,21 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 mb-4">
+            <div class="col-12 mb-3">
                 <div class="card h-100 shadow-sm border-success">
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title text-success">Стороны акта</h5>
                         <p class="card-text flex-grow-1">Добавляйте и редактируйте информацию о продавцах и покупателях.</p>
-                        <a href="#" class="btn btn-outline-success mt-auto disabled">Скоро...</a>
+                        <a href="/parties" class="btn btn-outline-success mt-auto">Перейти к сторонам</a>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 mb-4">
+            <div class="col-12 mb-3">
                 <div class="card h-100 shadow-sm border-info">
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title text-info">Документы</h5>
-                        <p class="card-text flex-grow-1">Создавайте акты приёма-передачи, используя справочники товаров и сторон.</p>
-                        <a href="#" class="btn btn-outline-info mt-auto disabled">Скоро...</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 mb-4">
-                <div class="card h-100 shadow-sm border-secondary">
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title text-secondary">Отчёты</h5>
-                        <p class="card-text flex-grow-1">Экспортируйте документы в формат Microsoft Excel для дальнейшей работы.</p>
-                        <a href="#" class="btn btn-outline-secondary mt-auto disabled">Скоро...</a>
+                        <p class="card-text flex-grow-1">Создавайте акты приёма-передачи, используя справочники товаров и сторон. Экспортируйте готовые документы в Excel.</p>
+                        <a href="/documents" class="btn btn-outline-info mt-auto">Перейти к документам</a>
                     </div>
                 </div>
             </div>
@@ -99,5 +91,15 @@
     {
         activeTab = "login";
         StateHasChanged();
+    }
+
+    protected override void OnInitialized()
+    {
+        UserState.OnChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        UserState.OnChange -= StateHasChanged;
     }
 }

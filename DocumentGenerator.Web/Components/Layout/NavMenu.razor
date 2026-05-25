@@ -1,6 +1,7 @@
 ﻿@using DocumentGenerator.Web.Services
 @using DocumentGenerator.Api.Client
 @using DocumentGenerator.Api.Models.Auth
+@implements IDisposable
 @inject UserState UserState
 @inject IClientTokenStore TokenStore
 @inject IDocumentGeneratorApiClient ApiClient
@@ -21,6 +22,16 @@
                     <li class="nav-item py-2">
                         <NavLink class="nav-link px-3" href="products">
                             Товары
+                        </NavLink>
+                    </li>
+                    <li class="nav-item py-2">
+                        <NavLink class="nav-link px-3" href="parties">
+                            Стороны акта
+                        </NavLink>
+                    </li>
+                    <li class="nav-item py-2">
+                        <NavLink class="nav-link px-3" href="documents">
+                            Документы
                         </NavLink>
                     </li>
                     @if (UserState.IsAdmin)
@@ -67,5 +78,15 @@
         await TokenStore.ClearAsync();
         UserState.Clear();
         Navigation.NavigateTo("/", forceLoad: false);
+    }
+
+    protected override void OnInitialized()
+    {
+        UserState.OnChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        UserState.OnChange -= StateHasChanged;
     }
 }

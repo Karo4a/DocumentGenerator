@@ -1,6 +1,10 @@
 ﻿@page "/products"
-@using DocumentGenerator.Api.Models.Product
+@using DocumentGenerator.Api.Client
+@using DocumentGenerator.Web.Services
 
+@inject IDocumentGeneratorApiClient ApiClient
+@inject UserState UserState
+@inject NavigationManager Navigation
 @inject IJSRuntime JS
 @inject ToastService ToastService
 
@@ -14,7 +18,10 @@
 }
 else
 {
-    <Button Color="ButtonColor.Success" @onclick="ShowCreateModal">+ Добавить товар</Button>
+    @if (UserState.IsEditor)
+    {
+        <Button Color="ButtonColor.Success" @onclick="ShowCreateModal">+ Добавить товар</Button>
+    }
 
     @if (products is null || products.Length == 0)
     {
@@ -27,7 +34,10 @@ else
                 <tr>
                     <th>Наименование</th>
                     <th>Стоимость</th>
-                    <th style="width: 140px;">Действия</th>
+                    @if (UserState.IsEditor)
+                    {
+                        <th style="width: 140px;">Действия</th>
+                    }
                 </tr>
             </thead>
             <tbody>
@@ -36,19 +46,25 @@ else
                     <tr>
                         <td>@product.Name</td>
                         <td>@product.Cost.ToString("C")</td>
-                        <td>
-                            <Dropdown Color="DropdownColor.Secondary">
-                                <DropdownToggleButton>Действия</DropdownToggleButton>
-                                <DropdownMenu>
-                                    <DropdownItem @onclick="() => { }">
-                                        <Button Size="ButtonSize.Small" Color="ButtonColor.Primary" @onclick="() => { }">Редактировать</Button>
-                                    </DropdownItem>
-                                    <DropdownItem @onclick="() => { }">
-                                        <Button Size="ButtonSize.Small" Color="ButtonColor.Danger" @onclick="() => { }">Удалить</Button>
-                                    </DropdownItem>
-                                </DropdownMenu>
-                            </Dropdown>
-                        </td>
+                        @if (UserState.IsEditor)
+                        {
+                            <td>
+                                <Dropdown Color="DropdownColor.Secondary">
+                                    <DropdownToggleButton>Действия</DropdownToggleButton>
+                                    <DropdownMenu>
+                                        <DropdownItem @onclick="() => EditProduct(product)">
+                                            Редактировать
+                                        </DropdownItem>
+                                        @if (UserState.IsAdmin)
+                                        {
+                                            <DropdownItem @onclick="() => DeleteProduct(product)">
+                                                <span class="text-danger">Удалить</span>
+                                            </DropdownItem>
+                                        }
+                                    </DropdownMenu>
+                                </Dropdown>
+                            </td>
+                        }
                     </tr>
                 }
             </tbody>
@@ -69,7 +85,7 @@ else
     </BodyTemplate>
     <FooterTemplate>
         <Button Color="ButtonColor.Secondary" @onclick="HideModal">Отмена</Button>
-        <Button Color="ButtonColor.Primary" @onclick="() => { }">Сохранить</Button>
+        <Button Color="ButtonColor.Primary" @onclick="SaveProductAsync">Сохранить</Button>
     </FooterTemplate>
 </Modal>
 
@@ -83,14 +99,110 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        if (!UserState.IsAuthenticated)
+        {
+            Navigation.NavigateTo("/");
+            return;
+        }
+
+        try
+        {
+            var list = await ApiClient.ProductAllAsync();
+            products = list is not null ? [.. list] : null;
+        }
+        catch
+        {
+            ToastService.Notify(new(ToastType.Danger, "Ошибка", "Не удалось загрузить товары"));
+        }
+        finally
+        {
+            isLoading = false;
+        }
     }
 
     private async Task ShowCreateModal()
     {
         isEditMode = false;
+        editingId = Guid.Empty;
         currentModel = new();
         await modal.ShowAsync();
     }
 
+    private async Task EditProduct(ProductApiModel product)
+    {
+        isEditMode = true;
+        editingId = product.Id;
+        currentModel = new ProductRequestApiModel
+        {
+            Name = product.Name,
+            Cost = product.Cost
+        };
+        await modal.ShowAsync();
+    }
+
+    private async Task SaveProductAsync()
+    {
+        try
+        {
+            if (isEditMode)
+            {
+                await ApiClient.ProductPUTAsync(editingId, currentModel);
+                ToastService.Notify(new(ToastType.Success, "Успех", "Товар обновлён"));
+            }
+            else
+            {
+                await ApiClient.ProductPOSTAsync(currentModel);
+                ToastService.Notify(new(ToastType.Success, "Успех", "Товар создан"));
+            }
+
+            await modal.HideAsync();
+            isLoading = true;
+            StateHasChanged();
+            await ReloadProductsAsync();
+        }
+        catch (ApiException ex) when (ex.StatusCode == 409)
+        {
+            ToastService.Notify(new(ToastType.Danger, "Ошибка", "Товар с таким наименованием уже существует"));
+        }
+        catch
+        {
+            ToastService.Notify(new(ToastType.Danger, "Ошибка", "Не удалось сохранить товар"));
+        }
+    }
+
+    private async Task DeleteProduct(ProductApiModel product)
+    {
+        var confirmed = await JS.InvokeAsync<bool>("confirm", $"Удалить товар \"{product.Name}\"?");
+        if (!confirmed) return;
+
+        try
+        {
+            await ApiClient.ProductDELETEAsync(product.Id);
+            ToastService.Notify(new(ToastType.Success, "Успех", "Товар удалён"));
+            await ReloadProductsAsync();
+        }
+        catch
+        {
+            ToastService.Notify(new(ToastType.Danger, "Ошибка", "Не удалось удалить товар"));
+        }
+    }
+
     private async Task HideModal() => await modal.HideAsync();
+
+    private async Task ReloadProductsAsync()
+    {
+        try
+        {
+            var list = await ApiClient.ProductAllAsync();
+            products = list is not null ? [.. list] : null;
+        }
+        catch
+        {
+            ToastService.Notify(new(ToastType.Danger, "Ошибка", "Не удалось загрузить товары"));
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
 }

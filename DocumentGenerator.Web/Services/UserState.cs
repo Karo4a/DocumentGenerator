@@ -5,6 +5,8 @@ namespace DocumentGenerator.Web.Services;
 /// </summary>
 public class UserState
 {
+    private void NotifyStateChanged() => OnChange?.Invoke();
+
     /// <summary>
     /// Идентификатор пользователя
     /// </summary>
@@ -41,6 +43,11 @@ public class UserState
     public bool IsEditor => Role is "Editor" or "Admin";
 
     /// <summary>
+    /// Событие, возникающее при изменении состояния пользователя
+    /// </summary>
+    public event Action? OnChange;
+
+    /// <summary>
     /// Заполняет состояние из полученных данных пользователя
     /// </summary>
     public void SetFrom(Guid id, string login, string email, string role)
@@ -49,6 +56,7 @@ public class UserState
         Login = login;
         Email = email;
         Role = role;
+        NotifyStateChanged();
     }
 
     /// <summary>
@@ -60,5 +68,6 @@ public class UserState
         Login = string.Empty;
         Email = string.Empty;
         Role = string.Empty;
+        NotifyStateChanged();
     }
 }
